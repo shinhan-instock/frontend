@@ -1,3 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --color-stroke-gray: rgba(167, 167, 167, 1);
+  --color-instock-gray: rgba(229, 229, 229, 0.3);
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

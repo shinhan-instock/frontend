@@ -18,7 +18,7 @@ export default function Post({
         </div>
       </div>
       <div>{content}</div>
-      <div className="bg-zinc-100 w-fit text-zinc-600 px-4 text-sm">
+      <div className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm">
         {stock}
       </div>
       <div className="flex flex-row gap-3">
