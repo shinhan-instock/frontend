@@ -10,19 +10,21 @@ export default function NavigationBar() {
   const [selectedTab, setSelectedTab] = useState(1);
 
   return (
-    <div className="mb-3 bg-white w-full border-b-1 border-zinc-300">
-      <div className=" h-7 flex flex-row justify-around mb-2">
-        {menu.map((tab) => (
-          <button
-            key={tab.id}
-            className={`w-1/3 rounded-lg  px-3 py-1 transition flex items-center justify-center ${
-              selectedTab === tab.id ? "bg-zinc-100" : "bg-white"
-            }`}
-            onClick={() => setSelectedTab(tab.id)}
-          >
-            {tab.menu}
-          </button>
-        ))}
+    <div className="w-full flex justify-center">
+      <div className="w-full max-w-4xl bg-white border-b border-zinc-300">
+        <div className="h-13 flex flex-row justify-around p-3">
+          {menu.map((tab) => (
+            <button
+              key={tab.id}
+              className={`rounded-2xl w-1/4  transition flex items-center justify-center ${
+                selectedTab === tab.id ? "bg-zinc-100" : "bg-white"
+              }`}
+              onClick={() => setSelectedTab(tab.id)}
+            >
+              {tab.menu}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
