@@ -22,7 +22,7 @@ export default function LoginForm() {
             setId(e.target.value);
           }}
           placeholder="Enter your Id"
-          className="border-1 border-zinc-300 p-2 rounded-md"
+          className="border-1 border-stroke-gray p-2 rounded-md"
         ></input>
 
         <div>Password</div>
@@ -31,13 +31,13 @@ export default function LoginForm() {
             setPw(e.target.value);
           }}
           placeholder="Enter your password"
-          className="border-1 border-zinc-300 p-2 rounded-md"
+          className="border-1 border-stroke-gray p-2 rounded-md"
         ></input>
 
         <button
           onClick={handleSubmit}
           type="submit"
-          className="border-1 border-zinc-300 p-2 rounded-md bg-black text-white "
+          className="border-1 border-stroke-gray p-2 rounded-md bg-black text-white "
         >
           Login
         </button>
