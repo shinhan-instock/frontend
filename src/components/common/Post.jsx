@@ -1,4 +1,6 @@
-/* eslint-disable react/prop-types */
+import { useState } from 'react';
+
+
 export default function Post({
   img,
   content,
@@ -8,6 +10,9 @@ export default function Post({
   likes,
   comments,
 }) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className=" flex flex-col gap-2 ">
       <div className="flex flex-row gap-2">
@@ -22,11 +27,15 @@ export default function Post({
         {stock}
       </div>
       <div className="flex flex-row gap-3">
-        <div>❤️</div>
+        <button onClick={() => setIsLiked(!isLiked)}>
+          {isLiked ? '❤️' : '🤍'}
+        </button>
         <div>{likes}</div>
-        <div>💬</div>
+
+        <button onClick={() => setIsModalOpen(true)}>💬</button>
         <div>{comments}</div>
       </div>
+
     </div>
   );
 }

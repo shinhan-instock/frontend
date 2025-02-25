@@ -21,7 +21,7 @@ export default function Layout() {
         <div className="sticky top-0 z-10 bg-white">
           <SearchBar />
         </div>
-        <div className="flex-grow overflow-auto px-5">
+        <div className="flex-grow px-5">
           <Outlet />
         </div>
       </div>
