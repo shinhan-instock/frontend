@@ -2,21 +2,22 @@ import { useState } from "react";
 
 const menuOptions = {
   default: [
-    {id:1, menu:"실시간"},
-    {id:2, menu:"팔로잉"},
-    {id:3, menu:"인기글"},
+    { id: 1, menu: "실시간" },
+    { id: 2, menu: "팔로잉" },
+    { id: 3, menu: "인기글" },
   ],
-  myprofile:[
-    {id:1, menu:"내가 쓴 게시글"},
-    {id:2, menu:"스크랩 글"},
+  myprofile: [
+    { id: 1, menu: "내가 쓴 게시글" },
+    { id: 2, menu: "스크랩 글" },
   ],
-  profile:[
-    {id:1, menu:"게시글"},
-    {id:2, menu:"SJ의 계좌"},
-  ]
-}
+  profile: [
+    { id: 1, menu: "게시글" },
+    { id: 2, menu: "SJ의 계좌" },
+  ],
+};
 
-export default function NavigationBar({menuType}) {
+// eslint-disable-next-line react/prop-types
+export default function NavigationBar({ menuType }) {
   const [selectedTab, setSelectedTab] = useState(1);
   const menu = menuOptions[menuType];
 
