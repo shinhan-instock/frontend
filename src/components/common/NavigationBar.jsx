@@ -11,13 +11,13 @@ export default function NavigationBar() {
 
   return (
     <div className="w-full flex justify-center">
-      <div className="w-full max-w-4xl bg-white border-b border-zinc-300">
+      <div className="w-full max-w-4xl bg-white border-b border-instock-gray">
         <div className="h-13 flex flex-row justify-around p-3">
           {menu.map((tab) => (
             <button
               key={tab.id}
               className={`rounded-2xl w-1/4  transition flex items-center justify-center ${
-                selectedTab === tab.id ? "bg-zinc-100" : "bg-white"
+                selectedTab === tab.id ? "bg-instock-gray" : "bg-white"
               }`}
               onClick={() => setSelectedTab(tab.id)}
             >
