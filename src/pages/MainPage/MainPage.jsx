@@ -1,6 +1,6 @@
 import PostList from '../../components/common/PostList';
 import NavigationBar from '../../components/common/NavigationBar';
-import Profile from '../../components/common/Profile';
+
 export default function MainPage() {
   return (
     <div className="flex flex-col items-center h-screen">
