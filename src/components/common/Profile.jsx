@@ -13,7 +13,7 @@ function ProfileImage({ image, alt, fallbackText }) {
 
 export default function Profile({ isMyProfile }) {
   const [isFollowing, setIsFollowing] = useState(false);
-  const userImage = userImg;
+  const userImage = isMyProfile ? userImg : "";
 
   return (
     <div className="flex flex-row items-start p-4 space-x-7">
