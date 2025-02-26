@@ -1,18 +1,20 @@
-import { Outlet } from "react-router-dom";
-import SearchBar from "./SearchBar";
-import Header from "./Header";
-import MyIntro from "./MyIntro/MyIntro";
-import WatchList from "./WatchList/WatchList";
-import MyStock from "./MyStock/MyStock";
-import TopStock from "./TopStock/TopStock";
+import { Outlet } from 'react-router-dom';
+import SearchBar from './SearchBar';
+import Header from './Header';
+import MyIntro from './MyIntro/MyIntro';
+import WatchList from './WatchList/WatchList';
+import MyStock from './MyStock/MyStock';
+import TopStock from './TopStock/TopStock';
+import Pig from './Pig/Pig';
 
 export default function Layout() {
   return (
     <div className="flex flex-row w-screen h-dvh gap-4">
       {/* 왼쪽 사이드바  */}
-      <div className="flex flex-col w-1/4 border-1 gap-10 overflow-hidden">
+      <div className="flex flex-col w-1/4 gap-10 overflow-hidden">
         <Header />
         <MyIntro />
+        <Pig />
         <WatchList />
       </div>
 
@@ -27,7 +29,7 @@ export default function Layout() {
       </div>
 
       {/* 왼쪽 사이드바  */}
-      <div className="flex flex-col w-1/4 border-1 gap-10 overflow-hidden">
+      <div className="flex flex-col w-1/4 gap-10 overflow-hidden">
         <MyStock />
         <TopStock />
       </div>
