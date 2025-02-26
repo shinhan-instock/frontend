@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import useImg from '/img/userImg.png';
-import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
+import { useState } from "react";
+import useImg from "/img/userImg.png";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 
 export default function PostCreate() {
-  const [postText, setPostText] = useState('');
+  const [postText, setPostText] = useState("");
 
   return (
-    <div className="flex flex-row p-5">
-      <img src={useImg} alt="User Profile" className="w-14 h-14 rounded-full" />
+    <div className="flex flex-row p-5 w-5/6">
+      <img src={useImg} alt="User Profile" className="w-20 h-20 rounded-full" />
       <div className="p-4 mx-4 border rounded-2xl w-full text-stroke-gray">
         <input
           type="text"

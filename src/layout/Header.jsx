@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <img
       src={logo}
-      className="w-1/2"
+      className="w-2/3 mt-5 mx-5"
       onClick={() => {
         navigate("/");
       }}

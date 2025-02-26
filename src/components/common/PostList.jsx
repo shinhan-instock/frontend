@@ -38,7 +38,7 @@ const postsData = [
 
 export default function PostList() {
   return (
-    <div className="flex flex-col gap-7">
+    <div className="flex flex-col gap-10">
       {postsData.map((post) => (
         <Post
           key={post.id}
