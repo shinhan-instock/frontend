@@ -3,6 +3,8 @@
 @theme {
   --color-stroke-gray: rgba(167, 167, 167, 1);
   --color-instock-gray: rgba(229, 229, 229, 0.3);
+  --color-background-blue: #f4f5fb;
+  --color-text-blue: #004b9d;
 }
 
 :root {
