@@ -9,9 +9,9 @@ import TopStock from "./TopStock/TopStock";
 
 export default function Layout() {
   return (
-    <div className="flex flex-row w-screen h-dvh gap-4">
+    <div className="flex flex-row w-screen h-dvh">
       {/* 왼쪽 사이드바  */}
-      <div className="flex flex-col w-1/4 border-1 gap-10 overflow-hidden">
+      <div className="flex flex-col w-1/4  gap-10 overflow-hidden ml-10 px-8">
         <Header />
         <MyIntro />
         <Pig />
@@ -19,17 +19,17 @@ export default function Layout() {
       </div>
 
       {/* 센터 부분 */}
-      <div className="flex flex-col w-1/2 overflow-hidden">
+      <div className="flex flex-col w-2/4 overflow-hidden ">
         <div className="sticky top-0 z-10 bg-white">
           <SearchBar />
         </div>
-        <div className="flex-grow px-5">
+        <div className="flex-grow ">
           <Outlet />
         </div>
       </div>
 
       {/* 왼쪽 사이드바  */}
-      <div className="flex flex-col w-1/4 border-1 gap-10 overflow-hidden">
+      <div className="flex flex-col w-1/4  gap-10 overflow-hidden mr-10">
         <MyStock />
         <TopStock />
       </div>

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const menuOptions = {
   default: [
     { id: 1, menu: "실시간" },
@@ -14,21 +12,29 @@ const menuOptions = {
     { id: 1, menu: "게시글" },
     { id: 2, menu: "SJ의 계좌" },
   ],
+  stock: [
+    { id: 1, menu: "관련 게시글" },
+    { id: 2, menu: "감정 분석" },
+    { id: 3, menu: "관련주" },
+  ],
 };
 
-// eslint-disable-next-line react/prop-types
-export default function NavigationBar({ menuType }) {
-  const [selectedTab, setSelectedTab] = useState(1);
+export default function NavigationBar({
+  menuType,
+  selectedTab,
+  setSelectedTab,
+}) {
+  // const [selectedTab, setSelectedTab] = useState(1);
   const menu = menuOptions[menuType];
 
   return (
     <div className="w-full flex justify-center">
-      <div className="w-full max-w-4xl bg-white border-b border-instock-gray">
-        <div className="h-13 flex flex-row justify-around p-3">
+      <div className="w-full max-w-2xl bg-white border-b border-instock-gray mx-24">
+        <div className="h-13 flex flex-row justify-around p-3 gap-10">
           {menu.map((tab) => (
             <button
               key={tab.id}
-              className={`rounded-2xl w-1/4  transition flex items-center justify-center ${
+              className={`rounded-2xl w-2/5 transition flex items-center justify-center px-3 ${
                 selectedTab === tab.id ? "bg-instock-gray" : "bg-white"
               }`}
               onClick={() => setSelectedTab(tab.id)}

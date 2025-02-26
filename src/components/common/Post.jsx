@@ -1,5 +1,4 @@
-import { useState } from 'react';
-
+import { useState } from "react";
 
 export default function Post({
   img,
@@ -14,7 +13,7 @@ export default function Post({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className=" flex flex-col gap-2 ">
+    <div className=" flex flex-col gap-2 px-20">
       <div className="flex flex-row gap-2">
         <img src={img} className="rounded-full w-[60px] h-[60px] " />
         <div className="flex flex-col">
@@ -28,14 +27,13 @@ export default function Post({
       </div>
       <div className="flex flex-row gap-3">
         <button onClick={() => setIsLiked(!isLiked)}>
-          {isLiked ? '❤️' : '🤍'}
+          {isLiked ? "❤️" : "🤍"}
         </button>
         <div>{likes}</div>
 
         <button onClick={() => setIsModalOpen(true)}>💬</button>
         <div>{comments}</div>
       </div>
-
     </div>
   );
 }
