@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import Header from "./Header";
 import MyIntro from "./MyIntro/MyIntro";
+import Pig from "./Pig/Pig";
 import WatchList from "./WatchList/WatchList";
 import MyStock from "./MyStock/MyStock";
 import TopStock from "./TopStock/TopStock";
@@ -13,6 +14,7 @@ export default function Layout() {
       <div className="flex flex-col w-1/4 border-1 gap-10 overflow-hidden">
         <Header />
         <MyIntro />
+        <Pig />
         <WatchList />
       </div>
 

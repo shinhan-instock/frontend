@@ -23,12 +23,9 @@ export default function PiggyBankCoin() {
   const options = useMemo(
     () => ({
       preset: "confetti",
-      fullScreen: {
-        zIndex: 1,
-      },
       particles: {
         number: {
-          value: 0, // ❗ Emitter를 사용하므로 기본 생성 없음
+          value: 0, // 기본 개수는 0
         },
         color: {
           value: ["#FFD700", "#FFA500", "#FF4500"],
@@ -46,19 +43,19 @@ export default function PiggyBankCoin() {
           },
         },
         size: {
-          value: { min: 20, max: 50 }, // 동전 크기 다양하게 조정
+          value: { min: 40, max: 50 }, // 동전 크기 다양화
         },
         move: {
           direction: "bottom",
           enable: true,
           gravity: {
             enable: true,
-            acceleration: 15, // ✅ 중력 효과 추가
+            acceleration: 10, // 자연스럽게 떨어지는 느낌 강화
           },
           outModes: {
-            default: "destroy", // ✅ 바닥에서 사라짐
+            default: "destroy", // 바닥에서 사라짐
           },
-          speed: { min: 5, max: 15 }, // ✅ 더 빠르게 떨어짐
+          speed: { min: 3, max: 8 }, // 속도 조정
         },
         rotate: {
           value: { min: 0, max: 360 },
@@ -66,7 +63,7 @@ export default function PiggyBankCoin() {
           move: true,
           animation: {
             enable: true,
-            speed: 20, // ✅ 회전 속도 증가
+            speed: 10,
           },
         },
         tilt: {
@@ -76,28 +73,28 @@ export default function PiggyBankCoin() {
           value: { min: 0, max: 360 },
           animation: {
             enable: true,
-            speed: 100, // ✅ 기울기 애니메이션 속도 증가
+            speed: 50,
           },
         },
         wobble: {
-          distance: 30,
+          distance: 20,
           enable: true,
-          speed: { min: -10, max: 10 }, // ✅ 흔들리는 효과 추가
+          speed: { min: -5, max: 5 },
         },
         roll: {
-          darken: { enable: true, value: 10 },
+          darken: { enable: true, value: 5 },
           enable: true,
-          speed: { min: 10, max: 20 },
+          speed: { min: 5, max: 10 },
         },
       },
       emitters: {
-        position: { x: 50, y: 10 }, // 중앙에서 조금 위쪽에 배치
-        rate: { delay: 0.1, quantity: 50 },
+        position: { x: 50, y: 20 }, // 화면 중앙보다 약간 위에서 떨어짐
+        rate: { delay: 0.1, quantity: 1 }, // 한 번에 나오는 동전 개수 조정
         life: {
           count: 1,
-          duration: 5,
+          duration: 3, // 3초 동안만 동전이 떨어짐
         },
-        size: { width: 150, height: 0 }, // width 값으로 동전 떨어지는 범위 조절
+        size: { width: 200, height: 0 }, // 가로 범위를 200px로 조정 (500px 이하)
       },
     }),
     []
@@ -108,10 +105,13 @@ export default function PiggyBankCoin() {
   }
 
   return (
-    <Particles
-      id="tsparticles"
-      particlesLoaded={particlesLoaded}
-      options={options}
-    />
+    <div className="w-[300px] h-[300px] relative">
+      {" "}
+      <Particles
+        id="tsparticles"
+        particlesLoaded={particlesLoaded}
+        options={options}
+      />
+    </div>
   );
 }
