@@ -29,10 +29,10 @@ export default function MyIntro() {
             </button>
           </div>
           <div className="flex flex-col p-4 mt-3 space-y-5">
-            <p className="text-lg font-semibold cursor-pointer hover:text-gray-700">
+            <p className="text-lg font-semibold cursor-pointer hover:text-stroke-gray">
               view profile
             </p>
-            <p className="text-lg font-semibold cursor-pointer hover:text-gray-700">
+            <p className="text-lg font-semibold cursor-pointer hover:text-stroke-gray">
               edit profile
             </p>
             <p className="text-lg font-semibold text-red-500 cursor-pointer hover:text-red-700">
