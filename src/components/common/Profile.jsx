@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import userImg from '/img/userImg.png';
+import { useState } from "react";
+import userImg from "/img/userImg.png";
 
 function ProfileImage({ image, alt, fallbackText }) {
   return image ? (
@@ -16,7 +16,7 @@ export default function Profile({ isMyProfile }) {
   const userImage = isMyProfile ? userImg : "";
 
   return (
-    <div className="flex flex-row items-start p-4 space-x-7">
+    <div className="flex flex-row items-start w-4/5  p-4 space-x-7">
       <ProfileImage image={userImage} alt="User Profile" fallbackText="SJ" />
       <div>
         <h2 className="text-2xl font-bold mb-2">sj</h2>
@@ -25,15 +25,16 @@ export default function Profile({ isMyProfile }) {
       <button className="px-4 py-2 rounded-full font-medium text-sm transition-colors bg-gray-200 ">
         팔로잉
       </button>
-      {!isMyProfile&&
-      <button
-        className={`px-4 py-2 rounded-full font-medium text-sm ${
-          isFollowing ? 'bg-gray-200 text-black' : 'bg-blue-500 text-white'
-        }`}
-        onClick={() => setIsFollowing(!isFollowing)}
-      >
-        {isFollowing ? '팔로잉' : '팔로우'}
-      </button>} 
+      {!isMyProfile && (
+        <button
+          className={`px-4 py-2 rounded-full font-medium text-sm ${
+            isFollowing ? "bg-gray-200 text-black" : "bg-blue-500 text-white"
+          }`}
+          onClick={() => setIsFollowing(!isFollowing)}
+        >
+          {isFollowing ? "팔로잉" : "팔로우"}
+        </button>
+      )}
       {/* 내프로필이 아닐때는 버튼 있음 */}
     </div>
   );

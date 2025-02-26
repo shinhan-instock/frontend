@@ -8,12 +8,13 @@ import RelatedStockTab from "./components/RelatedStockTab";
 export default function StockPage() {
   const [selectedTab, setSelectedTab] = useState(1);
   return (
-    <div className="flex flex-col h-screen">
-      <div className="sticky flex">
+    <div className="flex flex-col items-center h-screen">
+      <div className="sticky flex w-4/5 justify-center">
         <StockInfo />
       </div>
-      <div className="w-full max-w-2xl">
-        <div className="sticky flex w-full max-w-2xl bg-white border-b border-stroke-gray z-10">
+
+      <div className="w-4/5">
+        <div className="sticky flex w-full  bg-white border-b border-zinc-300 z-10">
           <NavigationBar
             menuType="stock"
             selectedTab={selectedTab}

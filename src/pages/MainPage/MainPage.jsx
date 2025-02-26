@@ -9,7 +9,7 @@ export default function MainPage() {
       <div className="sticky w-full flex flex-row justify-center">
         <PostCreate />
       </div>
-      <div className="w-2/3 ">
+      <div className="w-4/5">
         <div className="sticky flex w-full  bg-white border-b border-zinc-300 z-10">
           <NavigationBar
             menuType="default"
