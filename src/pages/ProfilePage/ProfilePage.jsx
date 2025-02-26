@@ -6,14 +6,14 @@ import PostList from "../../components/common/PostList";
 export default function ProfilePage() {
   const [selectedTab, setSelectedTab] = useState(1);
   return (
-    <div className="flex flex-col h-screen">
-      <div className="sticky flex">
+    <div className="flex flex-col h-screen items-center">
+      <div className="sticky flex w-full justify-center">
         <Profile isMyProfile={false} />
       </div>
-      <div className="w-full max-w-2xl">
-        <div className="sticky flex w-full max-w-2xl bg-white border-b border-zinc-300 z-10">
+      <div className="w-4/5">
+        <div className="sticky flex w-full  bg-white border-b border-zinc-300 z-10">
           <NavigationBar
-            menuType="profile"
+            menuType="myprofile"
             selectedTab={selectedTab}
             setSelectedTab={setSelectedTab}
           />
