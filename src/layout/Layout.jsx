@@ -15,16 +15,16 @@ export default function Layout() {
       <div className="flex flex-col w-1/4  gap-10 overflow-hidden ml-10 px-8">
         <Header />
         <MyIntro />
-        <Pig />
+        <Slider />
         <WatchList />
       </div>
 
       {/* 센터 부분 */}
-      <div className="flex flex-col w-2/4 overflow-hidden ">
+      <div className="flex flex-col w-2/4 overflow-hidden">
         <div className="sticky top-0 z-10 bg-white">
           <SearchBar />
         </div>
-        <div className="flex-grow ">
+        <div className="flex-grow">
           <Outlet />
         </div>
       </div>
