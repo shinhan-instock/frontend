@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import Header from "./Header";
 import MyIntro from "./MyIntro/MyIntro";
-import Pig from "./Pig/Pig";
+import Slider from "./Slider/Slider";
 import WatchList from "./WatchList/WatchList";
 import MyStock from "./MyStock/MyStock";
 import TopStock from "./TopStock/TopStock";
@@ -14,7 +14,7 @@ export default function Layout() {
       <div className="flex flex-col w-1/4  gap-10 overflow-hidden ml-10 px-8">
         <Header />
         <MyIntro />
-        <Pig />
+        <Slider />
         <WatchList />
       </div>
 
