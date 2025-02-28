@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PostList from "../../components/common/PostList";
 import NavigationBar from "../../components/common/NavigationBar";
 import PostCreate from "../MainPage/components/PostCreate";
+import { getAllPosts } from "../../api/PostAPI";
+import MainPostsData from "./components/MainPostsData";
 export default function MainPage() {
   const [selectedTab, setSelectedTab] = useState(1);
+  const [postsData, setPostsData] = useState([]);
   return (
     <div className="flex flex-col items-center h-screen">
       <div className="sticky w-full flex flex-row justify-center">
@@ -19,8 +22,9 @@ export default function MainPage() {
         </div>
       </div>
 
-      <div className="p-5 w-5/6 overflow-auto flex-grow pb-20">
-        <PostList />
+      <div className="p-5 w-5/6 overflow-auto flex-grow pb-30">
+        <MainPostsData selectedTab={selectedTab} setPostsData={setPostsData} />
+        <PostList postsData={postsData} />
       </div>
     </div>
   );

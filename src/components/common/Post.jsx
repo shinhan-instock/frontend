@@ -5,9 +5,10 @@ export default function Post({
   content,
   nickname,
   created_at,
-  stock,
+  hashtag,
   likes,
   comments,
+  sentimentScore,
 }) {
   const [isLiked, setIsLiked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +24,7 @@ export default function Post({
       </div>
       <div>{content}</div>
       <div className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm">
-        {stock}
+        {hashtag}
       </div>
       <div className="flex flex-row gap-3">
         <button onClick={() => setIsLiked(!isLiked)}>
