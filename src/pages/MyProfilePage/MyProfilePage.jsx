@@ -2,9 +2,11 @@ import { useState } from "react";
 import Profile from "../../components/common/Profile";
 import NavigationBar from "../../components/common/NavigationBar";
 import PostList from "../../components/common/PostList";
+import MyProfilePostsData from "./components/MyProfilePostsData";
 
 export default function MyProfilePage() {
   const [selectedTab, setSelectedTab] = useState(1);
+  const [postsData, setPostsData] = useState([]);
   return (
     <div className="flex flex-col h-screen  items-center">
       <div className="sticky flex w-full justify-center">
@@ -20,8 +22,12 @@ export default function MyProfilePage() {
         </div>
       </div>
 
-      <div className="p-5 w-full max-w-2xl overflow-auto flex-grow pb-20">
-        <PostList />
+      <div className="p-5 w-full max-w-2xl overflow-auto flex-grow pb-30">
+        <MyProfilePostsData
+          selectedTab={selectedTab}
+          setPostsData={setPostsData}
+        />
+        <PostList postsData={postsData} />
       </div>
     </div>
   );

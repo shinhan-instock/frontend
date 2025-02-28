@@ -1,12 +1,12 @@
-import { Outlet } from 'react-router-dom';
-import SearchBar from './SearchBar';
-import Header from './Header';
-import MyIntro from './MyIntro/MyIntro';
-import WatchList from './WatchList/WatchList';
-import MyStock from './MyStock/MyStock';
-import TopStock from './TopStock/TopStock';
-import Pig from './Pig/Pig';
-import M from '../components/common/Modal';
+import { Outlet } from "react-router-dom";
+import SearchBar from "./SearchBar";
+import Header from "./Header";
+import MyIntro from "./MyIntro/MyIntro";
+import WatchList from "./WatchList/WatchList";
+import MyStock from "./MyStock/MyStock";
+import TopStock from "./TopStock/TopStock";
+import Slider from "./Slider/Slider";
+import M from "../components/common/Modal";
 
 export default function Layout() {
   return (

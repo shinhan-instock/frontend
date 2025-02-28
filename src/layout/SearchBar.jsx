@@ -1,4 +1,3 @@
-import { useState } from "react";
 import searchIcon from "/img/searchIcon.png";
 
 export default function SearchBar() {
