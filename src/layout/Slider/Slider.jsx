@@ -1,4 +1,4 @@
-import CardSlider from "./components/CardSlider";
+import CardSlider from './components/CardSlider';
 
 export default function Slider() {
   return (

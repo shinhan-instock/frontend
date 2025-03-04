@@ -40,7 +40,7 @@ export default function Layout() {
       </div>
 
       {/* 오른쪽 사이드바  */}
-      <div className="flex flex-col w-1/4  gap-10 overflow-hidden mr-10 px-8">
+      <div className="flex flex-col w-1/4 mt-[80px] gap-10 overflow-hidden mr-10 px-8">
         <Modal />
         <MyStock />
         <TopStock />
