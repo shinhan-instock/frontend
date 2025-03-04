@@ -43,7 +43,6 @@ const stockData = [
 ];
 export default function MyStock() {
   const [isLinked, setIsLinked] = useState(true); // 계좌 연동 여부
-  const [stocks, setStocks] = useState(stockData);
 
   return (
     <div className="w-full mx-auto px-5">
@@ -63,7 +62,7 @@ export default function MyStock() {
           </div>
         ) : (
           <div className="flex flex-col h-64 overflow-auto">
-            {stocks.map((stock) => (
+            {stockData.map((stock) => (
               <div
                 key={stock.id}
                 className="flex justify-between space-y-3 w-full"
@@ -76,20 +75,28 @@ export default function MyStock() {
                   />
                   <div className="flex justify-between w-full">
                     <div className="w-full">
-                      <div className="flex justify-between items-start w-full">
-                        <p className="text-sm font-bold">{stock.name}</p>
-                        <div className="flex items-start ">
-                          <p className="flex items-center text-sm text-red-500">
-                            {stock.change_price}({stock.change}
-                            <MdPercent />)
+                      <div className="flex justify-between w-full">
+                        <div className="flex flex-col w-full max-w-[100px]">
+                          <p className="flex flex-col text-sm font-bold">
+                            {stock.name}
+                          </p>
+                          <p className="flex items-center text-gray-500 text-sm">
+                            <FaWonSign className="w-3 h-3" />
+                            <p className="ml-1">{stock.price}</p>
+                            <p className="ml-1">({stock.share}주)</p>
                           </p>
                         </div>
+                        <div className="flex flex-col items-start ">
+                          <p className="flex items-center text-sm text-red-500">
+                            {stock.change_price}
+                            <br />
+                          </p>
+                          <p className="flex items-center text-sm text-red-500">
+                            ({stock.change}
+                            <MdPercent />)
+                          </p>{' '}
+                        </div>
                       </div>
-                      <p className="text-gray-500 text-sm flex items-center">
-                        <FaWonSign className="w-3 h-3" />
-                        <p className="ml-1">{stock.price}</p>
-                        <p className="ml-1">({stock.share}주)</p>
-                      </p>
                     </div>
                   </div>
                 </div>
