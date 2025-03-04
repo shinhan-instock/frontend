@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { HiOutlineX } from "react-icons/hi";
+import { HiOutlineX } from 'react-icons/hi';
 
 export default function Modal({ children, isOpen, onClose }) {
   return (

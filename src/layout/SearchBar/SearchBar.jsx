@@ -1,23 +1,23 @@
-import { useState, useRef } from "react";
-import searchIcon from "/img/searchIcon.png";
-import Modal from "../../components/common/Modal";
+import { useState, useRef } from 'react';
+import searchIcon from '/img/searchIcon.png';
+import Modal from '../../components/common/Modal';
 import {
   UserSearchResultList,
   StockSearchResultList,
-} from "./components/SearchResultList";
-import TopStock from "./components/TopStock";
+} from './components/SearchResultList';
+import TopStock from './components/TopStock';
 
 export default function SearchBar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   // 0: 검색 전, 1: 주식 검색, 2: 인물 검색
   const [searchType, setSearchType] = useState(0);
 
   const inputRef = useRef(null); // useRef로 input을 참조
 
   const handleSearch = (e) => {
-    if (e.key == "Enter") {
-      if (searchInput.charAt(0) == "₩") {
+    if (e.key == 'Enter') {
+      if (searchInput.charAt(0) == '₩') {
         setSearchType(1);
       } else {
         setSearchType(2);
@@ -26,7 +26,7 @@ export default function SearchBar() {
   };
 
   const handleFocus = () => {
-    setSearchInput(""); // 포커스 시 입력값 초기화
+    setSearchInput(''); // 포커스 시 입력값 초기화
   };
 
   const handleButtonClick = () => {
