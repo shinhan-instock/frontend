@@ -28,7 +28,7 @@ export default function NavigationBar({
   const menu = menuOptions[menuType];
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center z-0">
       <div className="w-full max-w-2xl bg-white border-b border-instock-gray mx-24">
         <div className="h-13 flex flex-row justify-around p-3 gap-10">
           {menu.map((tab) => (
