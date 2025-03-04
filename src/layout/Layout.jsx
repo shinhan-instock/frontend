@@ -6,7 +6,7 @@ import WatchList from "./WatchList/WatchList";
 import MyStock from "./MyStock/MyStock";
 import TopStock from "./TopStock/TopStock";
 import Slider from "./Slider/Slider";
-import M from "../components/common/Modal";
+import Modal from "../components/common/Modal";
 
 export default function Layout() {
   return (
@@ -29,9 +29,9 @@ export default function Layout() {
         </div>
       </div>
 
-      {/* 왼쪽 사이드바  */}
-      <div className="flex flex-col w-1/4  gap-10 overflow-hidden mr-10">
-        <M />
+      {/* 오른쪽 사이드바  */}
+      <div className="flex flex-col w-1/4  gap-10 overflow-hidden mr-10 px-8">
+        <Modal />
         <MyStock />
         <TopStock />
       </div>
