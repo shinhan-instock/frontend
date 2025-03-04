@@ -1,8 +1,8 @@
-import { useState } from "react";
-import Profile from "../../components/common/Profile";
-import NavigationBar from "../../components/common/NavigationBar";
-import PostList from "../../components/common/PostList";
-import ProfilePostsData from "./components/ProfilePostsData";
+import { useState } from 'react';
+import Profile from '../../components/common/Profile';
+import NavigationBar from '../../components/common/NavigationBar';
+import PostList from '../../components/common/PostList';
+import ProfilePostsData from './components/ProfilePostsData';
 
 export default function ProfilePage() {
   const [selectedTab, setSelectedTab] = useState(1);
@@ -15,7 +15,7 @@ export default function ProfilePage() {
       <div className="w-4/5">
         <div className="sticky flex w-full  bg-white border-b border-zinc-300 z-10">
           <NavigationBar
-            menuType="myprofile"
+            menuType="profile"
             selectedTab={selectedTab}
             setSelectedTab={setSelectedTab}
           />
