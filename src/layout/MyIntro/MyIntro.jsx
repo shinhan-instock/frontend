@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import { HiChevronUp, HiChevronDown } from 'react-icons/hi';
-import userImg from '/img/userImg.png';
+import { useState } from "react";
+import { HiChevronUp, HiChevronDown } from "react-icons/hi";
+import userImg from "/img/userImg.png";
+import { useNavigate } from "react-router-dom";
 
 export default function MyIntro() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="w-full mx-auto px-5">
       {isOpen ? (
-        <div className="flex flex-col p-4 border border-stroke-gray rounded-lg">
+        <div className="flex flex-col p-4 border border-stroke-gray rounded-lg relative z-100">
           <div className="flex flex-row justify-between">
             <div className="flex">
               <img
@@ -29,13 +31,30 @@ export default function MyIntro() {
             </button>
           </div>
           <div className="flex flex-col p-4 mt-3 space-y-5">
-            <p className="text-lg font-semibold cursor-pointer hover:text-stroke-gray">
+            <p
+              className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
+              onClick={() => {
+                navigate("/myprofile");
+                setIsOpen(!isOpen);
+              }}
+            >
               view profile
             </p>
-            <p className="text-lg font-semibold cursor-pointer hover:text-stroke-gray">
+            <p
+              className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+            >
               edit profile
             </p>
-            <p className="text-lg font-semibold text-red-500 cursor-pointer hover:text-red-700">
+            <p
+              className="text-lg font-semibold text-red-500 cursor-pointer hover:text-red-700"
+              onClick={() => {
+                navigate("/myprofile");
+                setIsOpen(!isOpen);
+              }}
+            >
               sign out
             </p>
           </div>
