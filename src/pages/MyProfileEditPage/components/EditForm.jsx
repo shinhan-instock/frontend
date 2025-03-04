@@ -9,8 +9,9 @@ export default function EditForm() {
       fileInputRef.current.click();
     }
   };
+
   return (
-    <form className="flex flex-col items-center gap-8">
+    <form className="flex flex-col items-center gap-8 w-full">
       <div className="flex flex-col items-center gap-3 mt-8">
         <div className="flex flex-col items-center w-30 h-30 rounded-full relative">
           <img src={profileImg} className="w-full h-full rounded-full" />
@@ -57,9 +58,6 @@ export default function EditForm() {
         value="Done"
         className="bg-black text-center text-white rounded-2xl w-1/4 p-2"
       />
-      <button className="bg-instock-gray text-center  text-red-500 rounded-2xl w-1/4 p-2">
-        계정 삭제
-      </button>
     </form>
   );
 }
