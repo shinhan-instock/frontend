@@ -16,7 +16,7 @@ export default function Modal({ children, isOpen, onClose }) {
                 <HiOutlineX className="w-4 h-4 text-gray-600 hover:text-red-500" />
               </button>
             </div>
-            <div>{children}</div>
+            <div className="w-full h-full">{children}</div>
           </div>
         </div>
       )}
