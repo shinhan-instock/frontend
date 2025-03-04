@@ -1,4 +1,5 @@
 import stockImg from "/img/stockImg.png";
+import WonFormatter from "../../../utils/WonFormatter";
 
 const stockData = {
   stock_image: stockImg,
@@ -9,10 +10,6 @@ const stockData = {
 };
 
 export default function StockInfo() {
-  const WonFormat = new Intl.NumberFormat("kr-KR", {
-    style: "currency",
-    currency: "KRW",
-  });
   return (
     <div className="flex flex-col w-full ">
       <div className="flex flex-row items-center justify-center w-4/5 pb-2 flex-wrap">
@@ -23,24 +20,24 @@ export default function StockInfo() {
 
             <div className="text-stroke-gray">
               {" "}
-              {WonFormat.format(stockData.stock_price)}
+              {WonFormatter.format(stockData.stock_price)}
             </div>
+            {stockData.stock_change_rate > 0 ? (
+              <div className="font-bold text-xl text-red-500 ">
+                + {stockData.stock_change_rate} %
+              </div>
+            ) : (
+              <div className="font-bold text-xl text-blue-500">
+                {stockData.stock_change_rate} %
+              </div>
+            )}
           </div>
-          {stockData.stock_change_rate > 0 ? (
-            <div className="font-bold text-xl text-red-500 ">
-              + {stockData.stock_change_rate} %
-            </div>
-          ) : (
-            <div className="font-bold text-xl text-blue-500">
-              {stockData.stock_change_rate} %
-            </div>
-          )}
         </div>
-      </div>
-      <div className="flex flex-row justify-end">
-        <button className="w-36 bg-black text-white  px-6 py-1 rounded-xl hover:bg-instock-gray hover:text-black">
-          + watchlist
-        </button>
+        <div className="flex flex-row justify-end">
+          <button className="w-36 bg-black text-white  px-6 py-1 rounded-xl hover:bg-instock-gray hover:text-black">
+            + watchlist
+          </button>
+        </div>
       </div>
     </div>
   );

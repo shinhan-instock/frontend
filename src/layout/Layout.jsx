@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import SearchBar from "./SearchBar";
+import SearchBar from "./SearchBar/SearchBar";
 import Header from "./Header";
 import MyIntro from "./MyIntro/MyIntro";
 import WatchList from "./WatchList/WatchList";
@@ -24,7 +24,7 @@ export default function Layout() {
         <div className="sticky top-0 z-10 bg-white">
           <SearchBar />
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow z-0">
           <Outlet />
         </div>
       </div>

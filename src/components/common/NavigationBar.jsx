@@ -18,19 +18,18 @@ const menuOptions = {
     { id: 3, menu: "관련주" },
   ],
 };
-
 export default function NavigationBar({
   menuType,
   selectedTab,
   setSelectedTab,
 }) {
-  // const [selectedTab, setSelectedTab] = useState(1);
   const menu = menuOptions[menuType];
 
   return (
-    <div className="w-full flex justify-center">
-      <div className="w-full max-w-2xl bg-white border-b border-instock-gray mx-24">
-        <div className="h-13 flex flex-row justify-around p-3 gap-10">
+    <div className="w-full flex justify-center z-10 relative">
+      {" "}
+      <div className="w-full max-w-2xl bg-white border-b border-instock-gray mx-24 z-10">
+        <div className="h-13 flex flex-row justify-around p-3 gap-10 z-10">
           {menu.map((tab) => (
             <button
               key={tab.id}
