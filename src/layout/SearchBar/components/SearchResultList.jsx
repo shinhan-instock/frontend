@@ -14,25 +14,6 @@ const userdata = [
   },
 ];
 
-const stockdata = [
-  {
-    id: 1,
-    img: kbImg,
-    stockName: "kb",
-    stockCode: "055550",
-    price: 48450,
-    changeRate: 0.1,
-  },
-  {
-    id: 2,
-    img: bcImg,
-    stockName: "bc",
-    stockCode: "055550",
-    price: 48450,
-    changeRate: 0.1,
-  },
-];
-
 export function UserSearchResultList() {
   return (
     <div className="py-5 px-10 w-full">
@@ -48,17 +29,18 @@ export function UserSearchResultList() {
   );
 }
 
-export function StockSearchResultList() {
+export function StockSearchResultList({ stockData }) {
+  console.log("s", stockData);
   return (
-    <div className="py-5 px-10 w-full">
-      {stockdata.map((item) => (
+    <div className="py-5 px-10 w-full overflow-auto h-120">
+      {stockData.map((item) => (
         <StockSearchResult
           key={item.id}
-          img={item.img}
+          // img={item.img}
           stockName={item.stockName}
           stockCode={item.stockCode}
           price={item.price}
-          changeRate={item.changeRate}
+          changeRate={item.priceChangeRate}
         />
       ))}
     </div>

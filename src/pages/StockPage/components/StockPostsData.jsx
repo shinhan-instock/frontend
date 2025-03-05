@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
-import { getAllPosts } from "../../../api/PostAPI";
+import { getStockPosts } from "../../../api/PostAPI";
 
-export default function StockPostsData({ selectedTab, setPostsData }) {
+export default function StockPostsData({ stockName, setPostsData }) {
   useEffect(() => {
-    getAllPosts(false, false, false, 1).then((data) => {
+    getStockPosts(stockName).then((data) => {
       setPostsData(data);
     });
-  }, [selectedTab]);
+  }, []);
   return <div></div>;
 }

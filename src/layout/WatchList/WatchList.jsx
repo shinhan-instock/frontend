@@ -58,7 +58,7 @@ export default function WatchList() {
 
   return (
     <div className="w-full mx-auto px-5 h-full">
-      <div className="flex flex-col p-4 rounded-lg bg-instock-gray h-full mb-40">
+      <div className="flex flex-col p-4 rounded-lg bg-instock-gray h-11/12">
         <div className="flex mb-4">
           <button className="w-auto bg-black text-zinc-100 font-medium px-4 rounded-2xl">
             + watchList

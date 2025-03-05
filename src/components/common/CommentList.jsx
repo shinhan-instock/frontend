@@ -1,11 +1,11 @@
-import React from 'react';
-import userImg from '/img/userImg.png';
+/* eslint-disable react/prop-types */
+import userImg from "/img/userImg.png";
 
 export default function CommentList({ comment }) {
   return (
     <div className="p-4 flex flex-row w-full">
-      <div className="flex items-center justify-center">
-        <img src={userImg} alt="profile" className="w-14 h-14 rounded-full" />
+      <div className="flex items-center justify-center w-13 h-13 rounded-full">
+        <img src={userImg} alt="profile" className="w-13 h-13 rounded-full" />
       </div>
       <div className="flex flex-col mx-4 w-full">
         <div className="flex flex-row">

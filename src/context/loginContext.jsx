@@ -5,7 +5,7 @@ import { createContext, useState } from "react";
 export const loginContext = createContext();
 
 function instockUser() {
-  const instock_user = localStorage.getItem("instock_user");
+  const instock_user = sessionStorage.getItem("instock_user");
   return instock_user !== "" ? JSON.parse(instock_user) : null;
 }
 export function LoginProvider({ children }) {

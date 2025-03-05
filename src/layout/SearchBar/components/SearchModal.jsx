@@ -6,7 +6,8 @@ import {
   StockSearchResultList,
 } from "./SearchResultList";
 import TopStock from "./TopStock";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getTopStocks } from "../../../api/stockAPI";
 
 export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
   const [searchInput, setSearchInput] = useState("");
@@ -28,6 +29,10 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
   const handleFocus = () => {
     setSearchInput("");
   };
+  const [stockData, setStockData] = useState([]);
+  useEffect(() => {
+    getTopStocks().then((stocks) => setStockData(stocks));
+  }, []);
   return (
     <Modal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)}>
       <div className="flex flex-col items-center">
@@ -50,7 +55,7 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
         {searchType === 0 ? (
           <TopStock />
         ) : searchType === 1 ? (
-          <StockSearchResultList />
+          <StockSearchResultList stockData={stockData} />
         ) : (
           <UserSearchResultList />
         )}
