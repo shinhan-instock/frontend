@@ -14,7 +14,7 @@ export default function MainPostsData({ selectedTab, setPostsData }) {
       popular = true;
     }
 
-    getAllPosts(following, popular, scrap, 1).then((data) => {
+    getAllPosts(following, popular, scrap, "pda").then((data) => {
       setPostsData(data);
     });
   }, [selectedTab]);

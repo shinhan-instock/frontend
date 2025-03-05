@@ -43,6 +43,7 @@ export default function MyIntro() {
             <p
               className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
               onClick={() => {
+                navigate("/myprofile/edit");
                 setIsOpen(!isOpen);
               }}
             >
@@ -51,7 +52,6 @@ export default function MyIntro() {
             <p
               className="text-lg font-semibold text-red-500 cursor-pointer hover:text-red-700"
               onClick={() => {
-                navigate("/myprofile");
                 setIsOpen(!isOpen);
               }}
             >

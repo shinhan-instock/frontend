@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
-import { getAllPosts } from "../../../api/PostAPI";
+import { getMyPosts } from "../../../api/PostAPI";
 
 export default function MyProfilePostsData({ selectedTab, setPostsData }) {
   useEffect(() => {
-    getAllPosts(false, false, false, 1).then((data) => {
+    getMyPosts("pda").then((data) => {
       setPostsData(data);
     });
   }, [selectedTab]);
