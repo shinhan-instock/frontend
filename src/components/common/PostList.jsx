@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
 import Post from "./Post";
 import userImg from "/img/userImg.png";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function PostList({ postsData }) {
+  const { userInfo } = useLogin();
   return (
     <div className="flex flex-col gap-10">
       {postsData.length !== 0 ? (

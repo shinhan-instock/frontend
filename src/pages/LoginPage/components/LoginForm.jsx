@@ -1,17 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function LoginForm() {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
+  const navigate = useNavigate();
   const handleSubmit = async () => {
-    console.log(id, pw);
-    try {
-      const res = await axios.post("localhost:8080/user/login", { id, pw });
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
+    // 로그인 api 호출해서 로그인 성공하면 -> 로컬스토리지에 넣기
+    localStorage.setItem("instock_user", JSON.stringify({ id: id }));
+    navigate("/");
   };
   return (
     <div className="flex flex-col gap-5 px-60">
