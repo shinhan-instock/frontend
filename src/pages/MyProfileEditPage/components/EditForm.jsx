@@ -1,6 +1,6 @@
 import profileImg from "/img/userImg.png";
 import { LiaEditSolid } from "react-icons/lia";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 export default function EditForm() {
   const fileInputRef = useRef(null);
 

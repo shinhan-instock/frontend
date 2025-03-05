@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const menuOptions = {
   default: [
     { id: 1, menu: "실시간" },

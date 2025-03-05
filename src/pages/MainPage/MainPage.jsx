@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PostList from "../../components/common/PostList";
 import NavigationBar from "../../components/common/NavigationBar";
 import PostCreate from "../MainPage/components/PostCreate";
-import { getAllPosts } from "../../api/PostAPI";
 import MainPostsData from "./components/MainPostsData";
+
 export default function MainPage() {
   const [selectedTab, setSelectedTab] = useState(1);
   const [postsData, setPostsData] = useState([]);
