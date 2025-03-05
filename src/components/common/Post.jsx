@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import Modal from './Modal';
+import CommentCreate from './CommentCreate';
+import CommentList from './CommentList';
 export default function Post({
   img,
   content,
@@ -12,6 +14,37 @@ export default function Post({
 }) {
   const [isLiked, setIsLiked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [commentList, setCommentList] = useState([
+    {
+      nickname: 'user1',
+      created_at: '2025.03.5',
+      content: '이 글 너무 좋네요!',
+    },
+    {
+      nickname: 'user2',
+      created_at: '2025.03.5',
+      content: '저도 비슷한 생각을 했어요.',
+    },
+    {
+      nickname: 'user3',
+      created_at: '2025.03.5',
+      content: '좋은 정보 감사합니다!',
+    },
+    {
+      nickname: 'user3',
+      created_at: '2025.03.5',
+      content: '좋은 정보 감사합니다!',
+    },
+    {
+      nickname: 'user3',
+      created_at: '2025.03.5',
+      content: '좋은 정보 감사합니다!',
+    },
+  ]);
+
+  const addComment = (newComment) => {
+    setCommentList([...commentList, newComment]);
+  };
 
   return (
     <div className=" flex flex-col gap-2 px-20">
@@ -58,7 +91,15 @@ export default function Post({
             <button>💬</button>
             <div>{comments}</div>
           </div>
-        </div>  
+        </div>
+        <div>
+          <CommentCreate addComment={addComment} />
+        </div>
+        <div className="max-h-[250px] overflow-auto">
+          {commentList.map((comment, index) => (
+            <CommentList key={index} comment={comment} />
+          ))}
+        </div>
       </Modal>
     </div>
   );
