@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import stockImg from "/img/stockImg.png";
 import WonFormatter from "../../../utils/WonFormatter";
 import { getStockInfo } from "../../../api/stockAPI";
 import { useEffect, useState } from "react";

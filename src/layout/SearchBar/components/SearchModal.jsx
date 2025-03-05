@@ -35,7 +35,7 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
   }, []);
   return (
     <Modal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)}>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center h-full">
         <div className="w-11/12 border-1 border-stroke-gray bg-instock-gray py-1 px-5 rounded-md flex flex-row items-center gap-3">
           <CiSearch />
           <input
@@ -52,13 +52,15 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
             value={searchInput}
           ></input>
         </div>
-        {searchType === 0 ? (
-          <TopStock />
-        ) : searchType === 1 ? (
-          <StockSearchResultList stockData={stockData} />
-        ) : (
-          <UserSearchResultList />
-        )}
+        <div className="w-full h-5/6 ">
+          {searchType === 0 ? (
+            <TopStock />
+          ) : searchType === 1 ? (
+            <StockSearchResultList stockData={stockData} />
+          ) : (
+            <UserSearchResultList />
+          )}
+        </div>
       </div>
     </Modal>
   );

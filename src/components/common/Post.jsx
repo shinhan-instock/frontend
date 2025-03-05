@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import CommentCreate from "./CommentCreate";
 import CommentList from "./CommentList";
+import { getLikeByUser } from "../../api/PostAPI";
+import { useLogin } from "../../hooks/useLogin";
 export default function Post({
+  id,
   profileImg,
   content,
   nickname,
@@ -49,17 +52,35 @@ export default function Post({
     setCommentList([...commentList, newComment]);
   };
   const navigate = useNavigate();
+  const { userInfo } = useLogin();
+  useEffect(() => {
+    getLikeByUser(userInfo?.id, id).then((result) => setIsLiked(result));
+  }, [userInfo, id]);
+
   return (
     <div className=" flex flex-col gap-2 px-20">
-      <div className="flex flex-row gap-2" onClick={() => setIsModalOpen(true)}>
-        <img src={profileImg} className="rounded-full w-[60px] h-[60px] " />
-        <div className="flex flex-col">
-          <div>{nickname}</div>
-          <div>{created_at}</div>
+      <div
+        className="flex flex-row justify-between w-full"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <div className="flex flex-row gap-2">
+          <img src={profileImg} className="rounded-full w-[60px] h-[60px] " />
+          <div className="flex flex-col">
+            <div>{nickname}</div>
+            <div>
+              {new Date(created_at).toLocaleString({
+                dateStyle: "medium",
+                timeStyle: "short",
+              })}
+            </div>
+          </div>
         </div>
+        <div className=" border-1 border-yellow-500 w-10 h-10 flex flex-row items-center justify-center rounded-lg">
+          {sentimentScore}
+        </div>{" "}
       </div>
       <div>{content}</div>
-      {images && <img src={images} className="w-full " />}
+      {images && <img src={images} className="w-11/12 rounded-xl " />}
 
       <div
         className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm hover:cursor-pointer"

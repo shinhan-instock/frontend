@@ -2,9 +2,13 @@
 import { useEffect } from "react";
 import { getMyPosts } from "../../../api/PostAPI";
 
-export default function MyProfilePostsData({ selectedTab, setPostsData }) {
+export default function MyProfilePostsData({
+  selectedTab,
+  setPostsData,
+  userId,
+}) {
   useEffect(() => {
-    getMyPosts("pda").then((data) => {
+    getMyPosts(userId).then((data) => {
       setPostsData(data);
     });
   }, [selectedTab]);

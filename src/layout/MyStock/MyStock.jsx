@@ -1,8 +1,6 @@
-import { HiOutlineX } from "react-icons/hi";
 import { FaWonSign } from "react-icons/fa6";
 import { MdPercent } from "react-icons/md";
 import { useState } from "react";
-import { useLogin } from "../../hooks/useLogin";
 
 const stockData = [
   {

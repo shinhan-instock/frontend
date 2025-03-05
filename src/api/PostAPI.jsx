@@ -79,6 +79,14 @@ export async function deleteLike(likeId, userId) {
   return data;
 }
 
+export async function getLikeByUser(userId, postId) {
+  const res = await axios.get(`${BASE_URL}/posts/${postId}/like`, {
+    headers: { Authorization: `Bearer ${userId}` },
+  });
+  const data = res.data.result;
+  return data;
+}
+
 export async function deletePost(postId, userId) {
   const res = await axios.delete(`${BASE_URL}/posts/${postId}`, {
     headers: { Authorization: `Bearer ${userId}` },

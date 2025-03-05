@@ -47,6 +47,27 @@ const stockData = [
     change: +"0.89",
     img: "/img/stockImg.png",
   },
+  {
+    id: 7,
+    name: "SK",
+    price: "150,700",
+    change: +"0.89",
+    img: "/img/stockImg.png",
+  },
+  {
+    id: 8,
+    name: "SK",
+    price: "150,700",
+    change: +"0.89",
+    img: "/img/stockImg.png",
+  },
+  {
+    id: 9,
+    name: "SK",
+    price: "150,700",
+    change: +"0.89",
+    img: "/img/stockImg.png",
+  },
 ];
 export default function WatchList() {
   const { userInfo } = useLogin();
@@ -57,7 +78,7 @@ export default function WatchList() {
   };
 
   return (
-    <div className="w-full mx-auto px-5 h-full">
+    <div className="w-full mx-auto px-5 h-3/7 ">
       <div className="flex flex-col p-4 rounded-lg bg-instock-gray h-11/12">
         <div className="flex mb-4">
           <button className="w-auto bg-black text-zinc-100 font-medium px-4 rounded-2xl">
@@ -65,7 +86,7 @@ export default function WatchList() {
           </button>
         </div>
         {userInfo ? (
-          <div className="flex flex-col h-64 overflow-auto">
+          <div className="flex flex-col h-full overflow-auto">
             {stocks.map((stock) => (
               <div
                 key={stock.id}

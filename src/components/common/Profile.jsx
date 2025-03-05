@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import userImg from "/img/userImg.png";
 
@@ -11,7 +12,7 @@ function ProfileImage({ image, alt, fallbackText }) {
   );
 }
 
-export default function Profile({ isMyProfile }) {
+export default function Profile({ isMyProfile, userId }) {
   const [isFollowing, setIsFollowing] = useState(false);
   const userImage = isMyProfile ? userImg : "";
 
@@ -19,7 +20,7 @@ export default function Profile({ isMyProfile }) {
     <div className="flex flex-row items-start w-4/5  p-4 space-x-7">
       <ProfileImage image={userImage} alt="User Profile" fallbackText="SJ" />
       <div>
-        <h2 className="text-2xl font-bold mb-2">sj</h2>
+        <h2 className="text-2xl font-bold mb-2">{userId}</h2>
         <p className="text-gray-600">주식 폭주기니</p>
       </div>
       <button className="px-4 py-2 rounded-full font-medium text-sm transition-colors bg-gray-200 ">
