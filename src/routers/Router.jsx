@@ -19,7 +19,7 @@ export const Routes = [
       { element: <MyProfilePage />, path: "/myprofile" },
       { element: <PiggybankPage />, path: "/piggybank" },
       { element: <ProfilePage />, path: "/profile" },
-      { element: <StockPage />, path: "/stock/:id" },
+      { element: <StockPage />, path: "/stock/:stockname" },
     ],
   },
   {

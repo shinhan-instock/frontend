@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import userImg from '/img/userImg.png';
+import React, { useState } from "react";
+import userImg from "/img/userImg.png";
 
 export default function CommentCreate({ addComment }) {
-  const [commentText, setCommentText] = useState('');
+  const [commentText, setCommentText] = useState("");
 
   const handlePost = () => {
-    if (commentText.trim() !== '') {
+    if (commentText.trim() !== "") {
       addComment({
-        nickname: 'akrxso',
-        created_at: '2025.03.5',
+        nickname: "akrxso",
+        created_at: "2025.03.5",
         content: commentText,
       });
-      setCommentText('');
+      setCommentText("");
     }
   };
 
   return (
     <div className="p-4 flex flex-row  w-full">
-      <div className="flex items-center justify-center">
-        <img src={userImg} alt="profile" className="w-14 h-14 rounded-full " />
+      <div className="flex py-3 flex-row items-start justify-center">
+        <img src={userImg} alt="profile" className="w-16 h-16 rounded-full " />
       </div>
       <div className="flex flex-col mx-4  w-full">
         <div className="flex flex-row">

@@ -8,7 +8,7 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const handleSubmit = async () => {
     // 로그인 api 호출해서 로그인 성공하면 -> 로컬스토리지에 넣기
-    localStorage.setItem("instock_user", JSON.stringify({ id: id }));
+    sessionStorage.setItem("instock_user", JSON.stringify({ id: id }));
     navigate("/");
   };
   return (

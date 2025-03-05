@@ -1,10 +1,17 @@
 import { StockSearchResultList } from "./SearchResultList";
+import { getTopStocks } from "../../../api/stockAPI";
+import { useEffect, useState } from "react";
 
 export default function TopStock() {
+  const [stockData, setStockData] = useState([]);
+  useEffect(() => {
+    getTopStocks().then((stocks) => setStockData(stocks));
+  }, []);
+
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full ">
       <div className="px-10 pt-5 text-lg">실시간 등락율 높은 주식 Top 20</div>
-      <StockSearchResultList />
+      <StockSearchResultList stockData={stockData} />
     </div>
   );
 }

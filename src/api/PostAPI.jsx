@@ -2,10 +2,18 @@ import axios from "axios";
 const BASE_URL = "http://localhost:8080";
 
 export async function getAllPosts(following, popular, scrap, userId) {
-  const res = await axios.get(
-    `${BASE_URL}/posts/?following=${following}&popular=${popular}&scrap=${scrap}`,
-    { headers: { Authorization: `Bearer ${userId}` } }
-  );
+  let res = "";
+  if (userId !== null) {
+    res = await axios.get(
+      `${BASE_URL}/posts/?following=${following}&popular=${popular}&scrap=${scrap}`,
+      { headers: { Authorization: `Bearer ${userId}` } }
+    );
+  } else {
+    res = await axios.get(
+      `${BASE_URL}/posts/?following=${following}&popular=${popular}&scrap=${scrap}`
+    );
+  }
+
   const data = res.data.result;
   return data;
 }
@@ -19,6 +27,7 @@ export async function getPost(postId) {
 export async function getStockPosts(stockName) {
   const res = await axios.get(`${BASE_URL}/posts/stocks/${stockName}`);
   const data = res.data.result;
+  console.log(data);
   return data;
 }
 

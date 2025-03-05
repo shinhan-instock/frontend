@@ -11,7 +11,7 @@ export default function MyIntro() {
   console.log(userInfo);
 
   return (
-    <div className="w-full mx-auto px-5">
+    <div className="w-full mx-auto px-5 z-10 relative">
       {isOpen && userInfo ? (
         <div className="flex flex-col p-4 border border-stroke-gray rounded-lg relative z-100">
           <div className="flex flex-row justify-between">
@@ -66,7 +66,7 @@ export default function MyIntro() {
           </div>
         </div>
       ) : (
-        <div className="flex justify-between p-4 border border-stroke-gray rounded-lg">
+        <div className="flex justify-between p-4 border border-stroke-gray rounded-lg z-10 relative">
           <div className="flex flex-row space-x-3">
             <img
               src={userImg}

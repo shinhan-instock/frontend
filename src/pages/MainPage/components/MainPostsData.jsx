@@ -1,8 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
 import { getAllPosts } from "../../../api/PostAPI";
+import { useLogin } from "../../../hooks/useLogin";
 
 export default function MainPostsData({ selectedTab, setPostsData }) {
+  const { userInfo } = useLogin();
+  console.log("user", userInfo);
+  const userId = userInfo ? userInfo.id : null;
   useEffect(() => {
     let following = false;
     let popular = false;
@@ -14,7 +18,7 @@ export default function MainPostsData({ selectedTab, setPostsData }) {
       popular = true;
     }
 
-    getAllPosts(following, popular, scrap, "pda").then((data) => {
+    getAllPosts(following, popular, scrap, userId).then((data) => {
       setPostsData(data);
     });
   }, [selectedTab]);

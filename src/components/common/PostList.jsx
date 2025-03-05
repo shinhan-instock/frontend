@@ -11,7 +11,8 @@ export default function PostList({ postsData }) {
         postsData.map((post) => (
           <Post
             key={post.id}
-            img={post.img == null ? userImg : post.img}
+            profileImg={userImg}
+            images={post.images}
             content={post.content}
             nickname={post.nickname}
             created_at={
@@ -24,7 +25,7 @@ export default function PostList({ postsData }) {
           />
         ))
       ) : (
-        <div>아직 팔로잉 중인 게시글이 없어요 🥲</div>
+        <div>아직 관련 게시글이 없어요 🥲</div>
       )}
     </div>
   );

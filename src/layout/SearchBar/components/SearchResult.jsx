@@ -15,7 +15,7 @@ export function UserSearchResult({ img, nickname, intro }) {
 }
 
 export function StockSearchResult({
-  img,
+  // img,
   stockName,
   stockCode,
   price,
@@ -25,7 +25,7 @@ export function StockSearchResult({
     <div className="flex flex-row justify-between items-center py-2 border-b-1 border-instock-gray">
       <div className="flex flex-row gap-5">
         <img
-          src={img}
+          src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stockCode}.png`}
           className="w-12 h-12 rounded-full shadow-md object-cover "
         />
 
