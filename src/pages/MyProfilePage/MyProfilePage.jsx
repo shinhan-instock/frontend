@@ -12,7 +12,7 @@ export default function MyProfilePage() {
   return (
     <div className="flex flex-col h-screen  items-center">
       <div className="sticky flex w-full justify-center">
-        <Profile isMyProfile={true} userId={userInfo.id} />
+        <Profile isMyProfile={true} userId={userInfo.userId} />
       </div>
       <div className="w-4/5">
         <div className="sticky flex w-full  bg-white border-b border-zinc-300 z-10">
@@ -28,7 +28,7 @@ export default function MyProfilePage() {
         <MyProfilePostsData
           selectedTab={selectedTab}
           setPostsData={setPostsData}
-          userId={userInfo.id}
+          userId={userInfo.userId}
         />
         <PostList postsData={postsData} />
       </div>

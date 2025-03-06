@@ -12,7 +12,7 @@ export default function PostList({ postsData }) {
           <Post
             key={post.id}
             id={post.id}
-            profileImg={userImg}
+            profileImg={post.profileImg}
             images={post.images}
             content={post.content}
             nickname={post.nickname}

@@ -10,9 +10,8 @@ export default function MyIntro({
   setIsLogoutOpen,
 }) {
   const { userInfo } = useLogin();
-
   return (
-    <div className="w-full mx-auto px-5 z-10 relative">
+    <div className="w-full mx-auto px-5 z-0 relative">
       {isMyInfoOpen && userInfo ? (
         <OpenedProfile
           userInfo={userInfo}

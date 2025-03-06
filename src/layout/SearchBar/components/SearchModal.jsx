@@ -7,7 +7,7 @@ import {
 } from "./SearchResultList";
 import TopStock from "./TopStock";
 import { useEffect, useRef, useState } from "react";
-import { getTopStocks } from "../../../api/stockAPI";
+import { getTopStocks } from "../../../api/StockAPI";
 
 export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
   const [searchInput, setSearchInput] = useState("");

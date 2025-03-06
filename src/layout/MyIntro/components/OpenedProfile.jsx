@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { HiChevronUp } from "react-icons/hi";
-import userImg from "/img/userImg.png";
+import ImageMaker from "../../../utils/ImageMaker";
 import { useNavigate } from "react-router-dom";
 export default function OpenedProfile({
   userInfo,
@@ -13,12 +13,23 @@ export default function OpenedProfile({
     <div className="flex flex-col p-4 border border-stroke-gray rounded-lg relative z-100">
       <div className="flex flex-row justify-between">
         <div className="flex">
-          <img src={userImg} alt="profile" className="w-14 h-14 rounded-full" />
+          {userInfo && userInfo.imageUrl ? (
+            <img
+              src={userInfo.imageUrl}
+              alt="profile"
+              className="w-14 h-14 rounded-full"
+            />
+          ) : (
+            userInfo &&
+            userInfo.nickname && <ImageMaker nickname={userInfo.nickname} />
+          )}
           <div className="flex-col px-3">
             <h2 className="text-lg font-semibold">
-              {userInfo ? userInfo.id : "로그인이 필요해요"}
+              {userInfo ? userInfo.nickname : "로그인이 필요해요"}
             </h2>
-            <p className="text-gray-600 text-sm">주린이 탈출기</p>
+            <p className="text-gray-600 text-sm">
+              {userInfo ? userInfo.introduction : ""}
+            </p>
           </div>
         </div>
 

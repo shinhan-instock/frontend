@@ -15,7 +15,6 @@ export default function Layout() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
-  console.log("islogout", isLogoutOpen);
   return (
     <div className="flex flex-row w-screen h-dvh">
       {/* 왼쪽 사이드바  */}

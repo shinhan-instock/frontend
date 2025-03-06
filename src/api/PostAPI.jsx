@@ -27,7 +27,6 @@ export async function getPost(postId) {
 export async function getStockPosts(stockName) {
   const res = await axios.get(`${BASE_URL}/posts/stocks/${stockName}`);
   const data = res.data.result;
-  console.log(data);
   return data;
 }
 
@@ -48,17 +47,25 @@ export async function getPostsByUser(nickname) {
 }
 
 export async function addScrap(postId, userId) {
-  const res = await axios.post(`${BASE_URL}/posts/${postId}/scrap`, {
-    headers: { Authorization: `Bearer ${userId}` },
-  });
+  const res = await axios.post(
+    `${BASE_URL}/posts/${postId}/scrap`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${userId}` },
+    }
+  );
   const data = res.data.result;
   return data;
 }
 
 export async function addLike(postId, userId) {
-  const res = await axios.post(`${BASE_URL}/posts/${postId}/like`, {
-    headers: { Authorization: `Bearer ${userId}` },
-  });
+  const res = await axios.post(
+    `${BASE_URL}/posts/${postId}/like`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${userId}` },
+    }
+  );
   const data = res.data.result;
   return data;
 }

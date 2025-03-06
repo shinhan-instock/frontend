@@ -1,18 +1,34 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Login } from "../../../api/UserAPI";
+import Modal from "../../../components/common/Modal";
 
 export default function LoginForm() {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [errMsg, setErrMsg] = useState();
+
   const navigate = useNavigate();
-  const handleSubmit = async () => {
-    // 로그인 api 호출해서 로그인 성공하면 -> 로컬스토리지에 넣기
-    sessionStorage.setItem("instock_user", JSON.stringify({ id: id }));
-    navigate("/");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    Login(id, pw)
+      .then((result) => {
+        sessionStorage.setItem("instock_user", JSON.stringify(result));
+        navigate("/");
+        location.reload();
+      })
+
+      .catch((err) => {
+        setIsOpen(true);
+
+        setErrMsg(err.response.data.message);
+      });
   };
   return (
     <div className="flex flex-col gap-5 px-60">
-      <form className="flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div>ID</div>
         <input
           onChange={(e) => {
@@ -20,7 +36,7 @@ export default function LoginForm() {
           }}
           placeholder="Enter your Id"
           className="border-1 border-stroke-gray p-2 rounded-md"
-        ></input>
+        />
 
         <div>Password</div>
         <input
@@ -29,16 +45,21 @@ export default function LoginForm() {
           }}
           placeholder="Enter your password"
           className="border-1 border-stroke-gray p-2 rounded-md"
-        ></input>
+        />
 
         <button
-          onClick={handleSubmit}
+          onClick={() => setIsOpen(true)}
           type="submit"
-          className="border-1 border-stroke-gray p-2 rounded-md bg-black text-white "
+          className="border-1 border-stroke-gray p-2 rounded-md bg-black text-white"
         >
           Login
         </button>
       </form>
+      {errMsg && (
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+          {errMsg}
+        </Modal>
+      )}
     </div>
   );
 }

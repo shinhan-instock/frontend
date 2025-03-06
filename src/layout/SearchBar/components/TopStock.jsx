@@ -1,5 +1,5 @@
 import { StockSearchResultList } from "./SearchResultList";
-import { getTopStocks } from "../../../api/stockAPI";
+import { getTopStocks } from "../../../api/StockAPI";
 import { useEffect, useState } from "react";
 
 export default function TopStock() {

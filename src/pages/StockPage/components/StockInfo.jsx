@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import WonFormatter from "../../../utils/WonFormatter";
-import { getStockInfo } from "../../../api/stockAPI";
+import { getStockInfo } from "../../../api/StockAPI";
 import { useEffect, useState } from "react";
 
 export default function StockInfo({ stockName }) {
