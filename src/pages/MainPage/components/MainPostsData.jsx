@@ -5,8 +5,7 @@ import { useLogin } from "../../../hooks/useLogin";
 
 export default function MainPostsData({ selectedTab, setPostsData }) {
   const { userInfo } = useLogin();
-  console.log("user", userInfo);
-  const userId = userInfo ? userInfo.id : null;
+  const userId = userInfo ? userInfo.userId : null;
   useEffect(() => {
     let following = false;
     let popular = false;

@@ -1,8 +1,7 @@
+/* eslint-disable react/prop-types */
 import { UserSearchResult, StockSearchResult } from "./SearchResult";
 import userImg from "/img/userImg.png";
 import miniLogo from "/img/miniLogo.png";
-import bcImg from "/img/bc.png";
-import kbImg from "/img/kb.png";
 
 const userdata = [
   { id: 1, img: userImg, nickname: "sj", intro: "주식 폭주기니" },
@@ -30,13 +29,11 @@ export function UserSearchResultList() {
 }
 
 export function StockSearchResultList({ stockData }) {
-  console.log("s", stockData);
   return (
-    <div className="py-5 px-10 w-full overflow-auto h-120">
+    <div className="px-10 w-full overflow-auto">
       {stockData.map((item) => (
         <StockSearchResult
           key={item.id}
-          // img={item.img}
           stockName={item.stockName}
           stockCode={item.stockCode}
           price={item.price}

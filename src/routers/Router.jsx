@@ -18,7 +18,7 @@ export const Routes = [
       { element: <MyProfileEditPage />, path: "/myprofile/edit" },
       { element: <MyProfilePage />, path: "/myprofile" },
       { element: <PiggybankPage />, path: "/piggybank" },
-      { element: <ProfilePage />, path: "/profile" },
+      { element: <ProfilePage />, path: "/profile/:nickname" },
       { element: <StockPage />, path: "/stock/:stockname" },
     ],
   },

@@ -16,7 +16,7 @@ export default function CommentList({ comment }) {
             {comment.created_at}
           </div>
         </div>
-        <div>{comment.content}</div>
+        <div className="flex-grow overflow-hidden">{comment.content}</div>
       </div>
     </div>
   );

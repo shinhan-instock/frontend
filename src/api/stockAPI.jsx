@@ -10,13 +10,13 @@ export async function getStockSearch(stockName) {
 }
 
 export async function getStockInfo(stockName) {
-  const res = await axios.get(`${BASE_URL}/api/stocks/${stockName}`);
+  const res = await axios.get(`${BASE_URL}/stocks/${stockName}`);
   const data = res.data;
   return data;
 }
 
 export async function getTopStocks() {
-  const res = await axios.get(`${BASE_URL}/api/stocks/rankings/top20`);
+  const res = await axios.get(`${BASE_URL}/stocks/rankings/top20`);
   const data = res.data;
   return data;
 }

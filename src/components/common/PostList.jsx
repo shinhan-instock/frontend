@@ -11,7 +11,8 @@ export default function PostList({ postsData }) {
         postsData.map((post) => (
           <Post
             key={post.id}
-            profileImg={userImg}
+            id={post.id}
+            profileImg={post.profileImg}
             images={post.images}
             content={post.content}
             nickname={post.nickname}

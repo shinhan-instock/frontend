@@ -1,26 +1,36 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
 import userImg from "/img/userImg.png";
+import { useLogin } from "../../hooks/useLogin";
+import ImageMaker from "../../utils/ImageMaker";
+import { searchUser } from "../../api/UserAPI";
 
-function ProfileImage({ image, alt, fallbackText }) {
-  return image ? (
-    <img src={image} alt={alt} className="w-20 h-20" />
-  ) : (
-    <div className="w-20 h-20 bg-pink-400 text-white flex items-center justify-center text-2xl font-bold rounded-full shadow-lg">
-      {fallbackText}
-    </div>
-  );
-}
-
-export default function Profile({ isMyProfile }) {
+export default function Profile({ isMyProfile, userNickname }) {
   const [isFollowing, setIsFollowing] = useState(false);
-  const userImage = isMyProfile ? userImg : "";
+  const [userData, setUserData] = useState({});
+  const { userInfo } = useLogin();
+
+  useEffect(() => {
+    if (!isMyProfile) {
+      searchUser(userNickname).then((data) => {
+        setUserData(data[0]);
+      });
+    } else {
+      setUserData(userInfo);
+    }
+  }, []);
 
   return (
     <div className="flex flex-row items-start w-4/5  p-4 space-x-7">
-      <ProfileImage image={userImage} alt="User Profile" fallbackText="SJ" />
+      {userData.imageUrl !== null ? (
+        <img src={userData.imageUrl} />
+      ) : (
+        <ImageMaker nickname={userData.nickname} />
+      )}
+
       <div>
-        <h2 className="text-2xl font-bold mb-2">sj</h2>
-        <p className="text-gray-600">주식 폭주기니</p>
+        <h2 className="text-2xl font-bold mb-2">{userData.nickname}</h2>
+        <p className="text-gray-600">{userData.introduction}</p>
       </div>
       <button className="px-4 py-2 rounded-full font-medium text-sm transition-colors bg-gray-200 ">
         팔로잉
