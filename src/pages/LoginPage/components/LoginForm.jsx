@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Login } from "../../../api/UserAPI";
+import { login } from "../../../api/UserAPI";
 import Modal from "../../../components/common/Modal";
 
 export default function LoginForm() {
@@ -13,7 +13,7 @@ export default function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    Login(id, pw)
+    login(id, pw)
       .then((result) => {
         sessionStorage.setItem("instock_user", JSON.stringify(result));
         navigate("/");

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import userImg from "/img/userImg.png";
 import { useLogin } from "../../hooks/useLogin";
 import ImageMaker from "../../utils/ImageMaker";
-import { SearchUser } from "../../api/UserAPI";
+import { searchUser } from "../../api/UserAPI";
 
 export default function Profile({ isMyProfile, userNickname }) {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -12,7 +12,7 @@ export default function Profile({ isMyProfile, userNickname }) {
 
   useEffect(() => {
     if (!isMyProfile) {
-      SearchUser(userNickname).then((data) => {
+      searchUser(userNickname).then((data) => {
         setUserData(data[0]);
       });
     } else {

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import WonFormatter from "../../../utils/WonFormatter";
+import { useNavigate } from "react-router-dom";
 
 export function UserSearchResult({ img, nickname, intro }) {
   return (
@@ -21,8 +22,15 @@ export function StockSearchResult({
   price,
   changeRate,
 }) {
+  const navigate = useNavigate();
   return (
-    <div className="flex flex-row justify-between items-center py-2 border-b-1 border-instock-gray">
+    <div
+      className="flex flex-row justify-between items-center py-2 border-b-1 border-instock-gray cursor-pointer"
+      onClick={() => {
+        navigate(`/stock/${stockName}`);
+        location.reload();
+      }}
+    >
       <div className="flex flex-row gap-5">
         <img
           src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stockCode}.png`}
