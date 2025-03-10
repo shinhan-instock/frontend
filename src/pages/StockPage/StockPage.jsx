@@ -30,12 +30,12 @@ export default function StockPage() {
 
       <div className="p-5 w-full max-w-2xl overflow-auto flex-grow pb-30 ">
         {selectedTab === 1 ? (
+          <StockEmotionTab />
+        ) : selectedTab === 2 ? (
           <>
             <StockPostsData stockName={stockName} setPostsData={setPostsData} />
             <PostList postsData={postsData} />
           </>
-        ) : selectedTab === 2 ? (
-          <StockEmotionTab />
         ) : (
           <RelatedStockTab />
         )}

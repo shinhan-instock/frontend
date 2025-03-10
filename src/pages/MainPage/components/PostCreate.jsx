@@ -21,7 +21,7 @@ export default function PostCreate() {
           <button className="text-blue-500 hover:text-blue-700">
             <MdOutlineAddPhotoAlternate className="w-8 h-8" />
           </button>
-          <button className="bg-black text-white px-4 py-2 rounded-full font-medium">
+          <button className="bg-black text-white px-4 py-1 rounded-full font-xs">
             POST
           </button>
         </div>

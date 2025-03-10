@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
-import CommentCreate from "./CommentCreate";
-import CommentList from "./CommentList";
+import CommentCreate from "../comment/CommentCreate";
+import CommentList from "../comment/CommentList";
 import { getLikeByUser, addLike, deleteLike } from "../../api/PostAPI";
 import { useLogin } from "../../hooks/useLogin";
 import ImageMaker from "../../utils/ImageMaker";
@@ -24,10 +24,7 @@ export default function Post({
   const [isLiked, setIsLiked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
-
-  const addComment = (newComment) => {
-    setCommentList([...commentList, newComment]);
-  };
+  const [commentsData, setCommentsData] = useState([]);
 
   const navigate = useNavigate();
   const { userInfo } = useLogin();
@@ -70,38 +67,10 @@ export default function Post({
     }
   };
 
-  const [commentList, setCommentList] = useState([
-    {
-      nickname: "user1",
-      created_at: "2025.03.5",
-      content: "이 글 너무 좋네요!",
-    },
-    {
-      nickname: "user2",
-      created_at: "2025.03.5",
-      content: "저도 비슷한 생각을 했어요.",
-    },
-    {
-      nickname: "user3",
-      created_at: "2025.03.5",
-      content: "좋은 정보 감사합니다!",
-    },
-    {
-      nickname: "user2",
-      created_at: "2025.03.5",
-      content: "저도 비슷한 생각을 했어요.",
-    },
-    {
-      nickname: "user3",
-      created_at: "2025.03.5",
-      content: "좋은 정보 감사합니다!",
-    },
-  ]);
-
   return (
     <div>
       <div
-        className="flex flex-col gap-2 px-20"
+        className="flex flex-col gap-2 px-10 border-b-2 border-instock-gray pb-4"
         onClick={() => setIsModalOpen(true)}
       >
         <div className="flex flex-row justify-between w-full">
@@ -190,16 +159,22 @@ export default function Post({
         </div>
         {userInfo && (
           <div>
-            <CommentCreate addComment={addComment} />
+            <CommentCreate
+              postId={id}
+              comments={commentsData}
+              setComments={setCommentsData}
+            />
           </div>
         )}
 
         <div
           className={`${userInfo ? "max-h-1/3" : "max-h-1/2"} overflow-auto`}
         >
-          {commentList.map((comment, index) => (
-            <CommentList key={index} comment={comment} />
-          ))}
+          <CommentList
+            postId={id}
+            comments={commentsData}
+            setComments={setCommentsData}
+          />
         </div>
       </Modal>
     </div>

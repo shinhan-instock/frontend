@@ -13,6 +13,7 @@ export default function EditForm() {
   const fileInputRef = useRef(null);
 
   const handleSubmit = (e) => {
+    e.preventDefault()
     const userData = sessionStorage.getItem("instock_user");
 
     if (userData) {
@@ -65,8 +66,8 @@ export default function EditForm() {
             }}
           />
         </div>
-        <div>{nickname}</div>
-        <div>{introduction}</div>
+        <div>{JSON.parse(sessionStorage.getItem("instock_user")).userId}</div>
+        <div>{JSON.parse(sessionStorage.getItem("instock_user")).introduction}</div>
       </div>
       <div className="flex  flex-col w-3/4">
         <label>Name</label>
