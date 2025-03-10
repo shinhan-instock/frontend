@@ -1,8 +1,26 @@
 import profileImg from "/img/userImg.png";
 import { LiaEditSolid } from "react-icons/lia";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import { getUserInfo, updateUser } from "../../../api/UserAPI";
+
 export default function EditForm() {
+  const [image, setImage] = useState(''); //사진 update할때 쓰는 변수
+  const [nickname, setNickname] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [name, setName] = useState('');
+  const [previewUrl, setPreviewUrl] = useState(profileImg); //frontend에서 사진 보여줄때 쓰는 변수
+
   const fileInputRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    const userData = sessionStorage.getItem("instock_user");
+
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+      const userId = parsedData.userId;
+      updateUser(name, nickname, image, introduction, userId, previewUrl);
+    }
+  };
 
   const handleClick = () => {
     if (fileInputRef.current) {
@@ -10,11 +28,27 @@ export default function EditForm() {
     }
   };
 
+  useEffect(() => {
+    const userData = sessionStorage.getItem("instock_user");
+
+    if (userData) {
+      const parsedData = JSON.parse(userData);
+      const userId = parsedData.userId;
+      getUserInfo(userId).then((data) => {
+        setPreviewUrl(data.imageUrl);
+        setIntroduction(data.introduction);
+        setName(data.name);
+        setNickname(data.nickname);
+      })
+    }
+  
+  }, []);
+
   return (
-    <form className="flex flex-col items-center gap-8 w-full">
+    <form className="flex flex-col items-center gap-8 w-full" onSubmit={handleSubmit}>
       <div className="flex flex-col items-center gap-3 mt-8">
         <div className="flex flex-col items-center w-30 h-30 rounded-full relative">
-          <img src={profileImg} className="w-full h-full rounded-full" />
+          <img src={previewUrl} className="w-full h-full rounded-full" />
           <LiaEditSolid
             onClick={handleClick}
             className="absolute bottom-1 right-1 text-white bg-gray-800 rounded-full p-2 cursor-pointer"
@@ -25,32 +59,46 @@ export default function EditForm() {
             ref={fileInputRef}
             className="hidden"
             onChange={(e) => {
-              console.log(e.target.files[0]);
+              setImage(e.target.files[0]);
+              const imageUrl = URL.createObjectURL(e.target.files[0]); // ✅ 미리보기 URL 생성
+              setPreviewUrl(imageUrl); // ✅ 미리보기 업데이트
             }}
           />
         </div>
-        <div>기존 닉네임</div>
-        <div>기존 설명</div>
+        <div>{nickname}</div>
+        <div>{introduction}</div>
       </div>
       <div className="flex  flex-col w-3/4">
         <label>Name</label>
         <input
-          placeholder="기존 이름"
+          placeholder="이름을 입력하세요"
           className="border-1  border-stroke-gray p-2 rounded-md"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
         ></input>
       </div>
       <div className="flex  flex-col w-3/4">
         <label>Nickname</label>
         <input
-          placeholder="기존 닉네임"
+          placeholder="nickname을 입력하세요"
           className="border-1  border-stroke-gray p-2 rounded-md"
+          value={nickname}
+          onChange={(e) => {
+            setNickname(e.target.value);
+          }}
         ></input>
       </div>
       <div className="flex  flex-col w-3/4">
         <label>Brief Introduction</label>
         <input
-          placeholder="기존 소개"
+          placeholder="자기소개를 입력하세요"
           className="border-1  border-stroke-gray p-2 rounded-md"
+          value={introduction}
+          onChange={(e) => {
+            setIntroduction(e.target.value);
+          }}
         ></input>
       </div>
       <input
