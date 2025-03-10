@@ -1,9 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
-import userImg from '/img/userImg.png';
 import { useLogin } from '../../hooks/useLogin';
 import ImageMaker from '../../utils/ImageMaker';
-import { searchUser, getFollowList, followUser } from '../../api/UserAPI';
+import {
+  searchUser,
+  getFollowList,
+  followUser,
+  unfollowUser,
+} from '../../api/UserAPI';
 import Modal from './Modal';
 
 export default function Profile({ isMyProfile, userNickname }) {
@@ -27,16 +31,14 @@ export default function Profile({ isMyProfile, userNickname }) {
   useEffect(() => {
     const checkFollowStatus = async () => {
       try {
-        const followList = await getFollowList();
+        if (!userInfo.nickname) return;
+        const followList = await getFollowList(userInfo.nickname);
         const isAlreadyFollowing = followList.some(
           (user) => user.nickname === userNickname
         );
         setIsFollowing(isAlreadyFollowing);
-      } catch (error) {
-        console.error('팔로우 상태 조회 실패:', error);
-      }
+      } catch (error) {}
     };
-
     if (!isMyProfile) {
       checkFollowStatus();
     }
@@ -44,21 +46,27 @@ export default function Profile({ isMyProfile, userNickname }) {
 
   const handleFollow = async () => {
     try {
-      await followUser(userNickname);
-      setIsFollowing(true);
-    } catch (error) {
-      console.error('팔로우 실패:', error);
-    }
+      if (isFollowing) {
+        await unfollowUser(userNickname);
+        setIsFollowing(false);
+      } else {
+        await followUser(userNickname);
+        setIsFollowing(true);
+      }
+    } catch (error) {}
   };
 
   const openFollowModal = async () => {
+    const targetNickname = userNickname || userInfo.nickname;
+    if (!targetNickname) {
+      return;
+    }
+
     try {
-      const list = await getFollowList();
+      const list = await getFollowList(targetNickname);
       setFollowList(list);
       setIsModalOpen(true);
-    } catch (error) {
-      console.error('팔로잉 리스트 불러오기 실패:', error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -85,7 +93,6 @@ export default function Profile({ isMyProfile, userNickname }) {
             isFollowing ? 'bg-gray-200 text-black' : 'bg-blue-500 text-white'
           }`}
           onClick={handleFollow}
-          disabled={isFollowing}
         >
           {isFollowing ? '팔로잉' : '팔로우'}
         </button>
