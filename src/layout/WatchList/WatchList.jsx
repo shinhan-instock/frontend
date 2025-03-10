@@ -34,7 +34,7 @@ export default function WatchList() {
   const removeStocks = (e, stockName) => {
     e.stopPropagation();
 
-    console.log("delete", userInfo.userId, stockName);
+    localStorage.removeItem("watchList");
     deleteWatchList(userInfo.userId, stockName);
 
     setStocks(stocks.filter((stock) => stock.stockName !== stockName));

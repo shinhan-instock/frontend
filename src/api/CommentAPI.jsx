@@ -20,6 +20,5 @@ export async function addComment(postId, userId, content) {
     content: content,
   });
   const data = res.data;
-  console.log("data", res);
   return data;
 }

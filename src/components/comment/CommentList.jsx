@@ -18,7 +18,6 @@ export default function CommentList({ postId, comments, setComments }) {
     try {
       const newComments = await getComments(postId, lastCommentId, limit);
       const newCommentsData = newComments.content;
-      console.log("comm", newCommentsData);
 
       if (newCommentsData.length > 0) {
         setComments((prevComments) => {

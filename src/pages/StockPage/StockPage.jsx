@@ -37,7 +37,7 @@ export default function StockPage() {
             <PostList postsData={postsData} />
           </>
         ) : (
-          <RelatedStockTab />
+          <RelatedStockTab stockName={stockName} />
         )}
       </div>
     </div>
