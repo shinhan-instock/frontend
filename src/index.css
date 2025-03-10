@@ -1,10 +1,31 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-stroke-gray: rgba(167, 167, 167, 1);
   --color-instock-gray: rgba(229, 229, 229, 0.3);
   --color-background-blue: #f4f5fb;
   --color-text-blue: #004b9d;
+}
+@font-face {
+  font-family: 'ONE-Mobile-Title';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Title.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+.font-title {
+  @apply font-[ONE-Mobile-Title];
+}
+
+@font-face {
+  font-family: 'ONE-Mobile-POP';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+.font-onepop {
+  @apply font-[ONE-Mobile-POP];
 }
 
 :root {

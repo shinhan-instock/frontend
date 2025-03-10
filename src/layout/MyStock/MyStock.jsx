@@ -1,43 +1,43 @@
-import { FaWonSign } from "react-icons/fa6";
-import { MdPercent } from "react-icons/md";
-import { useState } from "react";
+import { FaWonSign } from 'react-icons/fa6';
+import { MdPercent } from 'react-icons/md';
+import { useState } from 'react';
 
 const stockData = [
   {
     id: 1,
-    name: "IBK",
-    price: "15,000",
-    change_price: "+2,000",
-    change: "+0.72",
-    share: "2",
-    img: "/img/stockImg.png",
+    name: 'IBK',
+    price: '15,000',
+    change_price: '+2,000',
+    change: '+0.72',
+    share: '2',
+    img: '/img/stockImg.png',
   },
   {
     id: 2,
-    name: "Samsung",
-    price: "65,300",
-    change_price: "+2,000",
-    change: "+1.23",
-    share: "1",
-    img: "/img/stockImg.png",
+    name: 'Samsung',
+    price: '65,300',
+    change_price: '+2,000',
+    change: '+1.23',
+    share: '1',
+    img: '/img/stockImg.png',
   },
   {
     id: 3,
-    name: "LG",
-    price: "88,500",
-    change_price: "-2,000",
-    change: "- 0.45",
-    share: "2",
-    img: "/img/stockImg.png",
+    name: 'LG',
+    price: '88,500',
+    change_price: '-2,000',
+    change: '- 0.45',
+    share: '2',
+    img: '/img/stockImg.png',
   },
   {
     id: 4,
-    name: "Hyundai",
-    price: "201,000",
-    change_price: "+20,000",
-    change: "+ 2.01",
-    share: "2",
-    img: "/img/stockImg.png",
+    name: 'Hyundai',
+    price: '201,000',
+    change_price: '+20,000',
+    change: '+ 2.01',
+    share: '2',
+    img: '/img/stockImg.png',
   },
 ];
 export default function MyStock() {
@@ -46,7 +46,7 @@ export default function MyStock() {
   return (
     <div className="w-full mx-auto px-5">
       <div className="flex flex-col p-4 rounded-lg bg-instock-gray">
-        <div className="flex mb-4 justify-center font-bold">내 계좌</div>
+        <div className="flex mb-4 justify-center font-title">내 계좌</div>
 
         {/* 계좌 연동 X */}
         {!isLinked ? (
@@ -55,7 +55,7 @@ export default function MyStock() {
               <span className="text-2xl text-gray-500">+</span>
             </div>
             <p className="mt-10 text-lg font-semibold">내 증권 계좌 연동하기</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 font-title ">
               다양한 서비스를 사용하기 위해 필요해요
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function MyStock() {
                           <p className="flex items-center text-sm text-red-500">
                             ({stock.change}
                             <MdPercent />)
-                          </p>{" "}
+                          </p>{' '}
                         </div>
                       </div>
                     </div>
