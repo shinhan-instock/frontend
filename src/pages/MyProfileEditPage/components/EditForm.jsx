@@ -1,7 +1,7 @@
-import profileImg from "/img/userImg.png";
-import { LiaEditSolid } from "react-icons/lia";
-import { useRef, useEffect, useState } from "react";
-import { getUserInfo, updateUser } from "../../../api/UserAPI";
+import profileImg from '/img/userImg.png';
+import { LiaEditSolid } from 'react-icons/lia';
+import { useRef, useEffect, useState } from 'react';
+import { getUserInfo, updateUser } from '../../../api/UserAPI';
 
 export default function EditForm() {
   const [image, setImage] = useState(''); //사진 update할때 쓰는 변수
@@ -13,8 +13,8 @@ export default function EditForm() {
   const fileInputRef = useRef(null);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const userData = sessionStorage.getItem("instock_user");
+    e.preventDefault();
+    const userData = sessionStorage.getItem('instock_user');
 
     if (userData) {
       const parsedData = JSON.parse(userData);
@@ -30,7 +30,7 @@ export default function EditForm() {
   };
 
   useEffect(() => {
-    const userData = sessionStorage.getItem("instock_user");
+    const userData = sessionStorage.getItem('instock_user');
 
     if (userData) {
       const parsedData = JSON.parse(userData);
@@ -40,16 +40,21 @@ export default function EditForm() {
         setIntroduction(data.introduction);
         setName(data.name);
         setNickname(data.nickname);
-      })
+      });
     }
-  
   }, []);
 
   return (
-    <form className="flex flex-col items-center gap-8 w-full" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col items-center gap-8 w-full"
+      onSubmit={handleSubmit}
+    >
       <div className="flex flex-col items-center gap-3 mt-8">
         <div className="flex flex-col items-center w-30 h-30 rounded-full relative">
-          <img src={previewUrl} className="w-full h-full rounded-full" />
+          <img
+            src={previewUrl}
+            className="w-30 h-30 rounded-full object-contain"
+          />
           <LiaEditSolid
             onClick={handleClick}
             className="absolute bottom-1 right-1 text-white bg-gray-800 rounded-full p-2 cursor-pointer"
@@ -61,13 +66,15 @@ export default function EditForm() {
             className="hidden"
             onChange={(e) => {
               setImage(e.target.files[0]);
-              const imageUrl = URL.createObjectURL(e.target.files[0]); // ✅ 미리보기 URL 생성
-              setPreviewUrl(imageUrl); // ✅ 미리보기 업데이트
+              const imageUrl = URL.createObjectURL(e.target.files[0]);
+              setPreviewUrl(imageUrl);
             }}
           />
         </div>
-        <div>{JSON.parse(sessionStorage.getItem("instock_user")).userId}</div>
-        <div>{JSON.parse(sessionStorage.getItem("instock_user")).introduction}</div>
+        <div>{JSON.parse(sessionStorage.getItem('instock_user')).userId}</div>
+        <div>
+          {JSON.parse(sessionStorage.getItem('instock_user')).introduction}
+        </div>
       </div>
       <div className="flex  flex-col w-3/4">
         <label>Name</label>
