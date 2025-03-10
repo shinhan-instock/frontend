@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useLogin } from "../../hooks/useLogin";
 import { getWatchList } from "../../api/UserAPI";
 import { useNavigate } from "react-router-dom";
+import WonFormatter from "../../utils/WonFormatter";
+import { deleteWatchList } from "../../api/UserAPI";
 
 export default function WatchList() {
   const { userInfo } = useLogin();
@@ -29,8 +31,13 @@ export default function WatchList() {
     };
   }, [userInfo?.userId]);
 
-  const removeStocks = (id) => {
-    setStocks(stocks.filter((stock) => stock.id !== id));
+  const removeStocks = (e, stockName) => {
+    e.stopPropagation();
+
+    console.log("delete", userInfo.userId, stockName);
+    deleteWatchList(userInfo.userId, stockName);
+
+    setStocks(stocks.filter((stock) => stock.stockName !== stockName));
   };
 
   return (
@@ -46,7 +53,7 @@ export default function WatchList() {
             {stocks.length !== 0 &&
               stocks.map((stock) => (
                 <div
-                  key={stock.stockCode}
+                  key={stock.id}
                   className="flex justify-between space-y-3 w-full my-3"
                   onClick={() => navigate(`stock/${stock.stockName}`)}
                 >
@@ -56,27 +63,39 @@ export default function WatchList() {
                       alt={stock.name}
                       className="w-13 h-13 rounded-full"
                     />
-                    <div className="flex justify-between w-full">
+                    <div className="flex flex-row justify-between w-full">
                       <div className="w-full">
                         <div className="flex justify-between items-start w-full">
-                          <p className="text-sm font-bold">{stock.stockName}</p>
+                          <p className="text-md ">{stock.stockName}</p>
+
                           <div className="flex items-start ">
-                            <p className="flex items-center text-red-500">
-                              {stock.changeRate}
-                              <MdPercent />
+                            <p className=" text-md flex items-center">
+                              <p className="ml-1">
+                                {WonFormatter.format(stock.currentPrice)}
+                              </p>
                             </p>
+
                             <button
                               className="w-6 h-6 flex items-center rounded-full hover:bg-instock-gray justify-center"
-                              // onClick={() => removeStocks(stock.id)}
+                              onClick={(e) => removeStocks(e, stock.stockName)}
                             >
                               <HiOutlineX className="w-4 h-4 text-gray-600 hover:text-red-500" />
                             </button>
                           </div>
                         </div>
-                        <p className="text-gray-500 text-sm flex items-center">
-                          <p className="mr-1">현재가</p>
-                          <FaWonSign className="w-3 h-3" />
-                          <p className="ml-1">{stock.currentPrice}</p>
+
+                        <p className="mr-6">
+                          {stock.changeRate > 0 ? (
+                            <p className="flex flex-row w-full justify-end text-red-500">
+                              {" "}
+                              + {stock.changeRate} %
+                            </p>
+                          ) : (
+                            <p className="flex w-full justify-end text-blue-500">
+                              {" "}
+                              {stock.changeRate} %
+                            </p>
+                          )}
                         </p>
                       </div>
                     </div>

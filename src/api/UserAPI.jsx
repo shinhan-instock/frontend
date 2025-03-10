@@ -15,10 +15,17 @@ export async function searchUser(userId) {
   const data = res.data.result;
   return data;
 }
+let eventSource = null;
 
 export function getWatchList(userId, onMessage, onError) {
   if (!userId) return () => {};
-  const eventSource = new EventSource(
+
+  if (eventSource) {
+    eventSource.close();
+    console.log("SSE 연결 종료");
+  }
+
+  eventSource = new EventSource(
     `http://localhost:8080/watchList?userId=${userId}&page=0&size=5`
   );
 
@@ -46,4 +53,37 @@ export function getWatchList(userId, onMessage, onError) {
     console.log("SSE 연결 종료");
     eventSource.close();
   };
+}
+
+export async function addWatchList(userId, stockCode, stockName, onUpdate) {
+  const res = await axios.post("http://localhost:8080/watchList", {
+    userId: userId,
+    stockCode: stockCode,
+    stockName: stockName,
+  });
+
+  const data = res.data.result;
+  console.log("added watchList", data);
+
+  if (onUpdate) {
+    onUpdate();
+  }
+  return data;
+}
+
+export async function deleteWatchList(userId, stockName, onUpdate) {
+  const res = await axios.delete("http://localhost:8080/watchList", {
+    data: {
+      userId: userId,
+      stockName: stockName,
+    },
+  });
+
+  const data = res.data.result;
+  console.log("deleted watchList", data);
+
+  if (onUpdate) {
+    onUpdate();
+  }
+  return data;
 }
