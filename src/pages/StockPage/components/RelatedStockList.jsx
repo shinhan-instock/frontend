@@ -1,4 +1,6 @@
 import RelatedStock from "./RelatedStock";
+import { getRelatedStocks } from "../../../api/StockAPI";
+import { useEffect, useState } from "react";
 
 const data = [
   { id: 1, name: "도이치 모터스", price: 15470, change_rate: 1.54 },
@@ -8,15 +10,15 @@ const data = [
   { id: 5, name: "도이치 모터스", price: 15470, change_rate: 1.54 },
 ];
 
-export default function RelatedStockList() {
+export default function RelatedStockList({ stockData }) {
   return (
     <div className="p-1">
-      {data.map((stock) => (
+      {stockData.map((stock) => (
         <RelatedStock
           key={stock.id}
-          name={stock.name}
+          name={stock.stockName}
           price={stock.price}
-          change_rate={stock.change_rate}
+          change_rate={stock.priceChange}
         />
       ))}
     </div>

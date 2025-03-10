@@ -20,3 +20,12 @@ export async function getTopStocks() {
   const data = res.data;
   return data;
 }
+
+export async function getRelatedStocks(stockName) {
+  const res = await axios.get(
+    `${BASE_URL}/stocks/rankings/${stockName}/theme `
+  );
+  console.log(res.data);
+  const data = res.data;
+  return data;
+}

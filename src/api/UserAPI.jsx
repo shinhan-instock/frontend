@@ -1,5 +1,5 @@
-import axios from 'axios';
-const BASE_URL = 'http://localhost:8080';
+import axios from "axios";
+const BASE_URL = "http://localhost:8080";
 export async function login(userId, password) {
   const res = await axios.post(`${BASE_URL}/users/login`, {
     userId: userId,
@@ -8,6 +8,7 @@ export async function login(userId, password) {
   const data = res.data.result;
   if (data && data.userId) {
     localStorage.setItem('user_id', data.userId);
+
   }
   return data;
 }
@@ -21,7 +22,9 @@ let eventSource = null;
 
 export async function getFollowList(nickname) {
   try {
+
     if (!nickname) {
+
       return [];
     }
 
@@ -33,6 +36,7 @@ export async function getFollowList(nickname) {
       headers: {
         Authorization: `Bearer ${userId}`,
         'Content-Type': 'application/json',
+
       },
       params: { following: nickname },
     });
@@ -97,17 +101,17 @@ export function getWatchList(userId, onMessage, onError) {
   eventSource.onmessage = (event) => {
     try {
       const jsonData = JSON.parse(event.data);
-      console.log('서버에서 받은 JSON 데이터:', jsonData.result);
+      console.log("서버에서 받은 JSON 데이터:", jsonData.result);
       if (onMessage) {
         onMessage(jsonData);
       }
     } catch (error) {
-      console.error('JSON 파싱 오류:', error);
+      console.error("JSON 파싱 오류:", error);
     }
   };
 
   eventSource.onerror = (error) => {
-    console.error('SSE 연결 오류:', error);
+    console.error("SSE 연결 오류:", error);
     if (onError) {
       onError(error);
     }
@@ -115,7 +119,7 @@ export function getWatchList(userId, onMessage, onError) {
   };
 
   return () => {
-    console.log('SSE 연결 종료');
+    console.log("SSE 연결 종료");
     eventSource.close();
   };
 }
@@ -129,7 +133,6 @@ export async function addWatchList(userId, stockCode, stockName, onUpdate) {
 
   const data = res.data.result;
   console.log('added watchList', data);
-
   if (onUpdate) {
     onUpdate();
   }
@@ -146,7 +149,6 @@ export async function deleteWatchList(userId, stockName, onUpdate) {
 
   const data = res.data.result;
   console.log('deleted watchList', data);
-
   if (onUpdate) {
     onUpdate();
   }

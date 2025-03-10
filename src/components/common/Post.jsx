@@ -4,9 +4,17 @@ import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import CommentCreate from "../comment/CommentCreate";
 import CommentList from "../comment/CommentList";
-import { getLikeByUser, addLike, deleteLike } from "../../api/PostAPI";
+import {
+  getLikeByUser,
+  addLike,
+  deleteLike,
+  addScrap,
+  deleteScrap,
+} from "../../api/PostAPI";
 import { useLogin } from "../../hooks/useLogin";
 import ImageMaker from "../../utils/ImageMaker";
+import { BsBookmark } from "react-icons/bs";
+import { BsBookmarkFill } from "react-icons/bs";
 
 export default function Post({
   id,
@@ -22,10 +30,12 @@ export default function Post({
 }) {
   const [likeId, setLikeId] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [scrapId, setScrapId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [commentsData, setCommentsData] = useState([]);
-
+  const [scrap, setScrap] = useState(false);
+  console.log(sentimentScore);
   const navigate = useNavigate();
   const { userInfo } = useLogin();
 
@@ -42,6 +52,19 @@ export default function Post({
     }
   }, [id, userInfo?.userId, likeCount]);
 
+  useEffect(() => {
+    const scrapList = JSON.parse(localStorage.getItem("scrap")) || [];
+
+    // 현재 게시물이 scrapList에 포함되어 있는지 확인
+    const existingScrapId = scrapList.find(
+      (scrapItem) => scrapItem.postId === id
+    );
+    if (existingScrapId) {
+      setScrap(true);
+      setScrapId(existingScrapId.scrapId);
+    }
+  }, [id]);
+
   const handleLike = (e) => {
     e.stopPropagation();
     if (isLiked) {
@@ -54,6 +77,31 @@ export default function Post({
       addLike(id, userInfo.userId).then(() => {
         setIsLiked(true);
         setLikeCount((prev) => prev + 1);
+      });
+    }
+  };
+
+  const handleScrap = (e) => {
+    e.stopPropagation();
+
+    let scrapList = JSON.parse(localStorage.getItem("scrap")) || []; // 기존 스크랩 목록 가져오기
+
+    if (scrap) {
+      console.log("scrapId", scrapId);
+      deleteScrap(scrapId, userInfo.userId).then(() => {
+        setScrap(false);
+        scrapList = scrapList.filter((id) => {
+          console.log("delete", id);
+          id.postId !== id;
+        });
+        localStorage.setItem("scrap", JSON.stringify(scrapList));
+      });
+    } else {
+      addScrap(id, userInfo.userId).then((data) => {
+        setScrap(true);
+        setScrapId(data);
+        scrapList.push({ postId: id, scrapId: data }); // 스크랩한 게시글 id 넣기
+        localStorage.setItem("scrap", JSON.stringify(scrapList));
       });
     }
   };
@@ -113,12 +161,18 @@ export default function Post({
         >
           {hashtag}
         </div>
-        <div className="flex flex-row gap-3">
-          <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
-          <div>{likeCount}</div>
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row gap-3">
+            <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
+            <div>{likeCount}</div>
 
-          <button>💬</button>
-          <div>{comments}</div>
+            <button>💬</button>
+            <div>{comments}</div>
+          </div>
+          <button onClick={(e) => handleScrap(e)}>
+            {" "}
+            {scrap ? <BsBookmarkFill /> : <BsBookmark />}
+          </button>
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -149,12 +203,17 @@ export default function Post({
           >
             {hashtag}
           </div>
-          <div className="flex flex-row gap-3 mt-4">
-            <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
-            <div>{likeCount}</div>
-
-            <button>💬</button>
-            <div>{comments}</div>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row gap-3 mt-4">
+              <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
+              <div>{likeCount}</div>
+              <button>💬</button>
+              <div>{comments}</div>
+            </div>
+            <button onClick={(e) => handleScrap(e)}>
+              {" "}
+              {scrap ? <BsBookmarkFill /> : <BsBookmark />}
+            </button>
           </div>
         </div>
         {userInfo && (
