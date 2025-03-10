@@ -14,8 +14,8 @@ const menuOptions = {
     { id: 2, menu: "SJ의 계좌" },
   ],
   stock: [
-    { id: 1, menu: "관련 게시글" },
-    { id: 2, menu: "감정 분석" },
+    { id: 1, menu: "감정 분석" },
+    { id: 2, menu: "관련 게시글" },
     { id: 3, menu: "관련주" },
   ],
 };
