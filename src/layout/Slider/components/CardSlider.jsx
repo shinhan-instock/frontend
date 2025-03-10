@@ -1,45 +1,59 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import piggyImg from "/img/piggyImg.jpg";
-import emotion from "/img/emotion1.jpg";
-import piggyBank from "/img/piggybank.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
+import image1 from '/img/image1.png';
+import image2 from '/img/image2.png';
+import image3 from '/img/image3.png';
+import image4 from '/img/image4.png';
+import image5 from '/img/image5.png';
+import image6 from '/img/image6.png';
+import image7 from '/img/image7.png';
 
 const carouselList = [
-  { id: 1, src: piggyImg, link: "/piggybank" },
-  { id: 2, src: emotion, link: "/stock/123" },
-  { id: 3, src: piggyBank, link: "/myprofile" },
+  { id: 1, src: image1, link: '/piggybank' },
+  { id: 2, src: image2, link: '/stock/123' },
+  { id: 3, src: image3, link: '/myprofile' },
+  { id: 4, src: image4, link: '/piggybank' },
+  { id: 5, src: image5, link: '/piggybank' },
+  { id: 6, src: image6, link: '/piggybank' },
+  { id: 7, src: image7, link: '/piggybank' },
 ];
 
-export default function Carousel() {
+export default function TrainSlider() {
   const navigate = useNavigate();
+
   return (
-    <div className="w-full h-full flex flex-col items-center">
-      <Swiper
-        modules={[Autoplay, Pagination]}
-        spaceBetween={20}
-        slidesPerView={1}
-        autoplay={{ delay: 2000, disableOnInteraction: false }}
-        className="w-full h-full"
-      >
-        {carouselList.map((item) => (
-          <SwiperSlide
-            key={item.id}
-            onClick={() => {
-              navigate(`${item.link}`);
-            }}
+    <div className="overflow-hidden w-full py-4 relative">
+      <div className="flex w-max animate-scroll gap-5">
+        {[...carouselList, ...carouselList].map((item, idx) => (
+          <div
+            key={idx}
+            className="cursor-pointer"
+            onClick={() => navigate(item.link)}
           >
-            <div className="flex justify-center items-center h-full w-full bg-white rounded-2xl">
-              <img
-                src={item.src}
-                className="object-scale-down h-full w-full rounded-2xl"
-              />
-            </div>
-          </SwiperSlide>
+            <img
+              src={item.src}
+              className="w-20 h-20 rounded-full shadow-lg object-cover"
+              alt="carousel-item"
+            />
+          </div>
         ))}
-      </Swiper>
+      </div>
+
+      <style>
+        {`
+          @keyframes scroll {
+            from {
+              transform: translateX(0);
+            }
+            to {
+              transform: translateX(-50%);
+            }
+          }
+          .animate-scroll {
+            animation: scroll 40s linear infinite;
+          }
+        `}
+      </style>
     </div>
   );
 }
