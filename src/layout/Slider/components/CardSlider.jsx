@@ -1,40 +1,47 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ImageMaker from '../../../utils/ImageMaker';
+import axios from 'axios';
 
-import image1 from '/img/image1.png';
-import image2 from '/img/image2.png';
-import image3 from '/img/image3.png';
-import image4 from '/img/image4.png';
-import image5 from '/img/image5.png';
-import image6 from '/img/image6.png';
-import image7 from '/img/image7.png';
-
-const carouselList = [
-  { id: 1, src: image1, link: '/piggybank' },
-  { id: 2, src: image2, link: '/stock/123' },
-  { id: 3, src: image3, link: '/myprofile' },
-  { id: 4, src: image4, link: '/piggybank' },
-  { id: 5, src: image5, link: '/piggybank' },
-  { id: 6, src: image6, link: '/piggybank' },
-  { id: 7, src: image7, link: '/piggybank' },
-];
-
-export default function TrainSlider() {
+export default function CardSlider() {
   const navigate = useNavigate();
+  const [influencers, setInfluencers] = useState([]);
+
+  useEffect(() => {
+    async function fetchInfluencers() {
+      try {
+        const response = await axios.get(
+          'http://localhost:8080/users/influencer'
+        );
+        if (response.data.isSuccess) {
+          setInfluencers(response.data.result);
+        }
+      } catch (error) {
+        console.error('인플루언서 데이터를 불러오는데 실패했습니다.', error);
+      }
+    }
+    fetchInfluencers();
+  }, []);
 
   return (
     <div className="overflow-hidden w-full py-4 relative">
       <div className="flex w-max animate-scroll gap-5">
-        {[...carouselList, ...carouselList].map((item, idx) => (
+        {[...influencers, ...influencers].map((influencer, idx) => (
           <div
             key={idx}
-            className="cursor-pointer"
-            onClick={() => navigate(item.link)}
+            className="cursor-pointer flex flex-col items-center"
+            onClick={() => navigate(`/profile/${influencer.nickname}`)}
           >
-            <img
-              src={item.src}
-              className="w-20 h-20 rounded-full shadow-lg object-cover"
-              alt="carousel-item"
-            />
+            {influencer.imageUrl ? (
+              <img
+                src={influencer.imageUrl}
+                className="w-[50px] h-[50px] rounded-full shadow-lg object-contain"
+                alt={influencer.nickname}
+              />
+            ) : (
+              <ImageMaker nickname={influencer.nickname} />
+            )}
+            <p className="text-xs mt-2">{influencer.nickname}</p>
           </div>
         ))}
       </div>
