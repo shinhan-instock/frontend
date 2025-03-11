@@ -1,28 +1,57 @@
-import { useState, useRef } from 'react';
-import { useLogin } from '../../../hooks/useLogin';
-import ImageMaker from '../../../utils/ImageMaker.jsx';
-import Modal from '../../../components/common/Modal.jsx';
-import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
-import { IoCloseCircle } from 'react-icons/io5';
+import { useState, useRef } from "react";
+import axios from "axios";
+import { useLogin } from "../../../hooks/useLogin";
+import ImageMaker from "../../../utils/ImageMaker.jsx";
+import Modal from "../../../components/common/Modal.jsx";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { IoCloseCircle } from "react-icons/io5";
+import { getHashtagList } from "../../../api/StockAPI.jsx";
 
 export default function PostCreate() {
-  const [postText, setPostText] = useState('');
+  const [postText, setPostText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [myStocks, setMyStocks] = useState([]); // 보유 주식 리스트 (보여줄 때)
+  const [images, setImages] = useState([]); // 실제 파일 저장
   const fileInputRef = useRef(null);
+  const textAreaRef = useRef(null);
   const { userInfo } = useLogin();
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); 
-    const newImagePreviews = files.map((file) => ({
-      id: URL.createObjectURL(file), 
-      file, 
-    }));
-
-    setImagePreviews((prevImages) => [...prevImages, ...newImagePreviews]); 
+  const handleKeyDown = (e) => {
+    if (e.key === "₩") {
+      getHashtagList(userInfo.userId).then((result) => {
+        setMyStocks(result);
+      });
+    }
   };
-  const removeImage = (id) => {
-    setImagePreviews((prevImages) => prevImages.filter((img) => img.id !== id));
+
+  const handleInput = (e) => {
+    setPostText(e.target.value);
+    if (!e.target.value.includes("₩")) {
+      setMyStocks([]);
+    }
+  };
+
+  // 🔥 주식 종목 선택 시 현재 커서 위치에 삽입하고 리스트 숨김
+  const selectHashtag = (selectedStock) => {
+    if (!textAreaRef.current) return;
+
+    const cursorPosition = textAreaRef.current.selectionStart;
+    const beforeText = postText.slice(0, cursorPosition);
+    const afterText = postText.slice(cursorPosition);
+
+    const newText = `${beforeText}${selectedStock} ${afterText}`;
+    setPostText(newText);
+
+    // 주식 리스트 숨기기
+    setMyStocks([]);
+
+    // 커서 위치를 선택된 종목 뒤로 이동
+    setTimeout(() => {
+      textAreaRef.current.selectionStart = textAreaRef.current.selectionEnd =
+        beforeText.length + selectedStock.length + 2; // ₩ + 주식명 + 공백
+      textAreaRef.current.focus();
+    }, 10);
   };
 
   return (
@@ -35,9 +64,10 @@ export default function PostCreate() {
           className="w-20 h-20 rounded-full object-contain"
         />
       ) : (
-        <ImageMaker nickname={userInfo?.nickname || 'User'} />
+        <ImageMaker nickname={userInfo?.nickname || "User"} />
       )}
 
+      {/* 게시글 작성 버튼 */}
       <div
         className="p-4 mx-4 border rounded-2xl w-full text-stroke-gray cursor-pointer"
         onClick={() => setIsModalOpen(true)}
@@ -45,18 +75,16 @@ export default function PostCreate() {
         <input
           type="text"
           placeholder="게시글을 작성해 보세요 🐷"
-          value={postText}
-          onChange={(e) => setPostText(e.target.value)}
           className="w-full text-gray-600 text-lg focus:outline-none"
-          readOnly // 클릭 시 모달에서 입력하도록 변경
+          value={postText}
+          onChange={handleInput}
+          onKeyDown={handleKeyDown}
         />
       </div>
 
       {/* 모달 */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-5 w-full bg-white rounded-xl">
-          <h2 className="text-xl font-bold mb-4">새 게시글 작성</h2>
-
           {/* 로그인 유저 프로필 이미지 */}
           <div className="flex items-center gap-3">
             {userInfo?.imageUrl ? (
@@ -66,36 +94,32 @@ export default function PostCreate() {
                 className="w-16 h-16 rounded-full object-contain"
               />
             ) : (
-              <ImageMaker nickname={userInfo?.nickname || 'User'} />
+              <ImageMaker nickname={userInfo?.nickname || "User"} />
             )}
             <span className="text-lg font-semibold">{userInfo?.nickname}</span>
           </div>
 
           {/* 게시글 입력 폼 */}
           <textarea
+            ref={textAreaRef}
             value={postText}
-            onChange={(e) => setPostText(e.target.value)}
+            onChange={handleInput}
+            onKeyDown={handleKeyDown}
             placeholder="관련 주식 태그하려면 ₩을 붙여주세요! (예: ₩네이버)"
             className="text-xl w-full p-3 mt-3 border rounded-lg resize-none focus:outline-none"
-            rows="10"
+            rows="6"
           ></textarea>
 
-          {/* 이미지 미리보기 및 삭제 버튼 */}
-          {imagePreviews.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-3">
-              {imagePreviews.map(({ id, file }) => (
-                <div key={id} className="relative">
-                  <img
-                    src={id}
-                    alt="Preview"
-                    className="w-24 h-24 object-contain "
-                  />
-                  <button
-                    onClick={() => removeImage(id)}
-                    className="absolute top-1 right-1 bg-gray-800 text-white p-1 rounded-full"
-                  >
-                    <IoCloseCircle size={16} />
-                  </button>
+          {/* 보유 주식 리스트 (₩ 입력 시) */}
+          {myStocks.length > 0 && (
+            <div className="w-full flex flex-row gap-3 overflow-auto mt-2">
+              {myStocks.map((stock) => (
+                <div
+                  key={stock.id}
+                  className="border border-stroke-gray px-4 py-2 rounded-md cursor-pointer hover:bg-gray-200"
+                  onClick={() => selectHashtag(stock.name || stock)}
+                >
+                  {stock.name || stock}
                 </div>
               ))}
             </div>
@@ -106,7 +130,7 @@ export default function PostCreate() {
             {/* 파일 업로드 버튼 */}
             <button
               className="text-blue-500 hover:text-blue-700"
-              onClick={() => fileInputRef.current.click()} // 버튼 클릭 시 파일 업로드 창 열기
+              onClick={() => fileInputRef.current.click()}
             >
               <MdOutlineAddPhotoAlternate className="w-8 h-8" />
             </button>
@@ -114,15 +138,13 @@ export default function PostCreate() {
               type="file"
               ref={fileInputRef}
               className="hidden"
-              onChange={handleFileChange}
-              multiple // 여러 개 파일 선택 가능
-              accept="image/*" // 이미지 파일만 허용
+              accept="image/*"
             />
 
             {/* 게시글 업로드 버튼 */}
             <button
               className="bg-black text-white px-4 py-1 rounded-full"
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => console.log("게시글 업로드!")}
             >
               POST
             </button>

@@ -29,3 +29,10 @@ export async function getRelatedStocks(stockName) {
   const data = res.data;
   return data;
 }
+
+export async function getHashtagList(userId) {
+  const res = await axios.get(`${BASE_URL}/stocks/search/hashtag`, {
+    headers: { Authorization: `Bearer ${userId}` },
+  });
+  return res.data;
+}
