@@ -35,7 +35,6 @@ export default function Post({
   const [likeCount, setLikeCount] = useState(likes);
   const [commentsData, setCommentsData] = useState([]);
   const [scrap, setScrap] = useState(false);
-  console.log(sentimentScore);
   const navigate = useNavigate();
   const { userInfo } = useLogin();
 
@@ -63,7 +62,7 @@ export default function Post({
       setScrap(true);
       setScrapId(existingScrapId.scrapId);
     }
-  }, [id]);
+  }, [id, userInfo]);
 
   const handleLike = (e) => {
     e.stopPropagation();
@@ -87,7 +86,6 @@ export default function Post({
     let scrapList = JSON.parse(localStorage.getItem('scrap')) || []; // 기존 스크랩 목록 가져오기
 
     if (scrap) {
-      console.log('scrapId', scrapId);
       deleteScrap(scrapId, userInfo.userId).then(() => {
         setScrap(false);
         scrapList = scrapList.filter((id) => {
@@ -170,8 +168,8 @@ export default function Post({
             <div>{comments}</div>
           </div>
           <button onClick={(e) => handleScrap(e)}>
-            {' '}
-            {scrap ? <BsBookmarkFill /> : <BsBookmark />}
+            {scrap && userInfo ? <BsBookmarkFill /> : <BsBookmark />}
+
           </button>
         </div>
       </div>
@@ -211,8 +209,8 @@ export default function Post({
               <div>{comments}</div>
             </div>
             <button onClick={(e) => handleScrap(e)}>
-              {' '}
-              {scrap ? <BsBookmarkFill /> : <BsBookmark />}
+              {scrap && userInfo ? <BsBookmarkFill /> : <BsBookmark />}
+
             </button>
           </div>
         </div>
