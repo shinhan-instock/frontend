@@ -1,15 +1,15 @@
-import { Outlet } from 'react-router-dom';
-import SearchBar from './SearchBar/SearchBar';
-import Header from './Header';
-import MyIntro from './MyIntro/MyIntro';
-import WatchList from './WatchList/WatchList';
-import MyStock from './MyStock/MyStock';
-import TopStock from './TopStock/TopStock';
-import Slider from './Slider/Slider';
-import Modal from '../components/common/Modal';
-import SearchModal from './SearchBar/components/SearchModal';
-import LogoutModal from './MyIntro/components/LogoutModal';
-import { useState } from 'react';
+import { Outlet } from "react-router-dom";
+import SearchBar from "./SearchBar/SearchBar";
+import Header from "./Header";
+import MyIntro from "./MyIntro/MyIntro";
+import WatchList from "./WatchList/WatchList";
+import MyStock from "./MyStock/MyStock";
+import TopStock from "./TopStock/TopStock";
+import Slider from "./Slider/Slider";
+import Modal from "../components/common/Modal";
+import SearchModal from "./SearchBar/components/SearchModal";
+import LogoutModal from "./MyIntro/components/LogoutModal";
+import { useState } from "react";
 
 export default function Layout() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function Layout() {
       </div>
 
       {/* 센터 부분 */}
-      <div className="flex flex-col mt-2 w-2/4 overflow-hidden">
+      <div className="flex flex-col w-2/4 overflow-hidden">
         <div className="sticky top-0 z-0 bg-white">
           <SearchBar setIsSearchOpen={setIsSearchOpen} />
         </div>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { useLogin } from '../../hooks/useLogin';
 import ImageMaker from '../../utils/ImageMaker';
@@ -8,38 +9,16 @@ import {
   followUser,
   unfollowUser,
 } from '../../api/UserAPI';
-import axios from 'axios';
 import Modal from './Modal';
-import miniLogo from '/img/miniLogo.png';
 
 export default function Profile({ isMyProfile, userNickname, userData }) {
   const [isFollowing, setIsFollowing] = useState(false);
-  const [isInfluencer, setIsInfluencer] = useState(false);
+
   const { userInfo } = useLogin();
-  const navigate = useNavigate();
+  const navigate = useNavigate('');
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [followList, setFollowList] = useState([]);
-
-  useEffect(() => {
-    async function checkInfluencerStatus() {
-      try {
-        const response = await axios.get(
-          'http://localhost:8080/users/influencer'
-        );
-        if (response.data.isSuccess) {
-          const influencerList = response.data.result;
-          const isUserInfluencer = influencerList.some(
-            (user) => user.nickname === userNickname
-          );
-          setIsInfluencer(isUserInfluencer);
-        }
-      } catch (error) {
-        console.error('인플루언서 여부 확인 실패:', error);
-      }
-    }
-
-    checkInfluencerStatus();
-  }, [userNickname]);
 
   useEffect(() => {
     const checkFollowStatus = async () => {
@@ -83,31 +62,22 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
   };
 
   return (
-    <div className="flex flex-row items-start w-4/5 p-4 space-x-7 mt-5 mb-4">
+    <div className="flex flex-row items-start w-4/5  p-4 space-x-7">
       {userData.imageUrl !== null ? (
         <img
           src={userData.imageUrl}
-          className="rounded-full object-contain w-[50px] h-[50px]"
+          className="rounded-full object-contain w-[50px] h-[50px] "
         />
       ) : (
         <ImageMaker nickname={userData.nickname} />
       )}
 
       <div>
-        <h2 className="text-2xl font-bold mb-2 flex items-center">
-          {userData.nickname}
-          {isInfluencer && (
-            <img
-              src={miniLogo}
-              className="w-6 h-6 ml-2"
-              alt="Influencer Badge"
-            />
-          )}
-        </h2>
+        <h2 className="text-2xl font-bold mb-2">{userData.nickname}</h2>
         <p className="text-gray-600">{userData.introduction}</p>
       </div>
       <button
-        className="px-4 py-2 rounded-full font-medium text-sm transition-colors bg-gray-200"
+        className="px-4 py-2 rounded-full font-medium text-sm transition-colors bg-gray-200 "
         onClick={openFollowModal}
       >
         팔로잉
@@ -122,7 +92,7 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
           {isFollowing ? '팔로잉' : '팔로우'}
         </button>
       )}
-      {/* 팔로잉 리스트 모달 */}
+      {/* 내프로필이 아닐때는 버튼 있음 */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-4">
           <h2 className="text-xl font-bold mb-3">팔로잉 리스트</h2>

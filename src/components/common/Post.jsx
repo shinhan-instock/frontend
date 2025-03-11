@@ -1,20 +1,20 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Modal from './Modal';
-import CommentCreate from '../comment/CommentCreate';
-import CommentList from '../comment/CommentList';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Modal from "./Modal";
+import CommentCreate from "../comment/CommentCreate";
+import CommentList from "../comment/CommentList";
 import {
   getLikeByUser,
   addLike,
   deleteLike,
   addScrap,
   deleteScrap,
-} from '../../api/PostAPI';
-import { useLogin } from '../../hooks/useLogin';
-import ImageMaker from '../../utils/ImageMaker';
-import { BsBookmark } from 'react-icons/bs';
-import { BsBookmarkFill } from 'react-icons/bs';
+} from "../../api/PostAPI";
+import { useLogin } from "../../hooks/useLogin";
+import ImageMaker from "../../utils/ImageMaker";
+import { BsBookmark } from "react-icons/bs";
+import { BsBookmarkFill } from "react-icons/bs";
 
 export default function Post({
   id,
@@ -52,8 +52,8 @@ export default function Post({
   }, [id, userInfo?.userId, likeCount]);
 
   useEffect(() => {
-    const scrapList = JSON.parse(localStorage.getItem('scrap')) || [];
-    console.log('스크랩 리스트:', scrapList); // 디버깅용 로그 추가
+    const scrapList = JSON.parse(localStorage.getItem("scrap")) || [];
+    console.log("스크랩 리스트:", scrapList); // 디버깅용 로그 추가
 
     const existingScrap = scrapList.find(
       (scrapItem) => scrapItem.postId === id
@@ -87,23 +87,23 @@ export default function Post({
   const handleScrap = (e) => {
     e.stopPropagation();
 
-    let scrapList = JSON.parse(localStorage.getItem('scrap')) || []; // 기존 스크랩 목록 가져오기
+    let scrapList = JSON.parse(localStorage.getItem("scrap")) || []; // 기존 스크랩 목록 가져오기
 
     if (scrap) {
       deleteScrap(scrapId, userInfo.userId).then(() => {
         setScrap(false);
         scrapList = scrapList.filter((id) => {
-          console.log('delete', id);
+          console.log("delete", id);
           id.postId !== id;
         });
-        localStorage.setItem('scrap', JSON.stringify(scrapList));
+        localStorage.setItem("scrap", JSON.stringify(scrapList));
       });
     } else {
       addScrap(id, userInfo.userId).then((data) => {
         setScrap(true);
         setScrapId(data);
         scrapList.push({ postId: id, scrapId: data }); // 스크랩한 게시글 id 넣기
-        localStorage.setItem('scrap', JSON.stringify(scrapList));
+        localStorage.setItem("scrap", JSON.stringify(scrapList));
       });
     }
   };
@@ -111,7 +111,7 @@ export default function Post({
   const navigateToProfile = (e) => {
     e.stopPropagation();
     if (userInfo && nickname === userInfo.nickname) {
-      navigate('/myprofile');
+      navigate("/myprofile");
     } else {
       navigate(`/profile/${nickname}`);
     }
@@ -120,7 +120,7 @@ export default function Post({
   return (
     <div>
       <div
-        className="flex flex-col gap-2 border-b-2 border-instock-gray pb-4"
+        className="flex flex-col gap-2 px-10 border-b-2 border-instock-gray pb-4"
         onClick={() => setIsModalOpen(true)}
       >
         <div className="flex flex-row justify-between w-full">
@@ -142,8 +142,8 @@ export default function Post({
               <div>{nickname}</div>
               <div>
                 {new Date(created_at).toLocaleString({
-                  dateStyle: 'medium',
-                  timeStyle: 'short',
+                  dateStyle: "medium",
+                  timeStyle: "short",
                 })}
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function Post({
         </div>
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-3">
-            <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
+            <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
             <div>{likeCount}</div>
 
             <button>💬</button>
@@ -206,7 +206,7 @@ export default function Post({
           </div>
           <div className="flex flex-row justify-between">
             <div className="flex flex-row gap-3 mt-4">
-              <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
+              <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
               <div>{likeCount}</div>
               <button>💬</button>
               <div>{comments}</div>
@@ -227,7 +227,7 @@ export default function Post({
         )}
 
         <div
-          className={`${userInfo ? 'max-h-1/3' : 'max-h-1/2'} overflow-auto`}
+          className={`${userInfo ? "max-h-1/3" : "max-h-1/2"} overflow-auto`}
         >
           <CommentList
             postId={id}
