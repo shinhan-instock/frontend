@@ -1,117 +1,70 @@
-import { useEffect, useMemo, useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadConfettiPreset } from "@tsparticles/preset-confetti";
-import { loadImageShape } from "@tsparticles/shape-image";
-import coinImg from "/img/coin.png";
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, useGLTF } from '@react-three/drei';
+import { Suspense, useEffect, useState } from 'react';
+import { gsap } from 'gsap';
 
 export default function PiggyBankCoin() {
-  const [init, setInit] = useState(false);
+  const [coins, setCoins] = useState([]);
+
+  const createCoin = () => {
+    setCoins((prevCoins) => [
+      ...prevCoins,
+      {
+        id: Date.now(),
+        position: [Math.random() * 2 - 1, 3, Math.random() * 2 - 1], // 랜덤 위치에서 생성
+      },
+    ]);
+  };
+
+  return (
+    <div className="w-screen h-screen fixed inset-0 pointer-events-none">
+      <Canvas>
+        <ambientLight intensity={1} />
+        <directionalLight position={[2, 5, 2]} intensity={2} />
+        <Suspense fallback={null}>
+          {coins.map((coin) => (
+            <CoinModel key={coin.id} startPosition={coin.position} />
+          ))}
+        </Suspense>
+        <OrbitControls enableZoom={false} />
+      </Canvas>
+
+      {/* 버튼 클릭 시 동전 생성 */}
+      <button
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-yellow-400 px-6 py-3 rounded-xl text-xl text-black shadow-lg"
+        onClick={createCoin}
+      >
+        저금통 깨기
+      </button>
+    </div>
+  );
+}
+
+// ✅ 3D 동전 모델 컴포넌트
+function CoinModel({ startPosition }) {
+  const { scene } = useGLTF('/models/coin.glb');
+  const [position, setPosition] = useState(startPosition);
 
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadConfettiPreset(engine);
-      await loadImageShape(engine);
-    }).then(() => {
-      setInit(true);
+    gsap.to(position, {
+      y: -2, // 바닥으로 떨어짐
+      duration: Math.random() * 2 + 1.5, // 1.5 ~ 3.5초 랜덤
+      ease: 'power1.in',
+      onUpdate: () => setPosition([...position]),
+      onComplete: () => setPosition(null), // 바닥에 도착하면 제거
+    });
+
+    gsap.to(scene.rotation, {
+      x: Math.random() * Math.PI * 2,
+      y: Math.random() * Math.PI * 2,
+      z: Math.random() * Math.PI * 2,
+      duration: Math.random() * 2 + 1.5,
+      repeat: -1,
+      ease: 'linear',
     });
   }, []);
 
-  const particlesLoaded = (container) => {
-    console.log("Particles Loaded:", container);
-  };
+  if (!position) return null; // 바닥에 닿으면 사라짐
 
-  const options = useMemo(
-    () => ({
-      preset: "confetti",
-      particles: {
-        number: {
-          value: 0, // 기본 개수는 0
-        },
-        color: {
-          value: ["#FFD700", "#FFA500", "#FF4500"],
-        },
-        shape: {
-          type: ["image"],
-          options: {
-            image: [
-              {
-                src: coinImg,
-                width: 40,
-                height: 40,
-              },
-            ],
-          },
-        },
-        size: {
-          value: { min: 40, max: 50 }, // 동전 크기 다양화
-        },
-        move: {
-          direction: "bottom",
-          enable: true,
-          gravity: {
-            enable: true,
-            acceleration: 10, // 자연스럽게 떨어지는 느낌 강화
-          },
-          outModes: {
-            default: "destroy", // 바닥에서 사라짐
-          },
-          speed: { min: 3, max: 8 }, // 속도 조정
-        },
-        rotate: {
-          value: { min: 0, max: 360 },
-          direction: "random",
-          move: true,
-          animation: {
-            enable: true,
-            speed: 10,
-          },
-        },
-        tilt: {
-          direction: "random",
-          enable: true,
-          move: true,
-          value: { min: 0, max: 360 },
-          animation: {
-            enable: true,
-            speed: 50,
-          },
-        },
-        wobble: {
-          distance: 20,
-          enable: true,
-          speed: { min: -5, max: 5 },
-        },
-        roll: {
-          darken: { enable: true, value: 5 },
-          enable: true,
-          speed: { min: 5, max: 10 },
-        },
-      },
-      emitters: {
-        position: { x: 50, y: 20 }, // 화면 중앙보다 약간 위에서 떨어짐
-        rate: { delay: 0.1, quantity: 1 }, // 한 번에 나오는 동전 개수 조정
-        life: {
-          count: 1,
-          duration: 3, // 3초 동안만 동전이 떨어짐
-        },
-        size: { width: 200, height: 0 }, // 가로 범위를 200px로 조정 (500px 이하)
-      },
-    }),
-    []
-  );
-
-  if (!init) {
-    return <>로딩 중...</>;
-  }
-
-  return (
-    <div className="w-[300px] h-[300px] relative">
-      {" "}
-      <Particles
-        id="tsparticles"
-        particlesLoaded={particlesLoaded}
-        options={options}
-      />
-    </div>
-  );
+  return <primitive object={scene} scale={0.5} position={position} />;
 }

@@ -28,8 +28,7 @@ export default function NavigationBar({
 
   return (
     <div className=" justify-center">
-      {/* <div className="w-full flex justify-center z-10 relative"> */}{' '}
-      <div className="w-full max-w-2xl bg-white border-b border-instock-gray mx-24 z-10">
+      <div className="w-full max-w-2xl bg-white border-b border-instock-gray z-10">
         <div className="h-13 flex flex-row justify-around p-3 gap-10 z-10">
           {menu.map((tab) => (
             <button
@@ -42,7 +41,6 @@ export default function NavigationBar({
               {tab.menu}
             </button>
           ))}
-          {/* </div> */}
         </div>
       </div>
     </div>
