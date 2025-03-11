@@ -19,13 +19,13 @@ export default function StockPage() {
       </div>
 
       <div className="w-4/5">
-        <div className="sticky flex w-full  bg-white border-b border-zinc-300 z-10">
+        {/* <div className="sticky flex w-full  bg-white border-b border-zinc-300 z-10"> */}
           <NavigationBar
             menuType="stock"
             selectedTab={selectedTab}
             setSelectedTab={setSelectedTab}
           />
-        </div>
+        {/* </div> */}
       </div>
 
       <div className="p-5 w-full max-w-2xl overflow-auto flex-grow pb-30 ">

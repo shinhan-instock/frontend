@@ -72,7 +72,7 @@ export default function Profile({ isMyProfile, userNickname }) {
   return (
     <div className="flex flex-row items-start w-4/5  p-4 space-x-7">
       {userData.imageUrl !== null ? (
-        <img src={userData.imageUrl} />
+        <img src={userData.imageUrl} className="flex w-20 h-20" />
       ) : (
         <ImageMaker nickname={userData.nickname} />
       )}

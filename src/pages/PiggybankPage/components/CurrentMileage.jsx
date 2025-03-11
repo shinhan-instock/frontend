@@ -1,7 +1,7 @@
 export default function CurrentMileage() {
   return (
-    <div className="text-xl  p-5 z-100">
+    <p className="text-white text-lg mb-5 animate-pulse">
       현재 user님은 1000마일리지를 모았어요!
-    </div>
+    </p>
   );
 }
