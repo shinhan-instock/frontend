@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import axios from "axios";
 const BASE_URL = "http://localhost:8080";
 export async function login(userId, password) {
@@ -7,8 +8,7 @@ export async function login(userId, password) {
   });
   const data = res.data.result;
   if (data && data.userId) {
-    localStorage.setItem('user_id', data.userId);
-
+    localStorage.setItem("user_id", data.userId);
   }
   return data;
 }
@@ -22,21 +22,18 @@ let eventSource = null;
 
 export async function getFollowList(nickname) {
   try {
-
     if (!nickname) {
-
       return [];
     }
 
-    const userId = localStorage.getItem('user_id');
+    const userId = localStorage.getItem("user_id");
     if (!userId) {
       return [];
     }
     const res = await axios.get(`${BASE_URL}/users/follow`, {
       headers: {
         Authorization: `Bearer ${userId}`,
-        'Content-Type': 'application/json',
-
+        "Content-Type": "application/json",
       },
       params: { following: nickname },
     });
@@ -49,14 +46,14 @@ export async function getFollowList(nickname) {
 
 export async function followUser(nickname) {
   try {
-    const userId = localStorage.getItem('user_id');
+    const userId = localStorage.getItem("user_id");
     if (!userId) {
       return;
     }
     const res = await axios.post(`${BASE_URL}/users/follow`, null, {
       headers: {
         Authorization: `Bearer ${userId}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       params: { Nickname: nickname },
     });
@@ -68,16 +65,16 @@ export async function followUser(nickname) {
 
 export async function unfollowUser(nickname) {
   try {
-    const userId = localStorage.getItem('user_id');
+    const userId = localStorage.getItem("user_id");
     if (!userId) {
       return;
     }
     const res = await axios.delete(`${BASE_URL}/users/follow`, {
       headers: {
         Authorization: `Bearer ${userId}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      params: { Nickname: nickname }, 
+      params: { Nickname: nickname },
     });
 
     return res.data;
@@ -91,7 +88,7 @@ export function getWatchList(userId, onMessage, onError) {
 
   if (eventSource) {
     eventSource.close();
-    console.log('SSE 연결 종료');
+    console.log("SSE 연결 종료");
   }
 
   eventSource = new EventSource(
@@ -125,14 +122,14 @@ export function getWatchList(userId, onMessage, onError) {
 }
 
 export async function addWatchList(userId, stockCode, stockName, onUpdate) {
-  const res = await axios.post('http://localhost:8080/watchList', {
+  const res = await axios.post("http://localhost:8080/watchList", {
     userId: userId,
     stockCode: stockCode,
     stockName: stockName,
   });
 
   const data = res.data.result;
-  console.log('added watchList', data);
+  console.log("added watchList", data);
   if (onUpdate) {
     onUpdate();
   }
@@ -140,7 +137,7 @@ export async function addWatchList(userId, stockCode, stockName, onUpdate) {
 }
 
 export async function deleteWatchList(userId, stockName, onUpdate) {
-  const res = await axios.delete('http://localhost:8080/watchList', {
+  const res = await axios.delete("http://localhost:8080/watchList", {
     data: {
       userId: userId,
       stockName: stockName,
@@ -148,7 +145,7 @@ export async function deleteWatchList(userId, stockName, onUpdate) {
   });
 
   const data = res.data.result;
-  console.log('deleted watchList', data);
+  console.log("deleted watchList", data);
   if (onUpdate) {
     onUpdate();
   }
@@ -156,14 +153,25 @@ export async function deleteWatchList(userId, stockName, onUpdate) {
 }
 
 export async function getUserInfo(userId) {
-  const res = await axios.post(`${BASE_URL}/users`, {}, {
-    headers: { Authorization: `Bearer ${userId}` },
-  });
+  const res = await axios.post(
+    `${BASE_URL}/users`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${userId}` },
+    }
+  );
   const data = res.data.result;
   return data;
 }
 
-export async function updateUser(name, nickname, image, introduction, userId, previewUrl){
+export async function updateUser(
+  name,
+  nickname,
+  image,
+  introduction,
+  userId,
+  previewUrl
+) {
   const formData = new FormData();
 
   formData.append("name", name);
@@ -175,26 +183,41 @@ export async function updateUser(name, nickname, image, introduction, userId, pr
 
   try {
     const res = await axios.put(`${BASE_URL}/users`, formData, {
-      headers: { 
+      headers: {
         Authorization: `Bearer ${userId}`,
-      "Content-Type": "multipart/form-data",
-     },
+        "Content-Type": "multipart/form-data",
+      },
     });
     console.log("Res, ", res);
     // 기존 데이터 가져오기
-    const existingUserData = JSON.parse(sessionStorage.getItem("instock_user")) || {};
+    const existingUserData =
+      JSON.parse(sessionStorage.getItem("instock_user")) || {};
     // 기존 userId 유지하면서 나머지 값 업데이트
     const updatedUserData = {
       ...existingUserData,
       nickname: nickname,
       imageUrl: previewUrl,
-      introduction: introduction 
+      introduction: introduction,
     };
     sessionStorage.setItem("instock_user", JSON.stringify(updatedUserData));
     alert("수정이 완료되었습니다");
     window.location.reload();
   } catch (error) {
-    alert("다른 사용자가 닉네임을 사용하고 있습니다. 다른 닉네임으로 등록해주세요.");
+    alert(
+      "다른 사용자가 닉네임을 사용하고 있습니다. 다른 닉네임으로 등록해주세요."
+    );
   }
+}
 
+export async function getUserAccount(id, userId) {
+  const res = await axios.post(
+    `${BASE_URL}/users/account`,
+    { userId: userId },
+    {
+      headers: {
+        Authorization: `Bearer ${id}`,
+      },
+    }
+  );
+  return res.data;
 }

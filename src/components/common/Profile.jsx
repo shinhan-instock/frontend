@@ -11,30 +11,14 @@ import {
 } from "../../api/UserAPI";
 import Modal from "./Modal";
 
-export default function Profile({ isMyProfile, userNickname }) {
+export default function Profile({ isMyProfile, userNickname, userData }) {
   const [isFollowing, setIsFollowing] = useState(false);
-  const [userData, setUserData] = useState({});
+
   const { userInfo } = useLogin();
   const navigate = useNavigate("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [followList, setFollowList] = useState([]);
-
-  useEffect(() => {
-    if (isMyProfile && !userInfo) {
-      navigate("/");
-    }
-  }, [isMyProfile]);
-
-  useEffect(() => {
-    if (!isMyProfile) {
-      searchUser(userNickname).then((data) => {
-        setUserData(data[0]);
-      });
-    } else {
-      setUserData(userInfo);
-    }
-  }, []);
 
   useEffect(() => {
     const checkFollowStatus = async () => {
@@ -80,7 +64,7 @@ export default function Profile({ isMyProfile, userNickname }) {
   return (
     <div className="flex flex-row items-start w-4/5  p-4 space-x-7">
       {userData.imageUrl !== null ? (
-        <img src={userData.imageUrl} className="flex w-20 h-20" />
+        <img src={userData.imageUrl} />
       ) : (
         <ImageMaker nickname={userData.nickname} />
       )}

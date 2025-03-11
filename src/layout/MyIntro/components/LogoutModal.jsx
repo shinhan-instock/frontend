@@ -6,6 +6,7 @@ export default function LogoutModal({ isLogoutOpen, setIsLogoutOpen }) {
   const handleLogout = () => {
     sessionStorage.removeItem("instock_user");
     localStorage.removeItem("user_id");
+    localStorage.removeItem("scrap");
     setIsLogoutOpen(false);
     location.reload();
   };
