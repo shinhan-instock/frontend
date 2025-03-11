@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import axios from 'axios';
 import { useLogin } from '../../../hooks/useLogin';
 import ImageMaker from '../../../utils/ImageMaker.jsx';
 import Modal from '../../../components/common/Modal.jsx';
@@ -9,20 +10,70 @@ export default function PostCreate() {
   const [postText, setPostText] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [images, setImages] = useState([]); // 실제 파일 저장
   const fileInputRef = useRef(null);
   const { userInfo } = useLogin();
 
+  // ✅ 이미지 선택 (최대 1개 제한)
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); 
-    const newImagePreviews = files.map((file) => ({
-      id: URL.createObjectURL(file), 
-      file, 
+    const files = Array.from(e.target.files);
+
+    // 📌 1개 이상이면 경고 메시지 띄우기
+    if (files.length > 1 || images.length >= 1) {
+      alert('이미지는 1개만 업로드할 수 있습니다.');
+      return;
+    }
+
+    const newPreviews = files.map((file) => ({
+      id: URL.createObjectURL(file),
+      file,
     }));
 
-    setImagePreviews((prevImages) => [...prevImages, ...newImagePreviews]); 
+    setImages(files);
+    setImagePreviews(newPreviews);
   };
+
+  // ❌ 이미지 삭제
   const removeImage = (id) => {
-    setImagePreviews((prevImages) => prevImages.filter((img) => img.id !== id));
+    setImagePreviews([]);
+    setImages([]);
+  };
+
+  // 🔥 게시글 업로드 함수
+  const handlePostUpload = async () => {
+    if (!postText.trim()) {
+      alert('게시글 내용을 입력하세요!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('userId', userInfo.userId);
+    formData.append('content', postText);
+    formData.append('hashtag', ''); // 필요하면 해시태그 추가
+
+    if (images.length > 0) {
+      formData.append('file', images[0]);
+    }
+
+    try {
+      const res = await axios.post('http://localhost:8080/posts', formData, {
+        headers: {
+          Authorization: `Bearer ${userInfo.userId}`, // 필요 시 토큰 추가
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (res.data.isSuccess) {
+        alert('게시글이 성공적으로 업로드되었습니다!');
+        setIsModalOpen(false);
+        setPostText('');
+        setImagePreviews([]);
+        setImages([]);
+      }
+    } catch (error) {
+      console.error('❌ 게시글 업로드 실패:', error);
+      alert('게시글 업로드 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -38,6 +89,7 @@ export default function PostCreate() {
         <ImageMaker nickname={userInfo?.nickname || 'User'} />
       )}
 
+      {/* 게시글 작성 버튼 */}
       <div
         className="p-4 mx-4 border rounded-2xl w-full text-stroke-gray cursor-pointer"
         onClick={() => setIsModalOpen(true)}
@@ -45,10 +97,8 @@ export default function PostCreate() {
         <input
           type="text"
           placeholder="게시글을 작성해 보세요 🐷"
-          value={postText}
-          onChange={(e) => setPostText(e.target.value)}
           className="w-full text-gray-600 text-lg focus:outline-none"
-          readOnly // 클릭 시 모달에서 입력하도록 변경
+          readOnly
         />
       </div>
 
@@ -77,7 +127,7 @@ export default function PostCreate() {
             onChange={(e) => setPostText(e.target.value)}
             placeholder="관련 주식 태그하려면 ₩을 붙여주세요! (예: ₩네이버)"
             className="text-xl w-full p-3 mt-3 border rounded-lg resize-none focus:outline-none"
-            rows="10"
+            rows="6"
           ></textarea>
 
           {/* 이미지 미리보기 및 삭제 버튼 */}
@@ -88,7 +138,7 @@ export default function PostCreate() {
                   <img
                     src={id}
                     alt="Preview"
-                    className="w-24 h-24 object-contain "
+                    className="w-24 h-24 object-contain"
                   />
                   <button
                     onClick={() => removeImage(id)}
@@ -106,7 +156,7 @@ export default function PostCreate() {
             {/* 파일 업로드 버튼 */}
             <button
               className="text-blue-500 hover:text-blue-700"
-              onClick={() => fileInputRef.current.click()} // 버튼 클릭 시 파일 업로드 창 열기
+              onClick={() => fileInputRef.current.click()}
             >
               <MdOutlineAddPhotoAlternate className="w-8 h-8" />
             </button>
@@ -115,14 +165,13 @@ export default function PostCreate() {
               ref={fileInputRef}
               className="hidden"
               onChange={handleFileChange}
-              multiple // 여러 개 파일 선택 가능
-              accept="image/*" // 이미지 파일만 허용
+              accept="image/*"
             />
 
             {/* 게시글 업로드 버튼 */}
             <button
               className="bg-black text-white px-4 py-1 rounded-full"
-              onClick={() => setIsModalOpen(false)}
+              onClick={handlePostUpload}
             >
               POST
             </button>
