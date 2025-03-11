@@ -1,47 +1,29 @@
+import { useEffect, useState } from 'react';
 import { FaWonSign } from 'react-icons/fa6';
 import { MdPercent } from 'react-icons/md';
-import { useState } from 'react';
+import { account } from '../../api/UserAPI';
 
-const stockData = [
-  {
-    id: 1,
-    name: 'IBK',
-    price: '15,000',
-    change_price: '+2,000',
-    change: '+0.72',
-    share: '2',
-    img: '/img/stockImg.png',
-  },
-  {
-    id: 2,
-    name: 'Samsung',
-    price: '65,300',
-    change_price: '+2,000',
-    change: '+1.23',
-    share: '1',
-    img: '/img/stockImg.png',
-  },
-  {
-    id: 3,
-    name: 'LG',
-    price: '88,500',
-    change_price: '-2,000',
-    change: '- 0.45',
-    share: '2',
-    img: '/img/stockImg.png',
-  },
-  {
-    id: 4,
-    name: 'Hyundai',
-    price: '201,000',
-    change_price: '+20,000',
-    change: '+ 2.01',
-    share: '2',
-    img: '/img/stockImg.png',
-  },
-];
 export default function MyStock() {
-  const [isLinked, setIsLinked] = useState(true); // 계좌 연동 여부
+  const [isLinked, setIsLinked] = useState(true);
+  const [stockData, setStockData] = useState([]);
+
+  useEffect(() => {
+    async function fetchAccountData() {
+      try {
+        const data = await account();
+        if (data && data.length > 0) {
+          setStockData(data);
+          setIsLinked(true);
+        } else {
+          setIsLinked(false);
+        }
+      } catch (error) {
+        setIsLinked(false);
+      }
+    }
+
+    fetchAccountData();
+  }, []);
 
   return (
     <div className="w-full mx-auto px-5">
@@ -55,45 +37,64 @@ export default function MyStock() {
               <span className="text-2xl text-gray-500">+</span>
             </div>
             <p className="mt-10 text-lg font-semibold">내 증권 계좌 연동하기</p>
-            <p className="text-sm text-gray-500 font-title ">
+            <p className="text-sm text-gray-500 font-title">
               다양한 서비스를 사용하기 위해 필요해요
             </p>
           </div>
         ) : (
           <div className="flex flex-col h-64 overflow-auto">
-            {stockData.map((stock) => (
+            {stockData.map((stock, index) => (
               <div
-                key={stock.id}
+                key={index}
                 className="flex justify-between space-y-3 w-full"
               >
-                <div className="flex flex-row space-x-3 w-full">
+                <div className="flex flex-row space-x-3 w-full space-y-6">
                   <img
-                    src={stock.img}
-                    alt={stock.name}
-                    className="w-14 h-14 rounded-full"
+                    src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`}
+                    alt={stock.stockName}
+                    className="w-10 h-10 rounded-full"
                   />
                   <div className="flex justify-between w-full">
                     <div className="w-full">
                       <div className="flex justify-between w-full">
                         <div className="flex flex-col w-full max-w-[100px]">
-                          <p className="flex flex-col text-sm font-bold">
-                            {stock.name}
-                          </p>
-                          <p className="flex items-center text-gray-500 text-sm">
+                          <p className="text-sm font-bold">{stock.stockName}</p>
+                          <p className="flex items-center text-gray-500 text-[10px]">
                             <FaWonSign className="w-3 h-3" />
-                            <p className="ml-1">{stock.price}</p>
-                            <p className="ml-1">({stock.share}주)</p>
+                            <span className="ml-1">
+                              {stock.avgPrice.toLocaleString()} 원
+                            </span>
+                            <span className="ml-1">({stock.stockCount}주)</span>
                           </p>
                         </div>
-                        <div className="flex flex-col items-start ">
-                          <p className="flex items-center text-sm text-red-500">
-                            {stock.change_price}
-                            <br />
+                        <div className="flex flex-col items-start">
+                          <p
+                            className={`text-sm ${
+                              stock.profit >= 0
+                                ? 'text-red-500'
+                                : 'text-blue-500'
+                            }`}
+                          >
+                            {stock.profit >= 0
+                              ? `+${stock.profit.toLocaleString()}`
+                              : stock.profit.toLocaleString()}{' '}
+                            원
                           </p>
-                          <p className="flex items-center text-sm text-red-500">
-                            ({stock.change}
+                          <p
+                            className={`flex items-center text-sm ${
+                              stock.profit >= 0
+                                ? 'text-red-500'
+                                : 'text-blue-500'
+                            }`}
+                          >
+                            (
+                            {(
+                              (stock.profit /
+                                (stock.avgPrice * stock.stockCount)) *
+                              100
+                            ).toFixed(2)}
                             <MdPercent />)
-                          </p>{' '}
+                          </p>
                         </div>
                       </div>
                     </div>

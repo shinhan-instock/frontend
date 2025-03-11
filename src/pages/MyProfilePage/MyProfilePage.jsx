@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Profile from "../../components/common/Profile";
 import NavigationBar from "../../components/common/NavigationBar";
@@ -5,6 +6,7 @@ import PostList from "../../components/common/PostList";
 import MyProfilePostsData from "./components/MyProfilePostsData";
 import { useLogin } from "../../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
+
 
 export default function MyProfilePage() {
   const { userInfo } = useLogin();
@@ -36,7 +38,7 @@ export default function MyProfilePage() {
         {/* </div> */}
       </div>
 
-      <div className="p-5 w-full max-w-2xl overflow-auto flex-grow pb-30">
+      <div className="p-5 w-5/6 overflow-auto flex-grow pb-30">
         <MyProfilePostsData
           selectedTab={selectedTab}
           setPostsData={setPostsData}

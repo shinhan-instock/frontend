@@ -11,6 +11,7 @@ export default function PostCreate() {
   const [postText, setPostText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [hashtag, setHashtag] = useState("");
   const [myStocks, setMyStocks] = useState([]); // 보유 주식 리스트 (보여줄 때)
   const [images, setImages] = useState([]); // 실제 파일 저장
   const fileInputRef = useRef(null);
@@ -36,6 +37,7 @@ export default function PostCreate() {
   const selectHashtag = (selectedStock) => {
     if (!textAreaRef.current) return;
 
+    setHashtag(selectedStock);
     const cursorPosition = textAreaRef.current.selectionStart;
     const beforeText = postText.slice(0, cursorPosition);
     const afterText = postText.slice(cursorPosition);
@@ -54,6 +56,68 @@ export default function PostCreate() {
     }, 10);
   };
 
+  // ✅ 이미지 선택 (최대 1개 제한)
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    // 📌 1개 이상이면 경고 메시지 띄우기
+    if (files.length > 1 || images.length >= 1) {
+      alert("이미지는 1개만 업로드할 수 있습니다.");
+      return;
+    }
+
+    const newPreviews = files.map((file) => ({
+      id: URL.createObjectURL(file),
+      file,
+    }));
+
+    setImages(files);
+    setImagePreviews(newPreviews);
+  };
+
+  // ❌ 이미지 삭제
+  const removeImage = (id) => {
+    setImagePreviews([]);
+    setImages([]);
+  };
+
+  // 🔥 게시글 업로드 함수
+  const handlePostUpload = async () => {
+    if (!postText.trim()) {
+      alert("게시글 내용을 입력하세요!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("userId", userInfo.userId);
+    formData.append("content", postText);
+    formData.append("hashtag", hashtag); // 필요하면 해시태그 추가
+
+    if (images.length > 0) {
+      formData.append("file", images[0]);
+    }
+
+    try {
+      const res = await axios.post("http://localhost:8080/posts", formData, {
+        headers: {
+          Authorization: `Bearer ${userInfo.userId}`, // 필요 시 토큰 추가
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res.data.isSuccess) {
+        alert("게시글이 성공적으로 업로드되었습니다!");
+        setIsModalOpen(false);
+        setPostText("");
+        setImagePreviews([]);
+        setImages([]);
+      }
+    } catch (error) {
+      console.error("❌ 게시글 업로드 실패:", error);
+      alert("게시글 업로드 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <div className="flex flex-row p-5 w-5/6">
       {/* 로그인 유저 프로필 이미지 */}
@@ -61,7 +125,7 @@ export default function PostCreate() {
         <img
           src={userInfo.imageUrl}
           alt="User Profile"
-          className="w-20 h-20 rounded-full object-contain"
+          className="w-20 h- rounded-full object-contain"
         />
       ) : (
         <ImageMaker nickname={userInfo?.nickname || "User"} />
@@ -124,6 +188,26 @@ export default function PostCreate() {
               ))}
             </div>
           )}
+          {/* 이미지 미리보기 및 삭제 버튼 */}
+          {imagePreviews.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-3">
+              {imagePreviews.map(({ id, file }) => (
+                <div key={id} className="relative">
+                  <img
+                    src={id}
+                    alt="Preview"
+                    className="w-24 h-24 object-contain"
+                  />
+                  <button
+                    onClick={() => removeImage(id)}
+                    className="absolute top-1 right-1 bg-gray-800 text-white p-1 rounded-full"
+                  >
+                    <IoCloseCircle size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* 첨부 및 업로드 버튼 */}
           <div className="flex justify-between items-center mt-3">
@@ -138,13 +222,14 @@ export default function PostCreate() {
               type="file"
               ref={fileInputRef}
               className="hidden"
+              onChange={handleFileChange}
               accept="image/*"
             />
 
             {/* 게시글 업로드 버튼 */}
             <button
               className="bg-black text-white px-4 py-1 rounded-full"
-              onClick={() => console.log("게시글 업로드!")}
+              onClick={handlePostUpload}
             >
               POST
             </button>
