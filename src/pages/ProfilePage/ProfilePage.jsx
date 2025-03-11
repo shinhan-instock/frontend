@@ -21,6 +21,7 @@ export default function ProfilePage() {
             menuType="profile"
             selectedTab={selectedTab}
             setSelectedTab={setSelectedTab}
+            nickname={params.nickname}
           />
         </div>
       </div>

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-const menuOptions = {
+const getMenuOptions = (nickname) => ({
   default: [
     { id: 1, menu: "실시간" },
     { id: 2, menu: "팔로잉" },
@@ -11,20 +11,22 @@ const menuOptions = {
   ],
   profile: [
     { id: 1, menu: "게시글" },
-    { id: 2, menu: "SJ의 계좌" },
+    { id: 2, menu: `${nickname}님의 계좌` },
   ],
   stock: [
     { id: 1, menu: "감정 분석" },
     { id: 2, menu: "관련 게시글" },
     { id: 3, menu: "관련주" },
   ],
-};
+});
 export default function NavigationBar({
   menuType,
   selectedTab,
   setSelectedTab,
+  nickname,
 }) {
-  const menu = menuOptions[menuType];
+  const menuOptions = getMenuOptions(nickname);
+  const menu = menuOptions[menuType] || [];
 
   return (
     <div className="w-full flex justify-center z-10 relative">
