@@ -83,7 +83,7 @@ export default function PostCreate() {
         <img
           src={userInfo.imageUrl}
           alt="User Profile"
-          className="w-20 h-20 rounded-full object-contain"
+          className="w-20 h- rounded-full object-contain"
         />
       ) : (
         <ImageMaker nickname={userInfo?.nickname || 'User'} />
