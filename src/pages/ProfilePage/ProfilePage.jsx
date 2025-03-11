@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Profile from "../../components/common/Profile";
-import NavigationBar from "../../components/common/NavigationBar";
-import PostList from "../../components/common/PostList";
-import ProfilePostsData from "./components/ProfilePostsData";
-import { useParams } from "react-router-dom";
+import { useState } from 'react';
+import Profile from '../../components/common/Profile';
+import NavigationBar from '../../components/common/NavigationBar';
+import PostList from '../../components/common/PostList';
+import ProfilePostsData from './components/ProfilePostsData';
+import { useParams } from 'react-router-dom';
 
 export default function ProfilePage() {
   const [selectedTab, setSelectedTab] = useState(1);
@@ -24,6 +24,7 @@ export default function ProfilePage() {
             nickname={params.nickname}
           />
         </div>
+
       </div>
 
       <div className="p-5 w-full max-w-2xl overflow-auto flex-grow pb-30">

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { HiChevronDown } from "react-icons/hi";
-import ImageMaker from "../../../utils/ImageMaker";
-import { useNavigate } from "react-router-dom";
+import { HiChevronDown } from 'react-icons/hi';
+import ImageMaker from '../../../utils/ImageMaker';
+import { useNavigate } from 'react-router-dom';
 
 export default function ClosedProfile({
   userInfo,
@@ -16,7 +16,7 @@ export default function ClosedProfile({
           <img
             src={userInfo.imageUrl}
             alt="profile"
-            className="w-14 h-14 rounded-full"
+            className="w-14 h-14 rounded-full object-contain"
           />
         ) : (
           userInfo &&
@@ -27,7 +27,7 @@ export default function ClosedProfile({
           {userInfo ? (
             <h2 className="text-lg font-semibold">{userInfo.nickname}</h2>
           ) : (
-            <button className="pt-5 px-5 " onClick={() => navigate("/login")}>
+            <button className="pt-5 px-5 " onClick={() => navigate('/login')}>
               로그인 하러가기
             </button>
           )}
