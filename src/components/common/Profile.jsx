@@ -11,30 +11,14 @@ import {
 } from '../../api/UserAPI';
 import Modal from './Modal';
 
-export default function Profile({ isMyProfile, userNickname }) {
+export default function Profile({ isMyProfile, userNickname, userData }) {
   const [isFollowing, setIsFollowing] = useState(false);
-  const [userData, setUserData] = useState({});
+
   const { userInfo } = useLogin();
   const navigate = useNavigate('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [followList, setFollowList] = useState([]);
-
-  useEffect(() => {
-    if (isMyProfile && !userInfo) {
-      navigate('/');
-    }
-  }, [isMyProfile]);
-
-  useEffect(() => {
-    if (!isMyProfile) {
-      searchUser(userNickname).then((data) => {
-        setUserData(data[0]);
-      });
-    } else {
-      setUserData(userInfo);
-    }
-  }, []);
 
   useEffect(() => {
     const checkFollowStatus = async () => {

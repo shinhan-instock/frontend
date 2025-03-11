@@ -5,7 +5,7 @@ import userImg from "/img/userImg.png";
 export default function Comment({ comment }) {
   return (
     <div className="px-8 py-3 flex flex-row w-full gap-3">
-      <div className="flex items-center justify-center w-5 h-5 rounded-full">
+      <div className="flex items-center justify-center rounded-full">
         {comment.userImage ? (
           <img src={comment.userImage} />
         ) : (
