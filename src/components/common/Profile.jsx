@@ -1,21 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
-import { useLogin } from "../../hooks/useLogin";
-import ImageMaker from "../../utils/ImageMaker";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useLogin } from '../../hooks/useLogin';
+import ImageMaker from '../../utils/ImageMaker';
+import { useNavigate } from 'react-router-dom';
 import {
   searchUser,
   getFollowList,
   followUser,
   unfollowUser,
-} from "../../api/UserAPI";
-import Modal from "./Modal";
+} from '../../api/UserAPI';
+import Modal from './Modal';
 
 export default function Profile({ isMyProfile, userNickname, userData }) {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const { userInfo } = useLogin();
-  const navigate = useNavigate("");
+  const navigate = useNavigate('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [followList, setFollowList] = useState([]);
@@ -64,7 +64,10 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
   return (
     <div className="flex flex-row items-start w-4/5  p-4 space-x-7">
       {userData.imageUrl !== null ? (
-        <img src={userData.imageUrl} />
+        <img
+          src={userData.imageUrl}
+          className="rounded-full object-contain w-[50px] h-[50px] "
+        />
       ) : (
         <ImageMaker nickname={userData.nickname} />
       )}
@@ -82,11 +85,11 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
       {!isMyProfile && (
         <button
           className={`px-4 py-2 rounded-full font-medium text-sm ${
-            isFollowing ? "bg-gray-200 text-black" : "bg-blue-500 text-white"
+            isFollowing ? 'bg-gray-200 text-black' : 'bg-blue-500 text-white'
           }`}
           onClick={handleFollow}
         >
-          {isFollowing ? "팔로잉" : "팔로우"}
+          {isFollowing ? '팔로잉' : '팔로우'}
         </button>
       )}
       {/* 내프로필이 아닐때는 버튼 있음 */}
