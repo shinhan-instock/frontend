@@ -209,9 +209,9 @@ export async function updateUser(
 
       },
     });
-    console.log('Res, ', res);
+
     // 기존 데이터 가져오기
-      JSON.parse(sessionStorage.getItem("instock_user")) || {};
+    const existingUserData = JSON.parse(sessionStorage.getItem("instock_user")) || {};
 
     // 기존 userId 유지하면서 나머지 값 업데이트
     const updatedUserData = {

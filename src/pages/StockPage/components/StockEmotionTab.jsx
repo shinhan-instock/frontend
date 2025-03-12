@@ -1,7 +1,7 @@
 import Emotion from "./Emotion";
 import EmotionChart from "./EmotionChart";
 
-export default function StockEmotionTab() {
+export default function StockEmotionTab({stockName}) {
   return (
     <div className="flex flex-col gap-4 items-center">
       <div>
@@ -10,7 +10,7 @@ export default function StockEmotionTab() {
       </div>
       <Emotion />
       <div>과거 주식과 감정분석글을 한눈에 비교하기 !</div>
-      <EmotionChart />
+      <EmotionChart stockName={stockName} />
     </div>
   );
 }
