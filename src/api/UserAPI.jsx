@@ -1,4 +1,3 @@
-
 import axios from "axios";
 const BASE_URL = "http://localhost:8080";
 export async function login(userId, password) {
@@ -9,7 +8,6 @@ export async function login(userId, password) {
   const data = res.data.result;
   if (data && data.userId) {
     localStorage.setItem("user_id", data.userId);
-
   }
   return data;
 }
@@ -75,7 +73,6 @@ export async function unfollowUser(nickname) {
         "Content-Type": "application/json",
       },
       params: { Nickname: nickname },
-
     });
 
     return res.data;
@@ -86,9 +83,9 @@ export async function unfollowUser(nickname) {
 
 export async function account() {
   try {
-    const userId = localStorage.getItem('user_id');
+    const userId = localStorage.getItem("user_id");
     if (!userId) {
-      throw new Error('로그인이 필요합니다.');
+      throw new Error("로그인이 필요합니다.");
     }
 
     const res = await axios.get(`${BASE_URL}/accounts`, {
@@ -118,17 +115,17 @@ export function getWatchList(userId, onMessage, onError) {
   eventSource.onmessage = (event) => {
     try {
       const jsonData = JSON.parse(event.data);
-      console.log('서버에서 받은 JSON 데이터:', jsonData.result);
+      console.log("서버에서 받은 JSON 데이터:", jsonData.result);
       if (onMessage) {
         onMessage(jsonData);
       }
     } catch (error) {
-      console.error('JSON 파싱 오류:', error);
+      console.error("JSON 파싱 오류:", error);
     }
   };
 
   eventSource.onerror = (error) => {
-    console.error('SSE 연결 오류:', error);
+    console.error("SSE 연결 오류:", error);
     if (onError) {
       onError(error);
     }
@@ -136,7 +133,7 @@ export function getWatchList(userId, onMessage, onError) {
   };
 
   return () => {
-    console.log('SSE 연결 종료');
+    console.log("SSE 연결 종료");
     eventSource.close();
   };
 }
@@ -194,24 +191,23 @@ export async function updateUser(
 ) {
   const formData = new FormData();
 
-  formData.append('name', name);
-  formData.append('nickname', nickname);
+  formData.append("name", name);
+  formData.append("nickname", nickname);
   if (image) {
-    formData.append('image', image);
+    formData.append("image", image);
   }
-  formData.append('introduction', introduction);
+  formData.append("introduction", introduction);
 
   try {
     const res = await axios.put(`${BASE_URL}/users`, formData, {
       headers: {
         Authorization: `Bearer ${userId}`,
         "Content-Type": "multipart/form-data",
-
       },
     });
-    console.log('Res, ', res);
+    console.log("Res, ", res);
     // 기존 데이터 가져오기
-      JSON.parse(sessionStorage.getItem("instock_user")) || {};
+    JSON.parse(sessionStorage.getItem("instock_user")) || {};
 
     // 기존 userId 유지하면서 나머지 값 업데이트
     const updatedUserData = {
@@ -220,8 +216,8 @@ export async function updateUser(
       imageUrl: previewUrl,
       introduction: introduction,
     };
-    sessionStorage.setItem('instock_user', JSON.stringify(updatedUserData));
-    alert('수정이 완료되었습니다');
+    sessionStorage.setItem("instock_user", JSON.stringify(updatedUserData));
+    alert("수정이 완료되었습니다");
     window.location.reload();
   } catch (error) {
     alert(
@@ -231,15 +227,31 @@ export async function updateUser(
 }
 
 export async function getUserAccount(id, userId) {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/users/account`,
+      { userId: userId },
+      {
+        headers: {
+          Authorization: `Bearer ${id}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    return error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
+  }
+}
+
+export async function changeOpenAccount(id) {
   const res = await axios.post(
-    `${BASE_URL}/users/account`,
-    { userId: userId },
+    `${BASE_URL}/users/openAccount`,
+    {},
     {
       headers: {
         Authorization: `Bearer ${id}`,
       },
     }
   );
-  return res.data;
-
+  return res.data.result;
 }
