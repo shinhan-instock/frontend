@@ -5,7 +5,7 @@ import crypig from '/img/crypig.png';
 export default function LogoutModal({ isLogoutOpen, setIsLogoutOpen }) {
   const handleLogout = () => {
     sessionStorage.removeItem('instock_user');
-    localStorage.clear();
+    sessionStorage.clear();
 
     setIsLogoutOpen(false);
     location.reload();

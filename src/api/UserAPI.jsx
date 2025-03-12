@@ -8,9 +8,6 @@ export async function login(userId, password) {
     password: password,
   });
   const data = res.data.result;
-  if (data && data.userId) {
-    sessionStorage.setItem('user_id', data.userId);
-  }
   return data;
 }
 
@@ -21,20 +18,14 @@ export async function searchUser(userId) {
 }
 let eventSource = null;
 
-export async function getFollowList(nickname) {
+export async function getFollowList(userInfo, nickname) {
   try {
-    if (!nickname) {
-      return [];
-    }
+    if (!nickname || !userInfo) return [];
 
-    const userId = sessionStorage.getItem('user_id');
-    if (!userId) {
-      return [];
-    }
     const res = await axios.get(`${BASE_URL}/users/follow`, {
       headers: {
-        Authorization: `Bearer ${userId}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.userId}`,
+        "Content-Type": "application/json",
       },
       params: { following: nickname },
     });
@@ -45,34 +36,31 @@ export async function getFollowList(nickname) {
   }
 }
 
-export async function followUser(nickname) {
+export async function followUser(userInfo, nickname) {
   try {
-    const userId = sessionStorage.getItem('user_id');
-    if (!userId) {
-      return;
-    }
+    if (!userInfo) return;
+
     const res = await axios.post(`${BASE_URL}/users/follow`, null, {
       headers: {
-        Authorization: `Bearer ${userId}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.userId}`,
+        "Content-Type": "application/json",
       },
       params: { Nickname: nickname },
     });
+
     return res.data;
   } catch (error) {
     throw error;
   }
 }
-export async function unfollowUser(nickname) {
+export async function unfollowUser(userInfo, nickname) {
   try {
-    const userId = sessionStorage.getItem('user_id');
-    if (!userId) {
-      return;
-    }
+    if (!userInfo) return;
+
     const res = await axios.delete(`${BASE_URL}/users/follow`, {
       headers: {
-        Authorization: `Bearer ${userId}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.userId}`,
+        "Content-Type": "application/json",
       },
       params: { Nickname: nickname },
     });
@@ -82,63 +70,62 @@ export async function unfollowUser(nickname) {
     throw error;
   }
 }
-export async function updatePost(postId, content, hashtag, file) {
+// export async function updatePost(postId, content, hashtag, file) {
+//   try {
+//     const userId = sessionStorage.getItem('user_id');
+//     if (!userId) {
+//       throw new Error('로그인이 필요합니다.');
+//     }
+
+//     const formData = new FormData();
+//     formData.append('content', content);
+//     formData.append('hashtag', hashtag);
+//     if (file) {
+//       formData.append('file', file);
+//     }
+
+//     const res = await axios.put(`${BASE_URL}/posts/${postId}`, formData, {
+//       headers: {
+//         Authorization: `Bearer ${userId}`,
+//         'Content-Type': 'multipart/form-data',
+//       },
+//     });
+
+//     return res.data;
+//   } catch (error) {
+//     console.error('게시글 수정 실패:', error);
+//     throw error;
+//   }
+// }
+// export async function deletePost(postId) {
+//   try {
+//     const userId = sessionStorage.getItem('user_id');
+//     if (!userId) {
+//       throw new Error('로그인이 필요합니다.');
+//     }
+
+//     const res = await axios.delete(`${BASE_URL}/posts/${postId}`, {
+//       headers: {
+//         Authorization: `Bearer ${userId}`,
+//       },
+//     });
+
+//     return res.data;
+//   } catch (error) {
+//     console.error('게시글 삭제 실패:', error);
+//     throw error;
+//   }
+// }
+
+export async function account(userInfo) {
   try {
-    const userId = sessionStorage.getItem('user_id');
-    if (!userId) {
-      throw new Error('로그인이 필요합니다.');
-    }
-
-    const formData = new FormData();
-    formData.append('content', content);
-    formData.append('hashtag', hashtag);
-    if (file) {
-      formData.append('file', file);
-    }
-
-    const res = await axios.put(`${BASE_URL}/posts/${postId}`, formData, {
-      headers: {
-        Authorization: `Bearer ${userId}`,
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    return res.data;
-  } catch (error) {
-    console.error('게시글 수정 실패:', error);
-    throw error;
-  }
-}
-export async function deletePost(postId) {
-  try {
-    const userId = sessionStorage.getItem('user_id');
-    if (!userId) {
-      throw new Error('로그인이 필요합니다.');
-    }
-
-    const res = await axios.delete(`${BASE_URL}/posts/${postId}`, {
-      headers: {
-        Authorization: `Bearer ${userId}`,
-      },
-    });
-
-    return res.data;
-  } catch (error) {
-    console.error('게시글 삭제 실패:', error);
-    throw error;
-  }
-}
-
-export async function account() {
-  try {
-    const userId = sessionStorage.getItem('user_id');
-    if (!userId) {
+    if (!userInfo) {
       throw new Error("로그인이 필요합니다.");
     }
 
     const res = await axios.get(`${BASE_URL}/accounts`, {
       headers: {
-        Authorization: `Bearer ${userId}`,
+        Authorization: `Bearer ${userInfo.userId}`,
       },
     });
 
@@ -147,6 +134,7 @@ export async function account() {
     throw error;
   }
 }
+
 
 export function getWatchList(userId, onMessage, onError) {
   if (!userId) return () => {};
@@ -264,7 +252,7 @@ export async function updateUser(
       imageUrl: previewUrl,
       introduction: introduction,
     };
-    sessionStorage.setItem("instock_user", JSON.stringify(updatedUserData));
+    // sessionStorage.setItem("instock_user", JSON.stringify(updatedUserData));
     alert("수정이 완료되었습니다");
     window.location.reload();
   } catch (error) {
@@ -274,14 +262,16 @@ export async function updateUser(
   }
 }
 
-export async function getUserAccount(id, userId) {
+export async function getUserAccount(userInfo) {
   try {
+    if (!userInfo) throw new Error("로그인이 필요합니다.");
+
     const res = await axios.post(
       `${BASE_URL}/users/account`,
-      { userId: userId },
+      {},
       {
         headers: {
-          Authorization: `Bearer ${id}`,
+          Authorization: `Bearer ${userInfo.userId}`,
         },
       }
     );
@@ -290,6 +280,7 @@ export async function getUserAccount(id, userId) {
     return error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
   }
 }
+
 
 export async function changeOpenAccount(id) {
   const res = await axios.post(
