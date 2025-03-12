@@ -71,8 +71,6 @@ export default function OpenedProfile({
         <p
           className="text-lg font-semibold text-red-500 cursor-pointer hover:text-red-700"
           onClick={() => {
-            console.log("logout clicked");
-
             setIsLogoutOpen(true);
             setIsMyInfoOpen(!isMyInfoOpen);
           }}

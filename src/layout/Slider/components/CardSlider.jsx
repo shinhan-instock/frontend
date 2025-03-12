@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ImageMaker from '../../../utils/ImageMaker';
-import axios from 'axios';
-
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import ImageMaker from "../../../utils/ImageMaker";
+import axios from "axios";
+import { useLogin } from "../../../hooks/useLogin";
 export default function CardSlider() {
+  const { userInfo } = useLogin();
   const navigate = useNavigate();
   const [influencers, setInfluencers] = useState([]);
 
@@ -11,13 +12,13 @@ export default function CardSlider() {
     async function fetchInfluencers() {
       try {
         const response = await axios.get(
-          'http://localhost:8080/users/influencer'
+          "http://localhost:8080/users/influencer"
         );
         if (response.data.isSuccess) {
           setInfluencers(response.data.result);
         }
       } catch (error) {
-        console.error('인플루언서 데이터를 불러오는데 실패했습니다.', error);
+        console.error("인플루언서 데이터를 불러오는데 실패했습니다.", error);
       }
     }
     fetchInfluencers();
@@ -30,7 +31,13 @@ export default function CardSlider() {
           <div
             key={idx}
             className="cursor-pointer flex flex-col items-center"
-            onClick={() => navigate(`/profile/${influencer.nickname}`)}
+            onClick={() => {
+              if (influencer.nickname === userInfo.nickname) {
+                navigate("/myprofile");
+              } else {
+                navigate(`/profile/${influencer.nickname}`);
+              }
+            }}
           >
             {influencer.imageUrl ? (
               <img

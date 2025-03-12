@@ -150,7 +150,7 @@ export function getWatchList(userId, onMessage, onError) {
   eventSource.onmessage = (event) => {
     try {
       const jsonData = JSON.parse(event.data);
-      console.log("서버에서 받은 JSON 데이터:", jsonData.result);
+      // console.log("서버에서 받은 JSON 데이터:", jsonData.result);
       if (onMessage) {
         onMessage(jsonData);
       }
@@ -181,7 +181,6 @@ export async function addWatchList(userId, stockCode, stockName, onUpdate) {
   });
 
   const data = res.data.result;
-  console.log("added watchList", data);
   if (onUpdate) {
     onUpdate();
   }
@@ -197,7 +196,6 @@ export async function deleteWatchList(userId, stockName, onUpdate) {
   });
 
   const data = res.data.result;
-  console.log("deleted watchList", data);
   if (onUpdate) {
     onUpdate();
   }

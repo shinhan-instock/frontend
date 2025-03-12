@@ -18,6 +18,6 @@ export default function MyProfilePostsData({
         setPostsData(data);
       });
     }
-  }, [selectedTab]);
+  }, [selectedTab, setPostsData, userId]);
   return <div></div>;
 }

@@ -1,38 +1,42 @@
 /* eslint-disable react/prop-types */
-import { UserSearchResult, StockSearchResult } from "./SearchResult";
-import userImg from "/img/userImg.png";
-import miniLogo from "/img/miniLogo.png";
+import { UserSearchResult, TopResult, StockSearchResult } from "./SearchResult";
 
-const userdata = [
-  { id: 1, img: userImg, nickname: "sj", intro: "주식 폭주기니" },
-  {
-    id: 2,
-    img: miniLogo,
-    nickname: "sjasdfasd",
-    intro: "주식 폭주기니asdfasdfasdf",
-  },
-];
-
-export function UserSearchResultList() {
+export function UserSearchResultList({ userData, setIsSearchOpen }) {
   return (
     <div className="py-5 px-10 w-full">
-      {userdata.map((item) => (
+      {userData.map((item) => (
         <UserSearchResult
+          setIsSearchOpen={setIsSearchOpen}
           key={item.id}
-          img={item.img}
+          img={item.imageUrl}
           nickname={item.nickname}
-          intro={item.intro}
+          intro={item.introduction}
         />
       ))}
     </div>
   );
 }
 
-export function StockSearchResultList({ stockData }) {
+export function StockSearchResultList({ stockData, setIsSearchOpen }) {
+  return (
+    <div className="px-10 w-full overflow-auto h-full my-5">
+      {stockData.map((item) => (
+        <StockSearchResult
+          key={item.id}
+          stockName={item}
+          setIsSearchOpen={setIsSearchOpen}
+        />
+      ))}
+    </div>
+  );
+}
+
+export function TopStockResult({ stockData, setIsSearchOpen }) {
   return (
     <div className="px-10 w-full overflow-auto">
       {stockData.map((item) => (
-        <StockSearchResult
+        <TopResult
+          setIsSearchOpen={setIsSearchOpen}
           key={item.id}
           stockName={item.stockName}
           stockCode={item.stockCode}

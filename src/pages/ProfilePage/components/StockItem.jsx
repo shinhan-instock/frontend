@@ -2,7 +2,6 @@
 import React from "react";
 
 export function InfluencerStockItem({ stock }) {
-  console.log("stockitem", stock);
   return (
     <div className="px-10 border-b-1 border-instock-gray pb-4 flex flex-row justify-between">
       <div className="flex flex-row  items-center gap-5  ">
@@ -25,7 +24,6 @@ export function InfluencerStockItem({ stock }) {
 
 // 계좌 공개한 일반 사람
 export function StockItem({ stock }) {
-  console.log("stockitem", stock);
   return (
     <div className="flex flex-row  items-center gap-5 px-10 border-b-1 border-instock-gray pb-4 ">
       <img src="" className="border-1 w-10 h-10 rounded-full" />

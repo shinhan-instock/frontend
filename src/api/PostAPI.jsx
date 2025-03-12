@@ -79,7 +79,6 @@ export async function addScrap(postId, userId) {
       headers: { Authorization: `Bearer ${userId}` },
     }
   );
-  console.log("add scrap", res);
   const data = res.data.result;
   return data;
 }
@@ -102,7 +101,6 @@ export async function deleteScrap(postId, userId) {
     headers: { Authorization: `Bearer ${userId}` },
   });
   const data = res.data.result;
-  console.log("delete scrap", res);
   return data;
 }
 

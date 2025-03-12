@@ -10,9 +10,9 @@ export default function StockList({ userData }) {
   const { userInfo } = useLogin();
   // 1 : 남이 인플루언서, 2: 남이 일반 공개 계좌 , 3: 남이 계좌 공개 안함, 4: 내가 계좌 개설 안함
   const [option, setOption] = useState(0);
-  console.log("option", option, "linked", isLinked);
-  console.log("userData", userData);
-  console.log("userInfo", userInfo);
+  // console.log("option", option, "linked", isLinked);
+  // console.log("userData", userData);
+  // console.log("userInfo", userInfo);
 
   useEffect(() => {
     if (!userInfo?.userId || !userData?.userId) return;
@@ -26,7 +26,6 @@ export default function StockList({ userData }) {
     });
 
     getUserAccount(userInfo.userId, userInfo.userId).then((result) => {
-      console.log("myacc", result);
       if (result === "보유주식 list에 해당 주식이 없습니다.") {
         setIsLinked(true);
       } else if (typeof result === "string") {
