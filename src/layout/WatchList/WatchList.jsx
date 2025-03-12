@@ -1,12 +1,12 @@
-import { HiOutlineX } from "react-icons/hi";
-import { FaWonSign } from "react-icons/fa6";
-import { MdPercent } from "react-icons/md";
-import { useState, useEffect } from "react";
-import { useLogin } from "../../hooks/useLogin";
-import { getWatchList } from "../../api/UserAPI";
-import { useNavigate } from "react-router-dom";
-import WonFormatter from "../../utils/WonFormatter";
-import { deleteWatchList } from "../../api/UserAPI";
+import { HiOutlineX } from 'react-icons/hi';
+import { FaWonSign } from 'react-icons/fa6';
+import { MdPercent } from 'react-icons/md';
+import { useState, useEffect } from 'react';
+import { useLogin } from '../../hooks/useLogin';
+import { getWatchList } from '../../api/UserAPI';
+import { useNavigate } from 'react-router-dom';
+import WonFormatter from '../../utils/WonFormatter';
+import { deleteWatchList } from '../../api/UserAPI';
 
 export default function WatchList() {
   const { userInfo } = useLogin();
@@ -22,7 +22,7 @@ export default function WatchList() {
         setStocks(data.result);
       },
       (error) => {
-        console.error("SSE 오류 발생:", error);
+        console.error('SSE 오류 발생:', error);
       }
     );
 
@@ -34,7 +34,7 @@ export default function WatchList() {
   const removeStocks = (e, stockName) => {
     e.stopPropagation();
 
-    localStorage.removeItem("watchList");
+    localStorage.removeItem('watchList');
     deleteWatchList(userInfo.userId, stockName);
 
     setStocks(stocks.filter((stock) => stock.stockName !== stockName));
@@ -61,7 +61,7 @@ export default function WatchList() {
                     <img
                       src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`}
                       alt={stock.name}
-                      className="w-13 h-13 rounded-full"
+                      className="w-10 h-10 rounded-full"
                     />
                     <div className="flex flex-row justify-between w-full">
                       <div className="w-full">
@@ -87,12 +87,12 @@ export default function WatchList() {
                         <p className="mr-6">
                           {stock.changeRate > 0 ? (
                             <p className="flex flex-row w-full justify-end text-red-500">
-                              {" "}
+                              {' '}
                               + {stock.changeRate} %
                             </p>
                           ) : (
                             <p className="flex w-full justify-end text-blue-500">
-                              {" "}
+                              {' '}
                               {stock.changeRate} %
                             </p>
                           )}
