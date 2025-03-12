@@ -1,15 +1,10 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import CommentCreate from "../comment/CommentCreate";
 import CommentList from "../comment/CommentList";
-import {
-  getLikeByUser,
-  addLike,
-  deleteLike,
-  addScrap,
-  deleteScrap,
-} from "../../api/PostAPI";
+import { addLike, deleteLike, addScrap, deleteScrap } from "../../api/PostAPI";
 import { useLogin } from "../../hooks/useLogin";
 import ImageMaker from "../../utils/ImageMaker";
 import { BsBookmark } from "react-icons/bs";
@@ -26,53 +21,24 @@ export default function Post({
   comments,
   sentimentScore,
   images,
+  scrapped,
+  liked,
 }) {
-  const [likeId, setLikeId] = useState(null);
-  const [isLiked, setIsLiked] = useState(false);
-  const [scrapId, setScrapId] = useState(null);
+  const [isLiked, setIsLiked] = useState(liked);
+  const [scrap, setScrap] = useState(scrapped);
+  // const [scrapId, setScrapId] = useState(null);
+  // const [likeId, setLikeId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [commentsData, setCommentsData] = useState([]);
-  const [scrap, setScrap] = useState(false);
   const navigate = useNavigate();
   const { userInfo } = useLogin();
-
-  useEffect(() => {
-    if (userInfo?.userId) {
-      getLikeByUser(userInfo.userId, id).then((result) => {
-        if (result !== undefined) {
-          setLikeId(result);
-          setIsLiked(true);
-        } else {
-          setIsLiked(false);
-        }
-      });
-    }
-  }, [id, userInfo?.userId, likeCount]);
-
-  useEffect(() => {
-    const scrapList = JSON.parse(localStorage.getItem("scrap")) || [];
-    // console.log('스크랩 리스트:', scrapList); // 디버깅용 로그 추가
-
-    const existingScrap = scrapList.find(
-      (scrapItem) => scrapItem.postId === id
-    );
-
-    if (existingScrap) {
-      setScrap(true);
-      setScrapId(existingScrap.scrapId);
-    } else {
-      setScrap(false);
-      setScrapId(null);
-    }
-  }, [id]); // `id`가 변경될 때마다 실행
 
   const handleLike = (e) => {
     e.stopPropagation();
     if (isLiked) {
-      deleteLike(likeId, userInfo.userId).then(() => {
+      deleteLike(id, userInfo.userId).then(() => {
         setIsLiked(false);
-        setLikeId(null);
         setLikeCount((prev) => prev - 1);
       });
     } else {
@@ -85,24 +51,13 @@ export default function Post({
 
   const handleScrap = (e) => {
     e.stopPropagation();
-
-    let scrapList = JSON.parse(localStorage.getItem("scrap")) || []; // 기존 스크랩 목록 가져오기
-
     if (scrap) {
-      deleteScrap(scrapId, userInfo.userId).then(() => {
+      deleteScrap(id, userInfo.userId).then(() => {
         setScrap(false);
-        scrapList = scrapList.filter((id) => {
-          console.log("delete", id);
-          id.postId !== id;
-        });
-        localStorage.setItem("scrap", JSON.stringify(scrapList));
       });
     } else {
-      addScrap(id, userInfo.userId).then((data) => {
+      addScrap(id, userInfo.userId).then(() => {
         setScrap(true);
-        setScrapId(data);
-        scrapList.push({ postId: id, scrapId: data }); // 스크랩한 게시글 id 넣기
-        localStorage.setItem("scrap", JSON.stringify(scrapList));
       });
     }
   };
@@ -128,10 +83,10 @@ export default function Post({
               onClick={(e) => navigateToProfile(e)}
               className="cursor-pointer"
             >
-              {profileImg !== null ? (
+              {profileImg ? (
                 <img
                   src={profileImg}
-                  className="rounded-full w-[50px] h-[50px] "
+                  className="rounded-full w-[50px] h-[50px]"
                 />
               ) : (
                 <ImageMaker nickname={nickname} />
@@ -139,12 +94,7 @@ export default function Post({
             </div>
             <div className="flex flex-col">
               <div>{nickname}</div>
-              <div>
-                {new Date(created_at).toLocaleString({
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })}
-              </div>
+              <div>{new Date(created_at).toLocaleString()}</div>
             </div>
           </div>
           <div className="border-1 border-yellow-500 w-10 h-10 flex flex-row items-center justify-center rounded-lg">
@@ -152,7 +102,7 @@ export default function Post({
           </div>
         </div>
         <div>{content}</div>
-        {images && <img src={images} className="w-11/12 rounded-xl " />}
+        {images && <img src={images} className="w-11/12 rounded-xl" />}
 
         <div
           className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm hover:cursor-pointer"
@@ -171,7 +121,7 @@ export default function Post({
             <div>{comments}</div>
           </div>
           <button onClick={(e) => handleScrap(e)}>
-            {scrap && userInfo ? <BsBookmarkFill /> : <BsBookmark />}
+            {scrap ? <BsBookmarkFill /> : <BsBookmark />}
           </button>
         </div>
       </div>
@@ -182,10 +132,10 @@ export default function Post({
               onClick={(e) => navigateToProfile(e)}
               className="cursor-pointer"
             >
-              {profileImg !== null ? (
+              {profileImg ? (
                 <img
                   src={profileImg}
-                  className="rounded-full w-[50px] h-[50px] "
+                  className="rounded-full w-[50px] h-[50px]"
                 />
               ) : (
                 <ImageMaker nickname={nickname} />
@@ -211,7 +161,7 @@ export default function Post({
               <div>{comments}</div>
             </div>
             <button onClick={(e) => handleScrap(e)}>
-              {scrap && userInfo ? <BsBookmarkFill /> : <BsBookmark />}
+              {scrap ? <BsBookmarkFill /> : <BsBookmark />}
             </button>
           </div>
         </div>
@@ -224,7 +174,6 @@ export default function Post({
             />
           </div>
         )}
-
         <div
           className={`${userInfo ? "max-h-1/3" : "max-h-1/2"} overflow-auto`}
         >

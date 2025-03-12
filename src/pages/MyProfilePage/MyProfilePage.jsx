@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Profile from "../../components/common/Profile";
 import NavigationBar from "../../components/common/NavigationBar";
@@ -7,14 +6,13 @@ import MyProfilePostsData from "./components/MyProfilePostsData";
 import { useLogin } from "../../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 
-
 export default function MyProfilePage() {
   const { userInfo } = useLogin();
   const [selectedTab, setSelectedTab] = useState(1);
   const [postsData, setPostsData] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!userInfo.userId) {
+    if (!userInfo) {
       navigate("/");
     }
   }, [navigate, userInfo]);

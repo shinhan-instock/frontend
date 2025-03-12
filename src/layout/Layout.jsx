@@ -40,7 +40,10 @@ export default function Layout() {
             <SearchBar setIsSearchOpen={setIsSearchOpen} />
           </div>
           {isSearchOpen ? (
-            <SearchModal setIsSearchOpen={setIsSearchOpen} />
+            <SearchModal
+              isSearchOpen={isSearchOpen}
+              setIsSearchOpen={setIsSearchOpen}
+            />
           ) : isLogoutOpen ? (
             <LogoutModal
               setIsLogoutOpen={setIsLogoutOpen}

@@ -8,7 +8,7 @@ export default function WatchList() {
   const { userInfo } = useLogin();
   const { watchList, removeStockFromWatchList } = useWatchList(); // ✅ 전역 관심목록 사용
   const navigate = useNavigate();
-
+  console.log("wat", watchList);
   return (
     <div className="w-full mx-auto px-5 h-3/7">
       <div className="flex flex-col p-4 rounded-lg bg-instock-gray h-11/12">

@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
 import { getStockPosts } from "../../../api/PostAPI";
+import { useLogin } from "../../../hooks/useLogin";
 
 export default function StockPostsData({ stockName, setPostsData }) {
-  console.log(stockName);
+  const { userInfo } = useLogin();
+  const userId = userInfo.userId ? userInfo.userId : null;
   useEffect(() => {
-    getStockPosts(stockName).then((data) => {
+    getStockPosts(stockName, userId).then((data) => {
       setPostsData(data);
     });
   }, [stockName]);
