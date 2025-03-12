@@ -6,6 +6,9 @@ export default function PostList({ postsData }) {
   const filteredPosts = postsData.filter(
     (post) => String(post.deleted) !== 'true'
   );
+import Post from "./Post";
+
+export default function PostList({ postsData }) {
   return (
     <div className="flex flex-col gap-10">
       {filteredPosts.length !== 0 ? (
@@ -25,6 +28,8 @@ export default function PostList({ postsData }) {
             comments={post.comments}
             sentimentScore={post.sentimentScore}
             deleted={post.deleted}
+            scrapped={post.scrapped}
+            liked={post.liked}
           />
         ))
       ) : (

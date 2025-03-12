@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { HiChevronUp } from 'react-icons/hi';
-import ImageMaker from '../../../utils/ImageMaker';
-import { useNavigate } from 'react-router-dom';
+import { HiChevronUp } from "react-icons/hi";
+import ImageMaker from "../../../utils/ImageMaker";
+import { useNavigate } from "react-router-dom";
 export default function OpenedProfile({
   userInfo,
   setIsMyInfoOpen,
@@ -25,10 +25,10 @@ export default function OpenedProfile({
           )}
           <div className="flex-col px-3">
             <h2 className="text-lg font-semibold">
-              {userInfo ? userInfo.nickname : '로그인이 필요해요'}
+              {userInfo ? userInfo.nickname : "로그인이 필요해요"}
             </h2>
             <p className="text-gray-600 text-sm">
-              {userInfo ? userInfo.introduction : ''}
+              {userInfo ? userInfo.introduction : ""}
             </p>
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function OpenedProfile({
         <p
           className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
           onClick={() => {
-            navigate('/myprofile');
+            navigate("/myprofile");
             setIsMyInfoOpen(!isMyInfoOpen);
           }}
         >
@@ -53,7 +53,7 @@ export default function OpenedProfile({
         <p
           className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
           onClick={() => {
-            navigate('/myprofile/edit');
+            navigate("/myprofile/edit");
             setIsMyInfoOpen(!isMyInfoOpen);
           }}
         >
@@ -62,7 +62,7 @@ export default function OpenedProfile({
         <p
           className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
           onClick={() => {
-            navigate('/piggybank');
+            navigate("/piggybank");
             setIsMyInfoOpen(!isMyInfoOpen);
           }}
         >

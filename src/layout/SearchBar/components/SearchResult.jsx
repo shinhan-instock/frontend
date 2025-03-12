@@ -1,11 +1,23 @@
 /* eslint-disable react/prop-types */
+import ImageMaker from "../../../utils/ImageMaker";
 import WonFormatter from "../../../utils/WonFormatter";
 import { useNavigate } from "react-router-dom";
 
-export function UserSearchResult({ img, nickname, intro }) {
+export function UserSearchResult({ img, nickname, intro, setIsSearchOpen }) {
+  const navigate = useNavigate();
   return (
-    <div className="flex flex-row gap-5 items-center py-2 border-b-1 border-instock-gray">
-      <img src={img} className="w-12 h-12 rounded-full shadow-md " />
+    <div
+      className="flex flex-row gap-5 items-center py-2 border-b-1 border-instock-gray"
+      onClick={() => {
+        navigate(`/profile/${nickname}`);
+        setIsSearchOpen(false);
+      }}
+    >
+      {img == null ? (
+        <ImageMaker nickname={nickname} />
+      ) : (
+        <img src={img} className="w-12 h-12 rounded-full shadow-md " />
+      )}
 
       <div className="flex flex-col">
         <div>{nickname}</div>
@@ -15,12 +27,28 @@ export function UserSearchResult({ img, nickname, intro }) {
   );
 }
 
-export function StockSearchResult({
+export function StockSearchResult({ stockName, setIsSearchOpen }) {
+  const navigate = useNavigate();
+  return (
+    <div
+      className="flex flex-row justify-between items-center py-2 border-b-1 border-instock-gray cursor-pointer"
+      onClick={() => {
+        navigate(`/stock/${stockName}`);
+        setIsSearchOpen(false);
+      }}
+    >
+      {stockName}
+    </div>
+  );
+}
+
+export function TopResult({
   // img,
   stockName,
   stockCode,
   price,
   changeRate,
+  setIsSearchOpen,
 }) {
   const navigate = useNavigate();
   return (
@@ -28,7 +56,7 @@ export function StockSearchResult({
       className="flex flex-row justify-between items-center py-2 border-b-1 border-instock-gray cursor-pointer"
       onClick={() => {
         navigate(`/stock/${stockName}`);
-        location.reload();
+        setIsSearchOpen(false);
       }}
     >
       <div className="flex flex-row gap-5">

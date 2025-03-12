@@ -1,8 +1,8 @@
-import { StockSearchResultList } from "./SearchResultList";
+import { TopStockResult } from "./SearchResultList";
 import { getTopStocks } from "../../../api/StockAPI";
 import { useEffect, useState } from "react";
 
-export default function TopStock() {
+export default function TopStock({ setIsSearchOpen }) {
   const [stockData, setStockData] = useState([]);
   useEffect(() => {
     getTopStocks().then((stocks) => setStockData(stocks));
@@ -13,7 +13,7 @@ export default function TopStock() {
       <div className="px-10 pt-5 pb-3 text-lg">
         실시간 등락율 높은 주식 Top 20
       </div>
-      <StockSearchResultList stockData={stockData} />
+      <TopStockResult stockData={stockData} setIsSearchOpen={setIsSearchOpen} />
     </div>
   );
 }

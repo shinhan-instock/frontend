@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 
 import axios from "axios";
 const BASE_URL = "http://localhost:8080";
@@ -83,20 +84,18 @@ export async function account(userInfo) {
         Authorization: `Bearer ${userInfo.userId}`,
       },
     });
-
     return res.data;
   } catch (error) {
     throw error;
   }
 }
 
-
 export function getWatchList(userId, onMessage, onError) {
   if (!userId) return () => {};
 
   if (eventSource) {
     eventSource.close();
-    console.log('SSE 연결 종료');
+    console.log("SSE 연결 종료");
   }
 
   eventSource = new EventSource(
@@ -106,7 +105,7 @@ export function getWatchList(userId, onMessage, onError) {
   eventSource.onmessage = (event) => {
     try {
       const jsonData = JSON.parse(event.data);
-      console.log("서버에서 받은 JSON 데이터:", jsonData.result);
+      // console.log("서버에서 받은 JSON 데이터:", jsonData.result);
       if (onMessage) {
         onMessage(jsonData);
       }
@@ -130,14 +129,13 @@ export function getWatchList(userId, onMessage, onError) {
 }
 
 export async function addWatchList(userId, stockCode, stockName, onUpdate) {
-  const res = await axios.post('http://localhost:8080/watchList', {
+  const res = await axios.post("http://localhost:8080/watchList", {
     userId: userId,
     stockCode: stockCode,
     stockName: stockName,
   });
 
   const data = res.data.result;
-  console.log('added watchList', data);
   if (onUpdate) {
     onUpdate();
   }
@@ -145,7 +143,7 @@ export async function addWatchList(userId, stockCode, stockName, onUpdate) {
 }
 
 export async function deleteWatchList(userId, stockName, onUpdate) {
-  const res = await axios.delete('http://localhost:8080/watchList', {
+  const res = await axios.delete("http://localhost:8080/watchList", {
     data: {
       userId: userId,
       stockName: stockName,
@@ -153,7 +151,6 @@ export async function deleteWatchList(userId, stockName, onUpdate) {
   });
 
   const data = res.data.result;
-  console.log('deleted watchList', data);
   if (onUpdate) {
     onUpdate();
   }
@@ -193,12 +190,13 @@ export async function updateUser(
     const res = await axios.put(`${BASE_URL}/users`, formData, {
       headers: {
         Authorization: `Bearer ${userId}`,
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
 
     // 기존 데이터 가져오기
-    const existingUserData = JSON.parse(sessionStorage.getItem("instock_user")) || {};
+    const existingUserData =
+      JSON.parse(sessionStorage.getItem("instock_user")) || {};
 
     // 기존 userId 유지하면서 나머지 값 업데이트
     const updatedUserData = {
@@ -212,21 +210,19 @@ export async function updateUser(
     window.location.reload();
   } catch (error) {
     alert(
-      '다른 사용자가 닉네임을 사용하고 있습니다. 다른 닉네임으로 등록해주세요.'
+      "다른 사용자가 닉네임을 사용하고 있습니다. 다른 닉네임으로 등록해주세요."
     );
   }
 }
 
-export async function getUserAccount(userInfo) {
+export async function getUserAccount(id, userId) {
   try {
-    if (!userInfo) throw new Error("로그인이 필요합니다.");
-
     const res = await axios.post(
       `${BASE_URL}/users/account`,
-      {},
+      { userId: userId },
       {
         headers: {
-          Authorization: `Bearer ${userInfo.userId}`,
+          Authorization: `Bearer ${id}`,
         },
       }
     );
@@ -235,7 +231,6 @@ export async function getUserAccount(userInfo) {
     return error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
   }
 }
-
 
 export async function changeOpenAccount(id) {
   const res = await axios.post(

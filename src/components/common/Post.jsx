@@ -29,16 +29,19 @@ export default function Post({
   sentimentScore,
   images,
   deleted,
+  scrapped,
+  liked,
 }) {
-  const [likeId, setLikeId] = useState(null);
-  const [isLiked, setIsLiked] = useState(false);
-  const [scrapId, setScrapId] = useState(null);
+  const [isLiked, setIsLiked] = useState(liked);
+  const [scrap, setScrap] = useState(scrapped);
+  // const [scrapId, setScrapId] = useState(null);
+  // const [likeId, setLikeId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [commentsData, setCommentsData] = useState([]);
-  const [scrap, setScrap] = useState(false);
   const navigate = useNavigate();
   const { userInfo } = useLogin();
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
   const [editedHashtag, setEditedHashtag] = useState(hashtag);
@@ -73,12 +76,12 @@ export default function Post({
     }
   }, [id]); // `id`가 변경될 때마다 실행
 
+
   const handleLike = (e) => {
     e.stopPropagation();
     if (isLiked) {
-      deleteLike(likeId, userInfo.userId).then(() => {
+      deleteLike(id, userInfo.userId).then(() => {
         setIsLiked(false);
-        setLikeId(null);
         setLikeCount((prev) => prev - 1);
       });
     } else {
@@ -91,24 +94,13 @@ export default function Post({
 
   const handleScrap = (e) => {
     e.stopPropagation();
-
-    let scrapList = JSON.parse(localStorage.getItem('scrap')) || []; // 기존 스크랩 목록 가져오기
-
     if (scrap) {
-      deleteScrap(scrapId, userInfo.userId).then(() => {
+      deleteScrap(id, userInfo.userId).then(() => {
         setScrap(false);
-        scrapList = scrapList.filter((id) => {
-          console.log('delete', id);
-          id.postId !== id;
-        });
-        localStorage.setItem('scrap', JSON.stringify(scrapList));
       });
     } else {
-      addScrap(id, userInfo.userId).then((data) => {
+      addScrap(id, userInfo.userId).then(() => {
         setScrap(true);
-        setScrapId(data);
-        scrapList.push({ postId: id, scrapId: data }); // 스크랩한 게시글 id 넣기
-        localStorage.setItem('scrap', JSON.stringify(scrapList));
       });
     }
   };
@@ -159,12 +151,13 @@ export default function Post({
   const navigateToProfile = (e) => {
     e.stopPropagation();
     if (userInfo && nickname === userInfo.nickname) {
-      navigate('/myprofile');
+      navigate("/myprofile");
     } else {
       navigate(`/profile/${nickname}`);
     }
   };
-
+  const sentimentColor =
+    sentimentScore > 50 ? "border-green-500" : "border-red-500";
   return (
     <div>
       <div
@@ -177,10 +170,10 @@ export default function Post({
               onClick={(e) => navigateToProfile(e)}
               className="cursor-pointer"
             >
-              {profileImg !== null ? (
+              {profileImg ? (
                 <img
                   src={profileImg}
-                  className="rounded-full w-[50px] h-[50px] "
+                  className="rounded-full w-[50px] h-[50px]"
                 />
               ) : (
                 <ImageMaker nickname={nickname} />
@@ -188,20 +181,19 @@ export default function Post({
             </div>
             <div className="flex flex-col">
               <div>{nickname}</div>
-              <div>
-                {new Date(created_at).toLocaleString({
-                  dateStyle: 'medium',
-                  timeStyle: 'short',
-                })}
-              </div>
+              <div>{new Date(created_at).toLocaleString()}</div>
             </div>
           </div>
-          <div className="border-1 border-yellow-500 w-10 h-10 flex flex-row items-center justify-center rounded-lg">
-            {sentimentScore}
-          </div>
+          {hashtag && (
+            <div
+              className={`border-1 ${sentimentColor} w-10 h-10 flex flex-row items-center justify-center rounded-lg`}
+            >
+              {sentimentScore}
+            </div>
+          )}
         </div>
         <div>{content}</div>
-        {images && <img src={images} className="w-11/12 rounded-xl " />}
+        {images && <img src={images} className="w-11/12 rounded-xl" />}
 
         <div
           className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm hover:cursor-pointer"
@@ -213,14 +205,14 @@ export default function Post({
         </div>
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-3">
-            <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
+            <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
             <div>{likeCount}</div>
 
             <button>💬</button>
             <div>{comments}</div>
           </div>
           <button onClick={(e) => handleScrap(e)}>
-            {scrap && userInfo ? <BsBookmarkFill /> : <BsBookmark />}
+            {scrap ? <BsBookmarkFill /> : <BsBookmark />}
           </button>
         </div>
       </div>
@@ -232,10 +224,10 @@ export default function Post({
               onClick={(e) => navigateToProfile(e)}
               className="cursor-pointer"
             >
-              {profileImg !== null ? (
+              {profileImg ? (
                 <img
                   src={profileImg}
-                  className="rounded-full w-[50px] h-[50px] "
+                  className="rounded-full w-[50px] h-[50px]"
                 />
               ) : (
                 <ImageMaker nickname={nickname} />
@@ -292,11 +284,20 @@ export default function Post({
             {/* ❤️ 좋아요, 💬 댓글 */}
             <div className="flex flex-row gap-3 mt-4 items-center">
               <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
+          <div className="mt-3">{content}</div>
+          <div
+            className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm mt-2 cursor-pointer"
+            onClick={() => navigate(`/stock/${hashtag}`)}
+          >
+            {hashtag}
+          </div>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row gap-3 mt-4">
+              <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
               <div>{likeCount}</div>
               <button>💬</button>
               <div>{comments}</div>
             </div>
-
             {/* ✏️ 수정 / 🗑 삭제 / 북마크 */}
             <div className="flex flex-row items-center gap-3">
               {userInfo?.nickname === nickname && (
@@ -309,6 +310,9 @@ export default function Post({
                 {scrap && userInfo ? <BsBookmarkFill /> : <BsBookmark />}
               </button>
             </div>
+            <button onClick={(e) => handleScrap(e)}>
+              {scrap ? <BsBookmarkFill /> : <BsBookmark />}
+            </button>
           </div>
         </div>
         {userInfo && (
@@ -320,9 +324,8 @@ export default function Post({
             />
           </div>
         )}
-
         <div
-          className={`${userInfo ? 'max-h-1/3' : 'max-h-1/2'} overflow-auto`}
+          className={`${userInfo ? "max-h-1/3" : "max-h-1/2"} overflow-auto`}
         >
           <CommentList
             postId={id}
