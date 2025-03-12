@@ -5,27 +5,52 @@ import { account } from '../../api/UserAPI';
 import { useNavigate } from 'react-router-dom';
 
 export default function MyStock() {
-  const [isLinked, setIsLinked] = useState(true);
+  const [isLinked, setIsLinked] = useState(false);
   const [stockData, setStockData] = useState([]);
   const navigate = useNavigate();
+  let eventSource = null;
 
   useEffect(() => {
     async function fetchAccountData() {
       try {
         const data = await account();
-        if (data && data.length > 0) {
-          setStockData(data);
-          setIsLinked(true);
-        } else {
+        setStockData(data);
+        setIsLinked(true);
+      } catch (error) {
+        if (error.response?.data?.error === '계좌 계설을 먼저 하세요.') {
           setIsLinked(false);
         }
-      } catch (error) {
-        setIsLinked(false);
       }
     }
-
     fetchAccountData();
   }, []);
+
+  useEffect(() => {
+    if (!isLinked) return;
+
+    if (eventSource) {
+      eventSource.close();
+    }
+
+    eventSource = new EventSource('http://localhost:8080/accounts/updates', {
+      withCredentials: true,
+    });
+
+    eventSource.onmessage = (event) => {
+      try {
+        const jsonData = JSON.parse(event.data);
+        setStockData(jsonData);
+      } catch (error) {}
+    };
+
+    eventSource.onerror = (error) => {
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [isLinked]);
 
   return (
     <div className="w-full mx-auto px-5">
@@ -48,14 +73,12 @@ export default function MyStock() {
             {stockData.map((stock, index) => (
               <div
                 key={index}
-                className="flex justify-between space-y-3 w-full"
+                className="flex justify-between space-y-3 w-full cursor-pointer hover:bg-gray-200 p-2 rounded-md"
                 onClick={() =>
-                  (window.location.href = `/stock/${encodeURIComponent(
-                    stock.stockName
-                  )}`)
+                  navigate(`/stock/${encodeURIComponent(stock.stockName)}`)
                 }
               >
-                <div className="flex flex-row space-x-3 w-full space-y-6">
+                <div className="flex flex-row space-x-3 w-full">
                   <img
                     src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`}
                     alt={stock.stockName}
