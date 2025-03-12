@@ -24,8 +24,20 @@ export async function getPost(postId) {
   return data;
 }
 
-export async function getStockPosts(stockName) {
-  const res = await axios.get(`${BASE_URL}/posts/stocks/${stockName}`);
+export async function getStockPosts(stockName, userId) {
+  let res = "";
+  if (userId !== null) {
+    res = await axios.get(
+      `${BASE_URL}/posts/stocks/${stockName}`,
+
+      {
+        headers: { Authorization: `Bearer ${userId}` },
+      }
+    );
+  } else {
+    res = await axios.get(`${BASE_URL}/posts/stocks/${stockName}`);
+  }
+
   const data = res.data.result;
   return data;
 }
@@ -38,10 +50,23 @@ export async function getMyPosts(userId) {
   return data;
 }
 
-export async function getPostsByUser(nickname) {
-  const res = await axios.post(`${BASE_URL}/posts/user`, {
-    nickname: nickname,
-  });
+export async function getPostsByUser(nickname, userId) {
+  let res = "";
+  if (userId !== null) {
+    res = await axios.post(
+      `${BASE_URL}/posts/user`,
+      {
+        nickname: nickname,
+      },
+      {
+        headers: { Authorization: `Bearer ${userId}` },
+      }
+    );
+  } else {
+    res = await axios.post(`${BASE_URL}/posts/user`, {
+      nickname: nickname,
+    });
+  }
   const data = res.data.result;
   return data;
 }
@@ -72,8 +97,8 @@ export async function addLike(postId, userId) {
   return data;
 }
 
-export async function deleteScrap(scrapId, userId) {
-  const res = await axios.delete(`${BASE_URL}/posts/scrap/${scrapId}`, {
+export async function deleteScrap(postId, userId) {
+  const res = await axios.delete(`${BASE_URL}/posts/${postId}/scrap`, {
     headers: { Authorization: `Bearer ${userId}` },
   });
   const data = res.data.result;
@@ -81,8 +106,8 @@ export async function deleteScrap(scrapId, userId) {
   return data;
 }
 
-export async function deleteLike(likeId, userId) {
-  const res = await axios.delete(`${BASE_URL}/posts/like/${likeId}`, {
+export async function deleteLike(postId, userId) {
+  const res = await axios.delete(`${BASE_URL}/posts/${postId}/like`, {
     headers: { Authorization: `Bearer ${userId}` },
   });
   const data = res.data.result;

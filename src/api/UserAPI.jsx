@@ -262,16 +262,14 @@ export async function updateUser(
   }
 }
 
-export async function getUserAccount(userInfo) {
+export async function getUserAccount(id, userId) {
   try {
-    if (!userInfo) throw new Error("로그인이 필요합니다.");
-
     const res = await axios.post(
       `${BASE_URL}/users/account`,
-      {},
+      { userId: userId },
       {
         headers: {
-          Authorization: `Bearer ${userInfo.userId}`,
+          Authorization: `Bearer ${id}`,
         },
       }
     );

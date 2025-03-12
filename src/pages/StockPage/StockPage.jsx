@@ -9,13 +9,13 @@ import StockPostsData from "./components/StockPostsData";
 
 export default function StockPage() {
   const stockName = useParams().stockname;
-
+  const [stockDesc, setStockDesc] = useState("");
   const [selectedTab, setSelectedTab] = useState(1);
   const [postsData, setPostsData] = useState([]);
   return (
     <div className="flex flex-col items-center h-screen">
       <div className="px-3 sticky w-full flex flex-row justify-center">
-        <StockInfo stockName={stockName} />
+        <StockInfo stockName={stockName} setStockDesc={setStockDesc} />
       </div>
 
       <div className="w-4/5">
@@ -37,7 +37,7 @@ export default function StockPage() {
             <PostList postsData={postsData} />
           </>
         ) : (
-          <RelatedStockTab stockName={stockName} />
+          <RelatedStockTab stockName={stockName} stockDesc={stockDesc} />
         )}
       </div>
     </div>

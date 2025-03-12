@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { StockItem, InfluencerStockItem } from "./StockItem";
-import { getUserAccount } from "../../../api/UserAPI";
+import { getUserAccount, account } from "../../../api/UserAPI";
 import { useLogin } from "../../../hooks/useLogin";
 
 export default function StockList({ userData }) {

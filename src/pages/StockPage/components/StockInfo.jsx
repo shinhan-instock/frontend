@@ -6,7 +6,7 @@ import { addWatchList, deleteWatchList } from "../../../api/UserAPI";
 import { useLogin } from "../../../hooks/useLogin";
 import { useWatchList } from "../../../context/WatchListContext";
 
-export default function StockInfo({ stockName }) {
+export default function StockInfo({ stockName, setStockDesc }) {
   const { userInfo } = useLogin();
   const { watchList, addStockToWatchList, removeStockFromWatchList } =
     useWatchList(); // ✅ 전역 관심목록 사용
@@ -20,6 +20,7 @@ export default function StockInfo({ stockName }) {
         const data = await getStockInfo(stockName, user);
         setStockData(data);
         setIsInWatchList(data.watchListAdded);
+        setStockDesc(data.description);
       } catch (error) {
         console.error("❌ 주식 정보 불러오기 실패:", error);
       }
