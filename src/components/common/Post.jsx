@@ -70,7 +70,8 @@ export default function Post({
       navigate(`/profile/${nickname}`);
     }
   };
-
+  const sentimentColor =
+    sentimentScore > 50 ? "border-green-500" : "border-red-500";
   return (
     <div>
       <div
@@ -97,9 +98,13 @@ export default function Post({
               <div>{new Date(created_at).toLocaleString()}</div>
             </div>
           </div>
-          <div className="border-1 border-yellow-500 w-10 h-10 flex flex-row items-center justify-center rounded-lg">
-            {sentimentScore}
-          </div>
+          {hashtag && (
+            <div
+              className={`border-1 ${sentimentColor} w-10 h-10 flex flex-row items-center justify-center rounded-lg`}
+            >
+              {sentimentScore}
+            </div>
+          )}
         </div>
         <div>{content}</div>
         {images && <img src={images} className="w-11/12 rounded-xl" />}

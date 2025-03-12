@@ -10,7 +10,6 @@ export async function getStockSearch(stockName) {
 }
 
 export async function getStockInfo(stockName, userId) {
-  console.log("usere", userId);
   if (userId == null) {
     const res = await axios.get(`${BASE_URL}/stocks/${stockName}`);
     return res.data;
@@ -32,7 +31,6 @@ export async function getRelatedStocks(stockName) {
   const res = await axios.get(
     `${BASE_URL}/stocks/rankings/${stockName}/theme `
   );
-  console.log(res.data);
   const data = res.data;
   return data;
 }
@@ -50,9 +48,16 @@ export async function getChartData(stockName) {
   return data;
 }
 
-// 언급이 많이된 주식(글 검색창)으로 언급많이된 종목 TOP10뽑음 
+// 언급이 많이된 주식(글 검색창)으로 언급많이된 종목 TOP10뽑음
 export async function getTop10Stocks() {
   const res = await axios.get(`${BASE_URL}/stocks/rankings/top10`);
+  const data = res.data;
+  return data;
+}
+
+export async function searchStock(keyword) {
+  const res = await axios.get(`${BASE_URL}/stocks/search?stockName=${keyword}`);
+  console.log(keyword, res);
   const data = res.data;
   return data;
 }
