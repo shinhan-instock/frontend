@@ -1,14 +1,15 @@
-/* eslint-disable react/prop-types */
-import Post from "./Post";
-import userImg from "/img/userImg.png";
-import { useLogin } from "../../hooks/useLogin";
+import Post from './Post';
+import { useLogin } from '../../hooks/useLogin';
 
 export default function PostList({ postsData }) {
   const { userInfo } = useLogin();
+  const filteredPosts = postsData.filter(
+    (post) => String(post.deleted) !== 'true'
+  );
   return (
     <div className="flex flex-col gap-10">
-      {postsData.length !== 0 ? (
-        postsData.map((post) => (
+      {filteredPosts.length !== 0 ? (
+        filteredPosts.map((post) => (
           <Post
             key={post.id}
             id={post.id}
@@ -23,6 +24,7 @@ export default function PostList({ postsData }) {
             likes={post.likes}
             comments={post.comments}
             sentimentScore={post.sentimentScore}
+            deleted={post.deleted}
           />
         ))
       ) : (
