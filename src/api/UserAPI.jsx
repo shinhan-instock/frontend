@@ -1,6 +1,7 @@
 
 import axios from "axios";
 const BASE_URL = "http://localhost:8080";
+
 export async function login(userId, password) {
   const res = await axios.post(`${BASE_URL}/users/login`, {
     userId: userId,
@@ -8,8 +9,7 @@ export async function login(userId, password) {
   });
   const data = res.data.result;
   if (data && data.userId) {
-    localStorage.setItem("user_id", data.userId);
-
+    sessionStorage.setItem('user_id', data.userId);
   }
   return data;
 }
@@ -27,14 +27,14 @@ export async function getFollowList(nickname) {
       return [];
     }
 
-    const userId = localStorage.getItem("user_id");
+    const userId = sessionStorage.getItem('user_id');
     if (!userId) {
       return [];
     }
     const res = await axios.get(`${BASE_URL}/users/follow`, {
       headers: {
         Authorization: `Bearer ${userId}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       params: { following: nickname },
     });
@@ -47,14 +47,14 @@ export async function getFollowList(nickname) {
 
 export async function followUser(nickname) {
   try {
-    const userId = localStorage.getItem("user_id");
+    const userId = sessionStorage.getItem('user_id');
     if (!userId) {
       return;
     }
     const res = await axios.post(`${BASE_URL}/users/follow`, null, {
       headers: {
         Authorization: `Bearer ${userId}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       params: { Nickname: nickname },
     });
@@ -65,17 +65,16 @@ export async function followUser(nickname) {
 }
 export async function unfollowUser(nickname) {
   try {
-    const userId = localStorage.getItem("user_id");
+    const userId = sessionStorage.getItem('user_id');
     if (!userId) {
       return;
     }
     const res = await axios.delete(`${BASE_URL}/users/follow`, {
       headers: {
         Authorization: `Bearer ${userId}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       params: { Nickname: nickname },
-
     });
 
     return res.data;
@@ -83,12 +82,58 @@ export async function unfollowUser(nickname) {
     throw error;
   }
 }
+export async function updatePost(postId, content, hashtag, file) {
+  try {
+    const userId = sessionStorage.getItem('user_id');
+    if (!userId) {
+      throw new Error('로그인이 필요합니다.');
+    }
+
+    const formData = new FormData();
+    formData.append('content', content);
+    formData.append('hashtag', hashtag);
+    if (file) {
+      formData.append('file', file);
+    }
+
+    const res = await axios.put(`${BASE_URL}/posts/${postId}`, formData, {
+      headers: {
+        Authorization: `Bearer ${userId}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error('게시글 수정 실패:', error);
+    throw error;
+  }
+}
+export async function deletePost(postId) {
+  try {
+    const userId = sessionStorage.getItem('user_id');
+    if (!userId) {
+      throw new Error('로그인이 필요합니다.');
+    }
+
+    const res = await axios.delete(`${BASE_URL}/posts/${postId}`, {
+      headers: {
+        Authorization: `Bearer ${userId}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error('게시글 삭제 실패:', error);
+    throw error;
+  }
+}
 
 export async function account() {
   try {
-    const userId = localStorage.getItem('user_id');
+    const userId = sessionStorage.getItem('user_id');
     if (!userId) {
-      throw new Error('로그인이 필요합니다.');
+      throw new Error("로그인이 필요합니다.");
     }
 
     const res = await axios.get(`${BASE_URL}/accounts`, {
@@ -108,7 +153,7 @@ export function getWatchList(userId, onMessage, onError) {
 
   if (eventSource) {
     eventSource.close();
-    console.log("SSE 연결 종료");
+    console.log('SSE 연결 종료');
   }
 
   eventSource = new EventSource(
@@ -118,17 +163,17 @@ export function getWatchList(userId, onMessage, onError) {
   eventSource.onmessage = (event) => {
     try {
       const jsonData = JSON.parse(event.data);
-      console.log('서버에서 받은 JSON 데이터:', jsonData.result);
+      console.log("서버에서 받은 JSON 데이터:", jsonData.result);
       if (onMessage) {
         onMessage(jsonData);
       }
     } catch (error) {
-      console.error('JSON 파싱 오류:', error);
+      console.error("JSON 파싱 오류:", error);
     }
   };
 
   eventSource.onerror = (error) => {
-    console.error('SSE 연결 오류:', error);
+    console.error("SSE 연결 오류:", error);
     if (onError) {
       onError(error);
     }
@@ -136,20 +181,20 @@ export function getWatchList(userId, onMessage, onError) {
   };
 
   return () => {
-    console.log('SSE 연결 종료');
+    console.log("SSE 연결 종료");
     eventSource.close();
   };
 }
 
 export async function addWatchList(userId, stockCode, stockName, onUpdate) {
-  const res = await axios.post("http://localhost:8080/watchList", {
+  const res = await axios.post('http://localhost:8080/watchList', {
     userId: userId,
     stockCode: stockCode,
     stockName: stockName,
   });
 
   const data = res.data.result;
-  console.log("added watchList", data);
+  console.log('added watchList', data);
   if (onUpdate) {
     onUpdate();
   }
@@ -157,7 +202,7 @@ export async function addWatchList(userId, stockCode, stockName, onUpdate) {
 }
 
 export async function deleteWatchList(userId, stockName, onUpdate) {
-  const res = await axios.delete("http://localhost:8080/watchList", {
+  const res = await axios.delete('http://localhost:8080/watchList', {
     data: {
       userId: userId,
       stockName: stockName,
@@ -165,7 +210,7 @@ export async function deleteWatchList(userId, stockName, onUpdate) {
   });
 
   const data = res.data.result;
-  console.log("deleted watchList", data);
+  console.log('deleted watchList', data);
   if (onUpdate) {
     onUpdate();
   }
@@ -194,19 +239,18 @@ export async function updateUser(
 ) {
   const formData = new FormData();
 
-  formData.append('name', name);
-  formData.append('nickname', nickname);
+  formData.append("name", name);
+  formData.append("nickname", nickname);
   if (image) {
-    formData.append('image', image);
+    formData.append("image", image);
   }
-  formData.append('introduction', introduction);
+  formData.append("introduction", introduction);
 
   try {
     const res = await axios.put(`${BASE_URL}/users`, formData, {
       headers: {
         Authorization: `Bearer ${userId}`,
-        "Content-Type": "multipart/form-data",
-
+        'Content-Type': 'multipart/form-data',
       },
     });
 
@@ -220,26 +264,42 @@ export async function updateUser(
       imageUrl: previewUrl,
       introduction: introduction,
     };
-    sessionStorage.setItem('instock_user', JSON.stringify(updatedUserData));
-    alert('수정이 완료되었습니다');
+    sessionStorage.setItem("instock_user", JSON.stringify(updatedUserData));
+    alert("수정이 완료되었습니다");
     window.location.reload();
   } catch (error) {
     alert(
-      "다른 사용자가 닉네임을 사용하고 있습니다. 다른 닉네임으로 등록해주세요."
+      '다른 사용자가 닉네임을 사용하고 있습니다. 다른 닉네임으로 등록해주세요.'
     );
   }
 }
 
 export async function getUserAccount(id, userId) {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/users/account`,
+      { userId: userId },
+      {
+        headers: {
+          Authorization: `Bearer ${id}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    return error.response?.data?.message || "알 수 없는 오류가 발생했습니다.";
+  }
+}
+
+export async function changeOpenAccount(id) {
   const res = await axios.post(
-    `${BASE_URL}/users/account`,
-    { userId: userId },
+    `${BASE_URL}/users/openAccount`,
+    {},
     {
       headers: {
         Authorization: `Bearer ${id}`,
       },
     }
   );
-  return res.data;
-
+  return res.data.result;
 }

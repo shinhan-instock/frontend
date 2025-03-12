@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import Profile from '../../components/common/Profile';
-import NavigationBar from '../../components/common/NavigationBar';
-import PostList from '../../components/common/PostList';
-import ProfilePostsData from './components/ProfilePostsData';
-import { useParams } from 'react-router-dom';
-import StockList from './components/StockList';
-import { searchUser } from '../../api/UserAPI';
-import { useLogin } from '../../hooks/useLogin';
+import { useState, useEffect } from "react";
+import Profile from "../../components/common/Profile";
+import NavigationBar from "../../components/common/NavigationBar";
+import PostList from "../../components/common/PostList";
+import ProfilePostsData from "./components/ProfilePostsData";
+import { useParams } from "react-router-dom";
+import StockList from "./components/StockList";
+import { searchUser } from "../../api/UserAPI";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function ProfilePage() {
   const [selectedTab, setSelectedTab] = useState(1);
@@ -48,7 +48,7 @@ export default function ProfilePage() {
       <div className="p-5 w-full max-w-2xl overflow-auto flex-grow pb-30">
         {selectedTab == 1 ? (
           <>
-            {' '}
+            {" "}
             <ProfilePostsData
               selectedTab={selectedTab}
               setPostsData={setPostsData}
@@ -57,7 +57,7 @@ export default function ProfilePage() {
             <PostList postsData={postsData} />
           </>
         ) : (
-          <StockList userId={userData.userId} />
+          <StockList userData={userData} />
         )}
       </div>
     </div>

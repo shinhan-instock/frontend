@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { FaWonSign } from 'react-icons/fa6';
 import { MdPercent } from 'react-icons/md';
 import { account } from '../../api/UserAPI';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyStock() {
   const [isLinked, setIsLinked] = useState(true);
   const [stockData, setStockData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchAccountData() {
@@ -47,6 +49,11 @@ export default function MyStock() {
               <div
                 key={index}
                 className="flex justify-between space-y-3 w-full"
+                onClick={() =>
+                  (window.location.href = `/stock/${encodeURIComponent(
+                    stock.stockName
+                  )}`)
+                }
               >
                 <div className="flex flex-row space-x-3 w-full space-y-6">
                   <img
