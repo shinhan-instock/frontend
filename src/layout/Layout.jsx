@@ -16,45 +16,46 @@ export default function Layout() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  console.log("log", isLogoutOpen);
 
   return (
-    <WatchListProvider>
-      {" "}
-      {/* ✅ Provider로 감싸기 */}
-      <div className="flex flex-row w-screen h-dvh">
-        {/* 왼쪽 사이드바  */}
-        <div className="flex flex-col w-1/4  gap-10 overflow-hidden ml-10 px-8">
-          <Header />
-          <MyIntro
-            setIsMyInfoOpen={setIsMyInfoOpen}
-            isMyInfoOpen={isMyInfoOpen}
-            setIsLogoutOpen={setIsLogoutOpen}
-          />
-          <Slider isMyInfoOpen={isMyInfoOpen} />
-          <WatchList />
-        </div>
-
-        {/* 센터 부분 */}
-        <div className="flex flex-col mt-2 w-2/4 overflow-hidden">
-          <div className="sticky top-0 z-0 bg-white">
-            <SearchBar setIsSearchOpen={setIsSearchOpen} />
-          </div>
-          {isSearchOpen ? (
-            <SearchModal setIsSearchOpen={setIsSearchOpen} />
-          ) : isLogoutOpen ? (
-            <LogoutModal setIsLogoutOpen={setIsLogoutOpen} />
-          ) : (
-            <Outlet />
-          )}
-        </div>
-
-        {/* 오른쪽 사이드바  */}
-        <div className="flex flex-col w-1/4 mt-[80px] gap-10 overflow-hidden mr-10 px-8">
-          <Modal />
-          <MyStock />
-          <TopStock />
-        </div>
+    <div className="flex flex-row w-screen h-dvh">
+      {/* 왼쪽 사이드바  */}
+      <div className="flex flex-col w-1/4  gap-10 overflow-hidden ml-10 px-8">
+        <Header />
+        <MyIntro
+          setIsMyInfoOpen={setIsMyInfoOpen}
+          isMyInfoOpen={isMyInfoOpen}
+          setIsLogoutOpen={setIsLogoutOpen}
+          isLogoutOpen={isLogoutOpen}
+        />
+        <Slider isMyInfoOpen={isMyInfoOpen} />
+        <WatchList />
       </div>
-    </WatchListProvider>
+
+      {/* 센터 부분 */}
+      <div className="flex flex-col mt-2 w-2/4 overflow-hidden">
+        <div className="sticky top-0 z-0 bg-white">
+          <SearchBar setIsSearchOpen={setIsSearchOpen} />
+        </div>
+        {isSearchOpen ? (
+          <SearchModal setIsSearchOpen={setIsSearchOpen} />
+        ) : isLogoutOpen ? (
+          <LogoutModal
+            setIsLogoutOpen={setIsLogoutOpen}
+            isLogoutOpen={isLogoutOpen}
+          />
+        ) : (
+          <Outlet />
+        )}
+      </div>
+
+      {/* 오른쪽 사이드바  */}
+      <div className="flex flex-col w-1/4 mt-[80px] gap-10 overflow-hidden mr-10 px-8">
+        <Modal />
+        <MyStock />
+        <TopStock />
+      </div>
+    </div>
   );
 }

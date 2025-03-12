@@ -4,43 +4,40 @@ import { getStockInfo } from "../../../api/StockAPI";
 import { useEffect, useState } from "react";
 import { addWatchList, deleteWatchList } from "../../../api/UserAPI";
 import { useLogin } from "../../../hooks/useLogin";
-import { useWatchList } from "../../../context/WatchListContext";
 
 export default function StockInfo({ stockName, onUpdate }) {
   const { userInfo } = useLogin();
-  const { watchList, addStockToWatchList, removeStockFromWatchList } =
-    useWatchList(); // ✅ 전역 관심목록 사용
   const [stockData, setStockData] = useState({});
   const [isInWatchList, setIsInWatchList] = useState(false);
 
   useEffect(() => {
-    async function fetchStockInfo() {
-      try {
-        const data = await getStockInfo(stockName, userInfo.userId);
-        setStockData(data);
-      } catch (error) {
-        console.error("❌ 주식 정보 불러오기 실패:", error);
-      }
-    }
+    getStockInfo(stockName).then((data) => {
+      setStockData(data);
+    });
+  }, []);
 
-    fetchStockInfo();
-  }, [stockName, userInfo.userId]);
-
-  // 관심목록 포함 여부 확인
   useEffect(() => {
-    setIsInWatchList(watchList.some((stock) => stock.stockName === stockName));
-  }, [watchList, stockName]);
+    const watchList = JSON.parse(localStorage.getItem("watchList")) || [];
+    setIsInWatchList(watchList.includes(stockData.stockCode));
+  }, [stockData]);
 
   const handleWatchList = async () => {
+    let watchList = JSON.parse(localStorage.getItem("watchList")) || [];
+
     if (isInWatchList) {
-      await removeStockFromWatchList(stockName);
+      watchList = watchList.filter((code) => code !== stockData.stockCode);
+      await deleteWatchList(userInfo.userId, stockName);
+      location.reload();
     } else {
-      await addStockToWatchList(
-        stockData.stockCode,
-        stockName,
-        stockData.price,
-        stockData.priceChange
-      );
+      watchList.push(stockData.stockCode);
+      await addWatchList(userInfo.userId, stockData.stockCode, stockName);
+      location.reload();
+    }
+    localStorage.setItem("watchList", JSON.stringify(watchList));
+
+    setIsInWatchList(!isInWatchList);
+    if (onUpdate) {
+      onUpdate();
     }
   };
 

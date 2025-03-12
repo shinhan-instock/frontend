@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
-import Modal from '../../../components/common/Modal';
-import crypig from '/img/crypig.png';
+import Modal from "../../../components/common/Modal";
+import crypig from "/img/crypig.png";
 
 export default function LogoutModal({ isLogoutOpen, setIsLogoutOpen }) {
+  console.log("logoutmodal", isLogoutOpen);
   const handleLogout = () => {
-    sessionStorage.removeItem('instock_user');
-    localStorage.clear();
+    sessionStorage.removeItem("instock_user");
+    sessionStorage.clear();
 
     setIsLogoutOpen(false);
     location.reload();
