@@ -1,47 +1,17 @@
-import { HiOutlineX } from 'react-icons/hi';
-import { FaWonSign } from 'react-icons/fa6';
-import { MdPercent } from 'react-icons/md';
-import { useState, useEffect } from 'react';
-import { useLogin } from '../../hooks/useLogin';
-import { getWatchList } from '../../api/UserAPI';
-import { useNavigate } from 'react-router-dom';
-import WonFormatter from '../../utils/WonFormatter';
-import { deleteWatchList } from '../../api/UserAPI';
+import { HiOutlineX } from "react-icons/hi";
+import { useWatchList } from "../../context/WatchListContext";
+import { useNavigate } from "react-router-dom";
+import WonFormatter from "../../utils/WonFormatter";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function WatchList() {
   const { userInfo } = useLogin();
-  const [stocks, setStocks] = useState([]);
+  const { watchList, removeStockFromWatchList } = useWatchList();
+  console.log("wwww", watchList);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!userInfo?.userId) return;
-
-    const closeSSE = getWatchList(
-      userInfo.userId,
-      (data) => {
-        setStocks(data.result);
-      },
-      (error) => {
-        console.error('SSE 오류 발생:', error);
-      }
-    );
-
-    return () => {
-      closeSSE();
-    };
-  }, [userInfo?.userId]);
-
-  const removeStocks = (e, stockName) => {
-    e.stopPropagation();
-
-    localStorage.removeItem('watchList');
-    deleteWatchList(userInfo.userId, stockName);
-
-    setStocks(stocks.filter((stock) => stock.stockName !== stockName));
-  };
-
   return (
-    <div className="w-full mx-auto px-5 h-3/7 ">
+    <div className="w-full mx-auto px-5 h-3/7">
       <div className="flex flex-col p-4 rounded-lg bg-instock-gray h-11/12">
         <div className="flex mb-4">
           <button className="w-auto bg-black text-zinc-100 font-medium px-4 rounded-2xl">
@@ -50,34 +20,37 @@ export default function WatchList() {
         </div>
         {userInfo ? (
           <div className="flex flex-col h-full overflow-auto">
-            {stocks.length !== 0 &&
-              stocks.map((stock) => (
+            {watchList.length > 0 ? (
+              watchList.map((stock) => (
                 <div
-                  key={stock.id}
+                  key={stock.stockCode}
                   className="flex justify-between space-y-3 w-full my-3"
                   onClick={() => navigate(`stock/${stock.stockName}`)}
                 >
                   <div className="flex flex-row space-x-3 w-full">
                     <img
                       src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`}
-                      alt={stock.name}
+                      alt={stock.stockName}
                       className="w-10 h-10 rounded-full"
                     />
                     <div className="flex flex-row justify-between w-full">
                       <div className="w-full">
                         <div className="flex justify-between items-start w-full">
-                          <p className="text-md ">{stock.stockName}</p>
+                          <p className="text-md">{stock.stockName}</p>
 
-                          <div className="flex items-start ">
-                            <p className=" text-md flex items-center">
-                              <p className="ml-1">
+                          <div className="flex items-start">
+                            <p className="text-md flex items-center">
+                              <span className="ml-1">
                                 {WonFormatter.format(stock.currentPrice)}
-                              </p>
+                              </span>
                             </p>
 
                             <button
                               className="w-6 h-6 flex items-center rounded-full hover:bg-instock-gray justify-center"
-                              onClick={(e) => removeStocks(e, stock.stockName)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeStockFromWatchList(stock.stockName);
+                              }}
                             >
                               <HiOutlineX className="w-4 h-4 text-gray-600 hover:text-red-500" />
                             </button>
@@ -86,22 +59,25 @@ export default function WatchList() {
 
                         <p className="mr-6">
                           {stock.changeRate > 0 ? (
-                            <p className="flex flex-row w-full justify-end text-red-500">
-                              {' '}
+                            <span className="flex flex-row w-full justify-end text-red-500">
                               + {stock.changeRate} %
-                            </p>
+                            </span>
                           ) : (
-                            <p className="flex w-full justify-end text-blue-500">
-                              {' '}
+                            <span className="flex w-full justify-end text-blue-500">
                               {stock.changeRate} %
-                            </p>
+                            </span>
                           )}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="text-center text-gray-500">
+                관심목록이 비어있습니다.
+              </div>
+            )}
           </div>
         ) : (
           <div>관심목록을 등록하려면 로그인이 필요해요</div>

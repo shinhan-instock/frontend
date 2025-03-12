@@ -1,43 +1,46 @@
 /* eslint-disable react/prop-types */
-import WonFormatter from '../../../utils/WonFormatter';
-import { getStockInfo } from '../../../api/StockAPI';
-import { useEffect, useState } from 'react';
-import { addWatchList, deleteWatchList } from '../../../api/UserAPI';
-import { useLogin } from '../../../hooks/useLogin';
+import WonFormatter from "../../../utils/WonFormatter";
+import { getStockInfo } from "../../../api/StockAPI";
+import { useEffect, useState } from "react";
+import { addWatchList, deleteWatchList } from "../../../api/UserAPI";
+import { useLogin } from "../../../hooks/useLogin";
+import { useWatchList } from "../../../context/WatchListContext";
 
 export default function StockInfo({ stockName, onUpdate }) {
   const { userInfo } = useLogin();
+  const { watchList, addStockToWatchList, removeStockFromWatchList } =
+    useWatchList(); // ✅ 전역 관심목록 사용
   const [stockData, setStockData] = useState({});
   const [isInWatchList, setIsInWatchList] = useState(false);
 
   useEffect(() => {
-    getStockInfo(stockName).then((data) => {
-      setStockData(data);
-    });
-  }, []);
+    async function fetchStockInfo() {
+      try {
+        const data = await getStockInfo(stockName, userInfo.userId);
+        setStockData(data);
+      } catch (error) {
+        console.error("❌ 주식 정보 불러오기 실패:", error);
+      }
+    }
 
+    fetchStockInfo();
+  }, [stockName, userInfo.userId]);
+
+  // 관심목록 포함 여부 확인
   useEffect(() => {
-    const watchList = JSON.parse(localStorage.getItem('watchList')) || [];
-    setIsInWatchList(watchList.includes(stockData.stockCode));
-  }, [stockData]);
+    setIsInWatchList(watchList.some((stock) => stock.stockName === stockName));
+  }, [watchList, stockName]);
 
   const handleWatchList = async () => {
-    let watchList = JSON.parse(localStorage.getItem('watchList')) || [];
-
     if (isInWatchList) {
-      watchList = watchList.filter((code) => code !== stockData.stockCode);
-      await deleteWatchList(userInfo.userId, stockName);
-      location.reload();
+      await removeStockFromWatchList(stockName);
     } else {
-      watchList.push(stockData.stockCode);
-      await addWatchList(userInfo.userId, stockData.stockCode, stockName);
-      location.reload();
-    }
-    localStorage.setItem('watchList', JSON.stringify(watchList));
-
-    setIsInWatchList(!isInWatchList);
-    if (onUpdate) {
-      onUpdate();
+      await addStockToWatchList(
+        stockData.stockCode,
+        stockName,
+        stockData.price,
+        stockData.priceChange
+      );
     }
   };
 
@@ -73,13 +76,13 @@ export default function StockInfo({ stockName, onUpdate }) {
                 className={`w-36 px-6 py-1 rounded-xl border border-black 
                   ${
                     isInWatchList
-                      ? 'bg-white text-black'
-                      : 'bg-black text-white'
+                      ? "bg-white text-black"
+                      : "bg-black text-white"
                   }
                   hover:bg-gray-200`}
                 onClick={handleWatchList}
               >
-                {isInWatchList ? '- Watchlist' : '+ Watchlist'}
+                {isInWatchList ? "- Watchlist" : "+ Watchlist"}
               </button>
             </div>
           </div>
