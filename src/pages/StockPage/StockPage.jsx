@@ -14,7 +14,7 @@ export default function StockPage() {
   const [postsData, setPostsData] = useState([]);
   return (
     <div className="flex flex-col items-center h-screen">
-      <div className="sticky w-full flex flex-row justify-center">
+      <div className="px-3 sticky w-full flex flex-row justify-center">
         <StockInfo stockName={stockName} />
       </div>
 
