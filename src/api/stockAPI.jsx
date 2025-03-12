@@ -36,3 +36,11 @@ export async function getHashtagList(userId) {
   });
   return res.data;
 }
+
+export async function getChartData(stockName){
+  const res = await axios.get(
+    `${BASE_URL}/stocks/chart/${stockName}`
+  );
+  const data = res.data;
+  return data;
+}
