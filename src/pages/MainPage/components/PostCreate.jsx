@@ -121,15 +121,19 @@ export default function PostCreate() {
   return (
     <div className="flex flex-row p-5 w-5/6">
       {/* 로그인 유저 프로필 이미지 */}
-      {userInfo?.imageUrl ? (
-        <img
-          src={userInfo.imageUrl}
-          alt="User Profile"
-          className="w-[50px] h-[50px] rounded-full object-contain"
-        />
-      ) : (
-        <ImageMaker nickname={userInfo?.nickname || 'User'} />
-      )}
+      <div className="flex py-3 flex-row items-start justify-center">
+        {userInfo?.imageUrl ? (
+          <div className="flex items-center justify-center w-[50px] h-[50px]">
+            <img
+              src={userInfo.imageUrl}
+              alt="profile"
+              className="rounded-full w-[50px] h-[50px]"
+            />
+          </div>
+        ) : (
+          <ImageMaker nickname={userInfo?.nickname || '유저'} />
+        )}
+      </div>
 
       {/* 게시글 작성 버튼 */}
       <div
@@ -155,7 +159,7 @@ export default function PostCreate() {
               <img
                 src={userInfo.imageUrl}
                 alt="User Profile"
-                className="w-16 h-16 rounded-full object-contain"
+                className="w-16 h-16 rounded-full"
               />
             ) : (
               <ImageMaker nickname={userInfo?.nickname || 'User'} />
@@ -193,11 +197,7 @@ export default function PostCreate() {
             <div className="mt-3 flex flex-wrap gap-3">
               {imagePreviews.map(({ id, file }) => (
                 <div key={id} className="relative">
-                  <img
-                    src={id}
-                    alt="Preview"
-                    className="w-24 h-24 object-contain"
-                  />
+                  <img src={id} alt="Preview" className="w-24 h-24" />
                   <button
                     onClick={() => removeImage(id)}
                     className="absolute top-1 right-1 bg-gray-800 text-white p-1 rounded-full"

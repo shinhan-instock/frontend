@@ -51,10 +51,7 @@ export default function EditForm() {
     >
       <div className="flex flex-col items-center gap-3 mt-8">
         <div className="flex flex-col items-center w-30 h-30 rounded-full relative">
-          <img
-            src={previewUrl}
-            className="w-30 h-30 rounded-full object-contain"
-          />
+          <img src={previewUrl} className="w-30 h-30 rounded-full" />
           <LiaEditSolid
             onClick={handleClick}
             className="absolute bottom-1 right-1 text-white bg-gray-800 rounded-full p-2 cursor-pointer"

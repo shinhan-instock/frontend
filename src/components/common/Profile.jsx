@@ -87,7 +87,7 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
       {userData.imageUrl !== null ? (
         <img
           src={userData.imageUrl}
-          className="rounded-full object-contain w-[50px] h-[50px]"
+          className="rounded-full w-[50px] h-[50px]"
         />
       ) : (
         <ImageMaker nickname={userData.nickname} />
