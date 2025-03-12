@@ -79,7 +79,11 @@ export default function MyStock() {
               <div
                 key={index}
                 className="flex justify-between space-y-3 w-full cursor-pointer hover:bg-gray-200 p-2 rounded-md"
-                onClick={() => window.location.href = `/stock/${encodeURIComponent(stock.stockName)}`}
+                onClick={() =>
+                  (window.location.href = `/stock/${encodeURIComponent(
+                    stock.stockName
+                  )}`)
+                }
               >
                 <div className="flex flex-row space-x-3 w-full">
                   <img

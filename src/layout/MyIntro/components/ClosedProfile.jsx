@@ -16,7 +16,7 @@ export default function ClosedProfile({
           <img
             src={userInfo.imageUrl}
             alt="profile"
-            className="w-14 h-14 rounded-full object-contain"
+            className="w-14 h-14 rounded-full"
           />
         ) : (
           userInfo &&

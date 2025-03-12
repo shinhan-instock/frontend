@@ -131,7 +131,7 @@ export default function Post({
               {profileImg !== null ? (
                 <img
                   src={profileImg}
-                  className="rounded-full object-contain w-[50px] h-[50px] "
+                  className="rounded-full w-[50px] h-[50px] "
                 />
               ) : (
                 <ImageMaker nickname={nickname} />

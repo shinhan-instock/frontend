@@ -35,7 +35,7 @@ export default function CardSlider() {
             {influencer.imageUrl ? (
               <img
                 src={influencer.imageUrl}
-                className="w-[50px] h-[50px] rounded-full shadow-lg object-contain"
+                className="w-[50px] h-[50px] rounded-full shadow-lg"
                 alt={influencer.nickname}
               />
             ) : (

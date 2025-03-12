@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import userImg from "/img/userImg.png";
-import { useLogin } from "../../hooks/useLogin";
-import ImageMaker from "../../utils/ImageMaker";
-import { addComment } from "../../api/CommentAPI";
+import React, { useState } from 'react';
+import { useLogin } from '../../hooks/useLogin';
+import ImageMaker from '../../utils/ImageMaker';
+import { addComment } from '../../api/CommentAPI';
 
 export default function CommentCreate({ postId, comments, setComments }) {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const { userInfo } = useLogin();
   const handlePost = async () => {
     if (!content.trim()) return; // 빈 댓글 방지
@@ -18,9 +17,9 @@ export default function CommentCreate({ postId, comments, setComments }) {
         ...prevComments,
       ]);
 
-      setContent(""); // 입력창 초기화
+      setContent(''); // 입력창 초기화
     } catch (error) {
-      console.error("댓글 등록 실패:", error);
+      console.error('댓글 등록 실패:', error);
     }
   };
 
@@ -29,16 +28,18 @@ export default function CommentCreate({ postId, comments, setComments }) {
       <div className="flex py-3 flex-row items-start justify-center">
         {userInfo &&
           (userInfo.imageUrl ? (
-            <img
-              src={userImg}
-              alt="profile"
-              className="w-16 h-16 rounded-full "
-            />
+            <div className="flex items-center justify-center w-[50px] h-[50px]">
+              <img
+                src={userInfo.imageUrl}
+                alt="profile"
+                className="rounded-full w-[50px] h-[50px]"
+              />
+            </div>
           ) : (
             <ImageMaker nickname={userInfo.nickname} />
           ))}
       </div>
-      <div className="flex flex-col mx-4  w-full">
+      <div className="flex flex-col px-4  w-full">
         <div className="flex flex-row">
           <div className="flex justify-center items-center text-m font-bold">
             {userInfo.nickname}
