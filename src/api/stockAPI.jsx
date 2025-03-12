@@ -44,3 +44,10 @@ export async function getChartData(stockName){
   const data = res.data;
   return data;
 }
+
+// 언급이 많이된 주식(글 검색창)으로 언급많이된 종목 TOP10뽑음 
+export async function getTop10Stocks() {
+  const res = await axios.get(`${BASE_URL}/stocks/rankings/top10`);
+  const data = res.data;
+  return data;
+}
