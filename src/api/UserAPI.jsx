@@ -252,7 +252,7 @@ export async function updateUser(
       imageUrl: previewUrl,
       introduction: introduction,
     };
-    // sessionStorage.setItem("instock_user", JSON.stringify(updatedUserData));
+    sessionStorage.setItem("instock_user", JSON.stringify(updatedUserData));
     alert("수정이 완료되었습니다");
     window.location.reload();
   } catch (error) {
