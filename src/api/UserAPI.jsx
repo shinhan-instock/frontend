@@ -71,52 +71,7 @@ export async function unfollowUser(userInfo, nickname) {
     throw error;
   }
 }
-// export async function updatePost(postId, content, hashtag, file) {
-//   try {
-//     const userId = sessionStorage.getItem('user_id');
-//     if (!userId) {
-//       throw new Error('로그인이 필요합니다.');
-//     }
 
-//     const formData = new FormData();
-//     formData.append('content', content);
-//     formData.append('hashtag', hashtag);
-//     if (file) {
-//       formData.append('file', file);
-//     }
-
-//     const res = await axios.put(`${BASE_URL}/posts/${postId}`, formData, {
-//       headers: {
-//         Authorization: `Bearer ${userId}`,
-//         'Content-Type': 'multipart/form-data',
-//       },
-//     });
-
-//     return res.data;
-//   } catch (error) {
-//     console.error('게시글 수정 실패:', error);
-//     throw error;
-//   }
-// }
-// export async function deletePost(postId) {
-//   try {
-//     const userId = sessionStorage.getItem('user_id');
-//     if (!userId) {
-//       throw new Error('로그인이 필요합니다.');
-//     }
-
-//     const res = await axios.delete(`${BASE_URL}/posts/${postId}`, {
-//       headers: {
-//         Authorization: `Bearer ${userId}`,
-//       },
-//     });
-
-//     return res.data;
-//   } catch (error) {
-//     console.error('게시글 삭제 실패:', error);
-//     throw error;
-//   }
-// }
 
 export async function account(userInfo) {
   try {
