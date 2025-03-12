@@ -6,22 +6,25 @@ const WatchListContext = createContext();
 
 export function WatchListProvider({ children }) {
   const { userInfo } = useLogin();
+  console.log("userInfo", userInfo);
   const [watchList, setWatchList] = useState([]);
 
   useEffect(() => {
     if (!userInfo?.userId) return;
 
-    async function fetchWatchList() {
-      try {
-        const data = await getWatchList(userInfo.userId);
-        setWatchList(data?.result || []);
-      } catch (error) {
-        console.error("❌ 관심목록 불러오기 실패:", error);
-        setWatchList([]);
+    const closeSSE = getWatchList(
+      userInfo.userId,
+      (data) => {
+        setWatchList(data.result);
+      },
+      (error) => {
+        console.error("SSE 오류 발생:", error);
       }
-    }
+    );
 
-    fetchWatchList();
+    return () => {
+      closeSSE();
+    };
   }, [userInfo?.userId]);
 
   const addStockToWatchList = async (

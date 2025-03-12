@@ -6,8 +6,7 @@ import { useLogin } from "../../hooks/useLogin";
 
 export default function WatchList() {
   const { userInfo } = useLogin();
-  const { watchList, removeStockFromWatchList } = useWatchList();
-  console.log("wwww", watchList);
+  const { watchList, removeStockFromWatchList } = useWatchList(); // ✅ 전역 관심목록 사용
   const navigate = useNavigate();
 
   return (

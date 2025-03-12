@@ -7,9 +7,9 @@ import { WatchListProvider } from "./context/WatchListContext";
 function App() {
   return (
     <LoginProvider>
-      <WatchListProvider>
-        <RouterProvider router={router}></RouterProvider>
-      </WatchListProvider>
+      {/* <WatchListProvider> */}
+      <RouterProvider router={router}></RouterProvider>
+      {/* </WatchListProvider> */}
     </LoginProvider>
   );
 }

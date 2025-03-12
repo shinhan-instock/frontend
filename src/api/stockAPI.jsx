@@ -10,11 +10,16 @@ export async function getStockSearch(stockName) {
 }
 
 export async function getStockInfo(stockName, userId) {
-  const res = await axios.get(`${BASE_URL}/stocks/${stockName}`, {
-    headers: { Authorization: `Bearer ${userId}` },
-  });
-  const data = res.data;
-  return data;
+  console.log("usere", userId);
+  if (userId == null) {
+    const res = await axios.get(`${BASE_URL}/stocks/${stockName}`);
+    return res.data;
+  } else {
+    const res = await axios.get(`${BASE_URL}/stocks/${stockName}`, {
+      headers: { Authorization: `Bearer ${userId}` },
+    });
+    return res.data;
+  }
 }
 
 export async function getTopStocks() {

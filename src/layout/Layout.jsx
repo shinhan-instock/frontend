@@ -20,42 +20,44 @@ export default function Layout() {
 
   return (
     <div className="flex flex-row w-screen h-dvh">
-      {/* 왼쪽 사이드바  */}
-      <div className="flex flex-col w-1/4  gap-10 overflow-hidden ml-10 px-8">
-        <Header />
-        <MyIntro
-          setIsMyInfoOpen={setIsMyInfoOpen}
-          isMyInfoOpen={isMyInfoOpen}
-          setIsLogoutOpen={setIsLogoutOpen}
-          isLogoutOpen={isLogoutOpen}
-        />
-        <Slider isMyInfoOpen={isMyInfoOpen} />
-        <WatchList />
-      </div>
-
-      {/* 센터 부분 */}
-      <div className="flex flex-col mt-2 w-2/4 overflow-hidden">
-        <div className="sticky top-0 z-0 bg-white">
-          <SearchBar setIsSearchOpen={setIsSearchOpen} />
-        </div>
-        {isSearchOpen ? (
-          <SearchModal setIsSearchOpen={setIsSearchOpen} />
-        ) : isLogoutOpen ? (
-          <LogoutModal
+      <WatchListProvider>
+        {/* 왼쪽 사이드바  */}
+        <div className="flex flex-col w-1/4  gap-10 overflow-hidden ml-10 px-8">
+          <Header />
+          <MyIntro
+            setIsMyInfoOpen={setIsMyInfoOpen}
+            isMyInfoOpen={isMyInfoOpen}
             setIsLogoutOpen={setIsLogoutOpen}
             isLogoutOpen={isLogoutOpen}
           />
-        ) : (
-          <Outlet />
-        )}
-      </div>
+          <Slider isMyInfoOpen={isMyInfoOpen} />
+          <WatchList />
+        </div>
 
-      {/* 오른쪽 사이드바  */}
-      <div className="flex flex-col w-1/4 mt-[80px] gap-10 overflow-hidden mr-10 px-8">
-        <Modal />
-        <MyStock />
-        <TopStock />
-      </div>
+        {/* 센터 부분 */}
+        <div className="flex flex-col mt-2 w-2/4 overflow-hidden">
+          <div className="sticky top-0 z-0 bg-white">
+            <SearchBar setIsSearchOpen={setIsSearchOpen} />
+          </div>
+          {isSearchOpen ? (
+            <SearchModal setIsSearchOpen={setIsSearchOpen} />
+          ) : isLogoutOpen ? (
+            <LogoutModal
+              setIsLogoutOpen={setIsLogoutOpen}
+              isLogoutOpen={isLogoutOpen}
+            />
+          ) : (
+            <Outlet />
+          )}
+        </div>
+
+        {/* 오른쪽 사이드바  */}
+        <div className="flex flex-col w-1/4 mt-[80px] gap-10 overflow-hidden mr-10 px-8">
+          <Modal />
+          <MyStock />
+          <TopStock />
+        </div>
+      </WatchListProvider>
     </div>
   );
 }
