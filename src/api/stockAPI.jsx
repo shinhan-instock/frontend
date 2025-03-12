@@ -9,10 +9,17 @@ export async function getStockSearch(stockName) {
   return data;
 }
 
-export async function getStockInfo(stockName) {
-  const res = await axios.get(`${BASE_URL}/stocks/${stockName}`);
-  const data = res.data;
-  return data;
+export async function getStockInfo(stockName, userId) {
+  console.log("usere", userId);
+  if (userId == null) {
+    const res = await axios.get(`${BASE_URL}/stocks/${stockName}`);
+    return res.data;
+  } else {
+    const res = await axios.get(`${BASE_URL}/stocks/${stockName}`, {
+      headers: { Authorization: `Bearer ${userId}` },
+    });
+    return res.data;
+  }
 }
 
 export async function getTopStocks() {
@@ -37,10 +44,8 @@ export async function getHashtagList(userId) {
   return res.data;
 }
 
-export async function getChartData(stockName){
-  const res = await axios.get(
-    `${BASE_URL}/stocks/chart/${stockName}`
-  );
+export async function getChartData(stockName) {
+  const res = await axios.get(`${BASE_URL}/stocks/chart/${stockName}`);
   const data = res.data;
   return data;
 }

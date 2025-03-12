@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import NavigationBar from '../../components/common/NavigationBar';
-import PostList from '../../components/common/PostList';
-import StockInfo from './components/StockInfo';
-import StockEmotionTab from './components/StockEmotionTab';
-import RelatedStockTab from './components/RelatedStockTab';
-import StockPostsData from './components/StockPostsData';
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import NavigationBar from "../../components/common/NavigationBar";
+import PostList from "../../components/common/PostList";
+import StockInfo from "./components/StockInfo";
+import StockEmotionTab from "./components/StockEmotionTab";
+import RelatedStockTab from "./components/RelatedStockTab";
+import StockPostsData from "./components/StockPostsData";
 
 export default function StockPage() {
   const stockName = useParams().stockname;
