@@ -29,7 +29,7 @@ spec:
       tty: true
     - name: jnlp
       image: jenkins/inbound-agent:latest
-      # jnlp 컨테이너의 기본 엔트리포인트와 인수를 사용하도록 args를 제거합니다.
+      # jnlp 컨테이너는 기본값 사용
 """
         }
     }
@@ -52,6 +52,8 @@ spec:
                 container('node') {
                     sh '''
                         git --version
+                        # 워크스페이스 정리: 현재 폴더 내 파일들을 삭제하여 빈 디렉토리로 만듭니다.
+                        rm -rf * || true
                         git clone -b develop https://github.com/shinhan-instock/frontend.git .
                     '''
                 }
