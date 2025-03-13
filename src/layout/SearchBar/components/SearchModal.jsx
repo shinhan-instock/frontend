@@ -8,20 +8,45 @@ import {
 import TopStock from "./TopStock";
 import { useEffect, useRef, useState } from "react";
 import { getTopStocks } from "../../../api/StockAPI";
+import { searchStock } from "../../../api/StockAPI";
+import { searchUser } from "../../../api/UserAPI"; // 사용자 검색 API를 불러옴 (예시)
 
 export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
   const [searchInput, setSearchInput] = useState("");
+  const [stockData, setStockData] = useState([]);
+  const [userData, setUserData] = useState([]);
   // 0: 검색 전, 1: 주식 검색, 2: 인물 검색
   const [searchType, setSearchType] = useState(0);
 
   const inputRef = useRef(null);
 
   const handleSearch = (e) => {
-    if (e.key == "Enter") {
-      if (searchInput.charAt(0) == "₩") {
+    if (e.key === "Backspace") {
+      if (searchInput.charAt(0) === "₩") {
         setSearchType(1);
       } else {
         setSearchType(2);
+      }
+    } else {
+      if (searchInput.charAt(0) === "₩") {
+        setSearchType(1);
+      } else if (searchInput.length === 0) {
+        setSearchType(0);
+      } else {
+        setSearchType(2);
+      }
+    }
+
+    if (e.key === "Enter") {
+      if (searchInput.charAt(0) === "₩") {
+        setSearchType(1);
+      } else if (searchType === 2) {
+        searchUser(searchInput).then((data) => {
+          setUserData(data);
+        });
+        setSearchType(2);
+      } else {
+        setSearchType(0);
       }
     }
   };
@@ -29,10 +54,21 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
   const handleFocus = () => {
     setSearchInput("");
   };
-  const [stockData, setStockData] = useState([]);
+
   useEffect(() => {
     getTopStocks().then((stocks) => setStockData(stocks));
   }, []);
+
+  useEffect(() => {
+    if (searchType === 1 && searchInput) {
+      searchStock(searchInput.slice(1)).then((data) => {
+        setStockData(data);
+      });
+    } else if (searchType !== 1) {
+      setStockData([]);
+    }
+  }, [searchType, searchInput]);
+
   return (
     <Modal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)}>
       <div className="flex flex-col items-center h-full">
@@ -54,11 +90,17 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
         </div>
         <div className="w-full h-5/6 ">
           {searchType === 0 ? (
-            <TopStock />
+            <TopStock setIsSearchOpen={setIsSearchOpen} />
           ) : searchType === 1 ? (
-            <StockSearchResultList stockData={stockData} />
+            <StockSearchResultList
+              stockData={stockData}
+              setIsSearchOpen={setIsSearchOpen}
+            />
           ) : (
-            <UserSearchResultList />
+            <UserSearchResultList
+              userData={userData}
+              setIsSearchOpen={setIsSearchOpen}
+            />
           )}
         </div>
       </div>

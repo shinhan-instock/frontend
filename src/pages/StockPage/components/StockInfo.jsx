@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
-import WonFormatter from "../../../utils/WonFormatter";
-import { getStockInfo } from "../../../api/StockAPI";
 import { useEffect, useState } from "react";
-import { addWatchList, deleteWatchList } from "../../../api/UserAPI";
 import { useLogin } from "../../../hooks/useLogin";
 import { useWatchList } from "../../../context/WatchListContext";
+import { getStockInfo } from "../../../api/StockAPI";
+import WonFormatter from "../../../utils/WonFormatter";
 
-export default function StockInfo({ stockName }) {
+export default function StockInfo({ stockName, setStockDesc }) {
   const { userInfo } = useLogin();
   const { watchList, addStockToWatchList, removeStockFromWatchList } =
     useWatchList(); // ✅ 전역 관심목록 사용
@@ -14,19 +13,23 @@ export default function StockInfo({ stockName }) {
   const [isInWatchList, setIsInWatchList] = useState();
 
   useEffect(() => {
-    async function fetchStockInfo() {
-      const user = userInfo?.userId ? userInfo.userId : null;
-      try {
-        const data = await getStockInfo(stockName, user);
+    const closeSSE = getStockInfo(
+      stockName,
+      userInfo?.userId,
+      (data) => {
         setStockData(data);
         setIsInWatchList(data.watchListAdded);
-      } catch (error) {
-        console.error("❌ 주식 정보 불러오기 실패:", error);
+        setStockDesc(data.description);
+      },
+      (error) => {
+        console.error("❌ SSE 오류 발생:", error);
       }
-    }
+    );
 
-    fetchStockInfo();
-  }, [stockName, userInfo?.userId]);
+    return () => {
+      closeSSE();
+    };
+  }, [setStockDesc, stockName, userInfo?.userId]);
 
   // 관심목록 포함 여부 확인
   useEffect(() => {
@@ -44,7 +47,7 @@ export default function StockInfo({ stockName }) {
         stockData.price,
         stockData.priceChange
       );
-      setIsInWatchList(false);
+      setIsInWatchList(true); // 버튼을 눌렀을 때 watchlist에 추가되었으므로 상태 업데이트
     }
   };
 

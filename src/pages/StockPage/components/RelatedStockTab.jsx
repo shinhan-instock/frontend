@@ -3,35 +3,35 @@ import RelatedStockList from "./RelatedStockList";
 import { getRelatedStocks } from "../../../api/StockAPI";
 import { useEffect, useState } from "react";
 
-export default function RelatedStockTab({ stockName }) {
+export default function RelatedStockTab({ stockName, stockDesc }) {
   const [data, setData] = useState([]);
+
   useEffect(() => {
-    getRelatedStocks(stockName).then((result) => {
-      setData(result);
-    });
+    const closeSSE = getRelatedStocks(
+      stockName,
+      (data) => {
+        setData(data);
+      },
+      (error) => {
+        console.error("SSE 오류 발생:", error);
+      }
+    );
+
+    return () => {
+      closeSSE();
+    };
   }, [stockName]);
+
   return (
     <div className="flex flex-col gap-3">
       <div className="text-text-blue  text-xl">기업 개요</div>
-      <div className="bg-background-blue p-5 rounded-xl">
-        <ul>
-          <li>
-            승용, RV, 소형상용, 대형상용 등의 자동차 및 자동차부품을 제조 및
-            판매하는 완성차 제조업체로 현대자동차그룹에 속하였으며,
-            현대자동차그룹에는 동사를 포함한 국내 53개 계열회사가 있음.
-          </li>{" "}
-          <li>
-            종속회사인 현대로템은 전차와 차륜형장갑차 등 방위사업, 철도차량
-            제작, E&M 등 레일솔루션사업, 제철설비와 완성차 생산설비 등는
-            에코플랜트사업을 영위함.{" "}
-          </li>
-          <li>금융 부문 종속회사로는 현대캐피탈과 현대카드가 있음.</li>
-        </ul>
+      <div className="bg-background-blue p-5 rounded-xl">{stockDesc}</div>
+      <div className="text-text-blue  text-xl">
+        <span className="font-bold">{stockName} </span>관련주 등락율 top5
       </div>
-      <div className="text-text-blue  text-xl">자동차 업종별 등락율 top5</div>
       <div className="bg-background-blue p-3 rounded-xl flex flex-row gap-4">
         <div className="bg-white w-1/2 p-5  rounded-xl">
-          <RelatedStockList stockData={data.slice(-1)} />
+          <RelatedStockList stockData={data.slice(5, 10).reverse()} />
         </div>
         <div className="bg-white w-1/2 p-5  rounded-xl">
           <RelatedStockList stockData={data.slice(0, 5)} />

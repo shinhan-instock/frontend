@@ -16,7 +16,6 @@ export default function Layout() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMyInfoOpen, setIsMyInfoOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
-  console.log("log", isLogoutOpen);
 
   return (
     <div className="flex flex-row w-screen h-dvh">
@@ -40,7 +39,10 @@ export default function Layout() {
             <SearchBar setIsSearchOpen={setIsSearchOpen} />
           </div>
           {isSearchOpen ? (
-            <SearchModal setIsSearchOpen={setIsSearchOpen} />
+            <SearchModal
+              isSearchOpen={isSearchOpen}
+              setIsSearchOpen={setIsSearchOpen}
+            />
           ) : isLogoutOpen ? (
             <LogoutModal
               setIsLogoutOpen={setIsLogoutOpen}

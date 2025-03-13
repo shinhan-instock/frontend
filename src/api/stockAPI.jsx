@@ -9,17 +9,38 @@ export async function getStockSearch(stockName) {
   return data;
 }
 
-export async function getStockInfo(stockName, userId) {
-  console.log("usere", userId);
-  if (userId == null) {
-    const res = await axios.get(`${BASE_URL}/stocks/${stockName}`);
-    return res.data;
-  } else {
-    const res = await axios.get(`${BASE_URL}/stocks/${stockName}`, {
-      headers: { Authorization: `Bearer ${userId}` },
-    });
-    return res.data;
-  }
+export function getStockInfo(stockName, userId, onMessage, onError) {
+  if (!userId) return;
+
+  const url = userId
+    ? `${BASE_URL}/stocks/${stockName}/stream?userId=${userId}`
+    : `${BASE_URL}/stocks/${stockName}/stream`;
+
+  const eventSource = new EventSource(url);
+
+  eventSource.onmessage = (event) => {
+    try {
+      const jsonData = JSON.parse(event.data);
+      if (onMessage) {
+        onMessage(jsonData);
+      }
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+    }
+  };
+
+  eventSource.onerror = (error) => {
+    console.error("SSE 연결 오류:", error);
+    if (onError) {
+      onError(error);
+    }
+    eventSource.close();
+  };
+
+  return () => {
+    console.log("SSE 연결 종료");
+    eventSource.close();
+  };
 }
 
 export async function getTopStocks() {
@@ -28,18 +49,37 @@ export async function getTopStocks() {
   return data;
 }
 
-export async function getRelatedStocks(stockName) {
-  const res = await axios.get(
-    `${BASE_URL}/stocks/rankings/${stockName}/theme `
+export function getRelatedStocks(stockName, onMessage, onError) {
+  const eventSource = new EventSource(
+    `${BASE_URL}/stocks/rankings/${stockName}/theme/stream`
   );
-  console.log(res.data);
-  const data = res.data;
-  return data;
+
+  eventSource.onmessage = (event) => {
+    try {
+      const jsonData = JSON.parse(event.data);
+      if (onMessage) {
+        onMessage(jsonData);
+      }
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+    }
+  };
+  eventSource.onerror = (error) => {
+    console.error("SSE 연결 오류:", error);
+    if (onError) {
+      onError(error);
+    }
+    eventSource.close();
+  };
+  return () => {
+    console.log("SSE 연결 종료");
+    eventSource.close();
+  };
 }
 
 export async function getHashtagList(userId) {
   const res = await axios.get(`${BASE_URL}/stocks/search/hashtag`, {
-    headers: { Authorization: `Bearer ${userId}` },
+    headers: { Authorization: `Bearer ${userId} ` },
   });
   return res.data;
 }
@@ -50,9 +90,16 @@ export async function getChartData(stockName) {
   return data;
 }
 
-// 언급이 많이된 주식(글 검색창)으로 언급많이된 종목 TOP10뽑음 
+// 언급이 많이된 주식(글 검색창)으로 언급많이된 종목 TOP10뽑음
 export async function getTop10Stocks() {
   const res = await axios.get(`${BASE_URL}/stocks/rankings/top10`);
+  const data = res.data;
+  return data;
+}
+
+export async function searchStock(keyword) {
+  const res = await axios.get(`${BASE_URL}/stocks/search?stockName=${keyword}`);
+  console.log(keyword, res);
   const data = res.data;
   return data;
 }
