@@ -1,11 +1,14 @@
 pipeline {
     agent {
         kubernetes {
-            label 'nodejs'         // 파이프라인이 사용할 K8s Pod의 라벨(아무 이름 가능)
-            defaultContainer 'node'// 기본 컨테이너 이름을 'node'로 설정
+            label 'nodejs'         // 파이프라인이 사용할 K8s Pod 라벨 (임의 이름)
+            defaultContainer 'node'// 기본 컨테이너 이름
             yaml """
 apiVersion: v1
 kind: Pod
+metadata:
+  annotations:
+    sidecar.istio.io/inject: "false"    # Istio 사이드카 자동 주입 비활성화
 spec:
   containers:
     - name: node
@@ -13,7 +16,11 @@ spec:
       tty: true
       command:
         - cat
-      # 여기서는 node:16 이미지를 씁니다. npm은 들어있지만 awscli는 없으므로, 아래 단계에서 apt-get install 필요.
+    - name: jnlp
+      image: jenkins/inbound-agent:latest
+      args:
+        - \${computer.jnlpmac}
+        - \${computer.name}
 """
         }
     }
@@ -23,22 +30,23 @@ spec:
         stage('Setup Tools') {
             steps {
                 container('node') {
-                    sh '''
-                        # Node 공식 이미지에는 apt가 있으므로 아래처럼 AWS CLI를 설치
+                    sh """
+                        # Node 공식 이미지에는 apt가 있으므로 아래처럼 AWS CLI 설치
                         apt-get update && apt-get install -y awscli
                         aws --version
-                    '''
+                    """
                 }
             }
         }
 
         stage('Checkout') {
             steps {
-                // Jenkinsfile과 동일한 Git Repo라면 checkout scm 써도 되며,
-                // 별도 repo면 git url: "...", branch: "..."
                 container('node') {
-                    sh 'git --version'
-                    sh 'git clone -b main https://github.com/shinhan-instock/frontend.git .'
+                    // 예시로 git clone 사용. 필요 시 'checkout scm'으로 대체 가능
+                    sh '''
+                        git --version
+                        git clone -b main https://github.com/shinhan-instock/frontend.git .
+                    '''
                 }
             }
         }
@@ -62,7 +70,6 @@ spec:
         stage('Deploy to S3') {
             steps {
                 container('node') {
-                    // build 폴더를 S3로 업로드
                     sh 'aws s3 sync build/ s3://inst00ck-front --delete'
                 }
             }
