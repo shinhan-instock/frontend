@@ -5,11 +5,11 @@ import { useLogin } from "../../../hooks/useLogin";
 
 export default function StockPostsData({ stockName, setPostsData }) {
   const { userInfo } = useLogin();
-  const userId = userInfo.userId ? userInfo.userId : null;
+  const userId = userInfo?.userId ? userInfo.userId : null;
   useEffect(() => {
     getStockPosts(stockName, userId).then((data) => {
       setPostsData(data);
     });
-  }, [stockName]);
+  }, [setPostsData, stockName, userId]);
   return <div></div>;
 }
