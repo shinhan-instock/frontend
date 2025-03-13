@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { CuteAlert } from '../components/common/CuteAlert';
+let eventSource = null;
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -17,7 +18,6 @@ export async function searchUser(userId) {
   const data = res.data.result;
   return data;
 }
-let eventSource = null;
 
 export async function getFollowList(userInfo, nickname) {
   try {
@@ -54,6 +54,7 @@ export async function followUser(userInfo, nickname) {
     throw error;
   }
 }
+
 export async function unfollowUser(userInfo, nickname) {
   try {
     if (!userInfo) return;
@@ -71,75 +72,66 @@ export async function unfollowUser(userInfo, nickname) {
     throw error;
   }
 }
-// export async function updatePost(postId, content, hashtag, file) {
-//   try {
-//     const userId = sessionStorage.getItem('user_id');
-//     if (!userId) {
-//       throw new Error('로그인이 필요합니다.');
-//     }
 
-//     const formData = new FormData();
-//     formData.append('content', content);
-//     formData.append('hashtag', hashtag);
-//     if (file) {
-//       formData.append('file', file);
-//     }
-
-//     const res = await axios.put(`${BASE_URL}/posts/${postId}`, formData, {
-//       headers: {
-//         Authorization: `Bearer ${userId}`,
-//         'Content-Type': 'multipart/form-data',
-//       },
-//     });
-
-//     return res.data;
-//   } catch (error) {
-//     console.error('게시글 수정 실패:', error);
-//     throw error;
-//   }
-// }
-// export async function deletePost(postId) {
-//   try {
-//     const userId = sessionStorage.getItem('user_id');
-//     if (!userId) {
-//       throw new Error('로그인이 필요합니다.');
-//     }
-
-//     const res = await axios.delete(`${BASE_URL}/posts/${postId}`, {
-//       headers: {
-//         Authorization: `Bearer ${userId}`,
-//       },
-//     });
-
-//     return res.data;
-//   } catch (error) {
-//     console.error('게시글 삭제 실패:', error);
-//     throw error;
-//   }
-// }
-
-export async function account(userInfo) {
-  try {
-    if (!userInfo) {
-      throw new Error('로그인이 필요합니다.');
-    }
-
-    const res = await axios.get(`${BASE_URL}/accounts/stream`, {
-      headers: {
-        Authorization: `Bearer ${userInfo.userId}`,
-      },
-    });
-    console.log('✅ API 응답 성공:', res.data);
-
-    return res.data;
-  } catch (error) {
-    console.error(
-      '❌ API 요청 실패:',
-      error.response ? error.response.data : error.message
-    );
-
-    throw error;
+export function account(userInfo, onMessage, onError) {
+  if (!userInfo || !userInfo.userId) {
+    return () => {};
   }
+
+  // 기존 SSE 연결이 있으면 닫기
+  if (eventSource) {
+    eventSource.close();
+  }
+
+  const url = `${BASE_URL}/accounts/stream`;
+
+  async function fetchSSE() {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${userInfo.userId}`, // 헤더에
+          Accept: 'text/event-stream',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`서버 응답 오류: ${response.status}`);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const text = decoder.decode(value);
+
+        if (!text.trim()) continue;
+
+        try {
+          // "data:" 제거 후 JSON 파싱
+          const cleanText = text.replace(/^data:\s*/, '');
+          const jsonData = JSON.parse(cleanText);
+
+          if (onMessage) onMessage(jsonData);
+        } catch (error) {}
+      }
+    } catch (error) {
+      if (onError) onError(error);
+    } finally {
+    }
+  }
+
+  // SSE 연결 시작
+  fetchSSE().catch((error) => {});
+  return () => {
+    if (eventSource) {
+      eventSource.close();
+      eventSource = null;
+    }
+  };
 }
 
 export function getWatchList(userId, onMessage, onError) {
@@ -260,11 +252,6 @@ export async function updateUser(
     sessionStorage.setItem('instock_user', JSON.stringify(updatedUserData));
     CuteAlert('🎉 수정이 완료되었습니다!', 'success');
   } catch (error) {
-    console.error(
-      '❌ 사용자 정보 업데이트 실패:',
-      error.response?.data || error.message
-    );
-
     if (
       error.response?.status === 400 &&
       error.response?.data?.message?.includes('이미 사용 중')
@@ -276,14 +263,13 @@ export async function updateUser(
   }
 }
 
-
 export function getUserAccount(id, userId, onMessage, onError) {
   if (!userId) return () => {};
 
   // EventSource 객체가 이미 있다면 연결 종료
   if (eventSource) {
     eventSource.close();
-    console.log("SSE 연결 종료");
+    console.log('SSE 연결 종료');
   }
 
   // 새 EventSource 객체 생성
@@ -300,13 +286,13 @@ export function getUserAccount(id, userId, onMessage, onError) {
         onMessage(jsonData);
       }
     } catch (error) {
-      console.error("JSON 파싱 오류:", error);
+      console.error('JSON 파싱 오류:', error);
     }
   };
 
   // 오류 처리
   eventSource.onerror = (error) => {
-    console.error("SSE 연결 오류:", error);
+    console.error('SSE 연결 오류:', error);
     if (onError) {
       onError(error);
     }
@@ -315,7 +301,7 @@ export function getUserAccount(id, userId, onMessage, onError) {
 
   // 클린업: EventSource 연결 종료 함수 반환
   return () => {
-    console.log("SSE 연결 종료");
+    console.log('SSE 연결 종료');
     eventSource.close();
   };
 }
@@ -336,7 +322,7 @@ export async function changeOpenAccount(id) {
 
 export async function getMyInfo(id) {
   const res = await axios.post(
-    "http://localhost:8080/users",
+    'http://localhost:8080/users',
     {},
     {
       headers: {

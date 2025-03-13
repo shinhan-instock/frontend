@@ -21,6 +21,7 @@
     "@tsparticles/shape-image": "^3.8.1",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
+    "event-source-polyfill": "^1.0.31",
     "framer-motion": "^12.4.7",
     "gsap": "^3.12.7",
     "react": "^19.0.0",

@@ -6,7 +6,7 @@ import piggybank from '/img/piggybank.png';
 import stock from '/img/stockImg.png';
 import bc from '/img/bc.png';
 import kb from '/img/kb.png';
-import PiggyBankCoin from './PiggyBankCoin';
+import PiggyBankCoin from './PiggybankModal';
 
 const stockIcons = [
   { src: stock, top: '10%', left: '-50%', size: 'w-[50px]' },
@@ -44,7 +44,6 @@ export default function Piggybank() {
 
   const handleBreak = () => {
     setIsBroken(true);
-    setTimeout(() => setIsModalOpen(false), 5000);
   };
 
   const handleClose = () => {

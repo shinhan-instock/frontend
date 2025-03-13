@@ -1,6 +1,6 @@
-import Piggybank from "./components/Piggybank";
-import CurrentMileage from "./components/CurrentMileage";
-import PiggyBankCoin from "./components/PiggyBankCoin";
+import Piggybank from './components/Piggybank';
+import CurrentMileage from './components/CurrentMileage';
+import PiggyBankCoin from './components/PiggybankModal';
 
 export default function PiggybankPage() {
   return (
