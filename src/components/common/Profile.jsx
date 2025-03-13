@@ -1,16 +1,10 @@
-import { useState, useEffect } from "react";
-import { useLogin } from "../../hooks/useLogin";
-import ImageMaker from "../../utils/ImageMaker";
-import { useNavigate } from "react-router-dom";
-import {
-  searchUser,
-  getFollowList,
-  followUser,
-  unfollowUser,
-} from "../../api/UserAPI";
-import axios from "axios";
-import Modal from "./Modal";
-import miniLogo from "/img/miniLogo.png";
+import { useState, useEffect } from 'react';
+import { useLogin } from '../../hooks/useLogin';
+import ImageMaker from '../../utils/ImageMaker';
+import { getFollowList, followUser, unfollowUser } from '../../api/UserAPI';
+import Modal from './Modal';
+import miniLogo from '/img/miniLogo.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile({ isMyProfile, userNickname, userData }) {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -18,27 +12,37 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
   const { userInfo } = useLogin();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [followList, setFollowList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    async function checkInfluencerStatus() {
+    const checkFollowStatus = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/users/influencer"
-        );
-        if (response.data.isSuccess) {
-          const influencerList = response.data.result;
-          const isUserInfluencer = influencerList.some(
-            (user) => user.nickname === userNickname
+        if (!userInfo || !userInfo.nickname || !userNickname) {
+          console.warn(
+            '⚠️ 사용자 정보가 부족하여 팔로우 여부를 확인할 수 없습니다.'
           );
-          setIsInfluencer(isUserInfluencer);
+          return;
         }
-      } catch (error) {
-        console.error("인플루언서 여부 확인 실패:", error);
-      }
-    }
 
-    checkInfluencerStatus();
-  }, [userNickname]);
+        console.log('📢 팔로우 여부 확인 요청:', {
+          myNickname: userInfo.nickname,
+          target: userNickname,
+        });
+
+        const followList = await getFollowList(userInfo, userInfo.nickname);
+
+        const isUserFollowing = followList.some(
+          (user) => user.nickname === userNickname
+        );
+
+        setIsFollowing(isUserFollowing);
+      } catch (error) {}
+    };
+
+    if (!isMyProfile) {
+      checkFollowStatus();
+    }
+  }, [userInfo, userNickname]);
 
   useEffect(() => {
     const checkFollowStatus = async () => {
@@ -58,11 +62,17 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
 
   const handleFollow = async () => {
     try {
+      if (!userInfo || !userNickname) {
+        return;
+      }
+
       if (isFollowing) {
-        await unfollowUser(userNickname);
+        await unfollowUser(userInfo, userNickname);
+
         setIsFollowing(false);
       } else {
-        await followUser(userNickname);
+        await followUser(userInfo, userNickname);
+
         setIsFollowing(true);
       }
     } catch (error) {}
@@ -75,7 +85,8 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
     }
 
     try {
-      const list = await getFollowList(targetNickname);
+      const list = await getFollowList(userInfo, targetNickname);
+
       setFollowList(list);
       setIsModalOpen(true);
     } catch (error) {}
@@ -109,28 +120,37 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
         className="px-4 py-2 rounded-full font-medium text-sm transition-colors bg-gray-200"
         onClick={openFollowModal}
       >
-        팔로잉
+        팔로우
       </button>
       {!isMyProfile && (
         <button
           className={`px-4 py-2 rounded-full font-medium text-sm ${
-            isFollowing ? "bg-gray-200 text-black" : "bg-blue-500 text-white"
+            isFollowing ? 'bg-gray-200 text-black' : 'bg-blue-500 text-white'
           }`}
           onClick={handleFollow}
         >
-          {isFollowing ? "팔로잉" : "팔로우"}
+          {isFollowing ? '언팔로잉' : '팔로우하기'}
         </button>
       )}
       {/* 팔로잉 리스트 모달 */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-4">
-          <h2 className="text-xl font-bold mb-3">팔로잉 리스트</h2>
+          <h2 className="text-xl font-bold mb-8">
+            {userData.nickname}님의 팔로우 리스트
+          </h2>
           {followList.length > 0 ? (
             <ul className="space-y-2">
               {followList.map((user) => (
-                <li key={user.id} className="flex items-center space-x-3">
-                  {user.image ? (
-                    <img src={user.image} className="w-10 h-10 rounded-full" />
+                <li
+                  key={user.id}
+                  className="flex items-center space-x-3"
+                  onClick={() => navigate(`/profile/${user.nickname}`)}
+                >
+                  {user.imageUrl ? (
+                    <img
+                      src={user.imageUrl}
+                      className="w-[50px] h-[50px] rounded-full"
+                    />
                   ) : (
                     <ImageMaker nickname={user.nickname} />
                   )}

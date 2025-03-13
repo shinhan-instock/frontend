@@ -4,7 +4,11 @@ import { useWatchList } from "../../../context/WatchListContext";
 import { getStockInfo } from "../../../api/StockAPI";
 import WonFormatter from "../../../utils/WonFormatter";
 
-export default function StockInfo({ stockName, setStockDesc }) {
+export default function StockInfo({
+  stockName,
+  setStockDesc,
+  setSentimentNum,
+}) {
   const { userInfo } = useLogin();
   const [isInWatchList, setIsInWatchList] = useState(true);
   const { watchList, addStockToWatchList, removeStockFromWatchList } =
@@ -20,6 +24,7 @@ export default function StockInfo({ stockName, setStockDesc }) {
       (data) => {
         setStockData(data);
         setStockDesc(data.description);
+        setSentimentNum(data.sentimentScore);
         if (prevWatchListAdded.current !== data.watchListAdded) {
           prevWatchListAdded.current = data.watchListAdded;
           setIsInWatchList(data.watchListAdded);

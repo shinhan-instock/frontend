@@ -1,6 +1,7 @@
+/* eslint-disable no-useless-catch */
 import axios from "axios";
 import { CuteAlert } from "../components/common/CuteAlert";
-import { EventSourcePolyfill, NativeEventSource } from "event-source-polyfill";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
 const BASE_URL = "http://localhost:8080";
 
