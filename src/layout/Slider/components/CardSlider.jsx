@@ -32,7 +32,7 @@ export default function CardSlider() {
             key={idx}
             className="cursor-pointer flex flex-col items-center"
             onClick={() => {
-              if (influencer.nickname === userInfo.nickname) {
+              if (influencer.nickname === userInfo?.nickname) {
                 navigate("/myprofile");
               } else {
                 navigate(`/profile/${influencer.nickname}`);
