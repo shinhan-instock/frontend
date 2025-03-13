@@ -22,7 +22,6 @@ spec:
   containers:
     - name: node
       image: node:16
-      # 기존의 /busybox/cat 대신, tail -f /dev/null 로 대체하여 컨테이너가 계속 실행되도록 함
       command:
         - tail
         - -f
@@ -30,9 +29,7 @@ spec:
       tty: true
     - name: jnlp
       image: jenkins/inbound-agent:latest
-      args:
-        - \${computer.jnlpmac}
-        - \${computer.name}
+      # jnlp 컨테이너의 기본 엔트리포인트와 인수를 사용하도록 args를 제거합니다.
 """
         }
     }
