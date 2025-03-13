@@ -6,6 +6,7 @@ import Modal from "../../../components/common/Modal.jsx";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoCloseCircle } from "react-icons/io5";
 import { getHashtagList } from "../../../api/StockAPI.jsx";
+import { debounce } from "lodash";
 
 export default function PostCreate() {
   const [postText, setPostText] = useState("");
@@ -19,17 +20,21 @@ export default function PostCreate() {
   const { userInfo } = useLogin();
 
   const handleKeyDown = (e) => {
-    if (e.key === "₩") {
+    const key = e.key.normalize("NFC");
+  
+    if (key === "₩" || key === "\\") {
       getHashtagList(userInfo.userId).then((result) => {
         console.log("hash", result);
         setMyStocks(result);
       });
     }
   };
-
+  
   const handleInput = (e) => {
-    setPostText(e.target.value);
-    if (!e.target.value.includes("₩")) {
+    const inputValue = e.target.value.normalize("NFC");
+  
+    setPostText(inputValue);
+    if (!inputValue.includes("₩") && !inputValue.includes("\\")) {
       setMyStocks([]);
     }
   };
@@ -118,6 +123,8 @@ export default function PostCreate() {
       alert("게시글 업로드 중 오류가 발생했습니다.");
     }
   };
+
+  const debouncedHandlePostUpload = debounce(handlePostUpload, 500);
 
   return (
     <div className="flex flex-row p-5 w-5/6">
@@ -231,7 +238,7 @@ export default function PostCreate() {
             {/* 게시글 업로드 버튼 */}
             <button
               className="bg-black text-white px-4 py-1 rounded-full"
-              onClick={handlePostUpload}
+              onClick={debouncedHandlePostUpload}
             >
               POST
             </button>
