@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import CommentCreate from '../comment/CommentCreate';
 import CommentList from '../comment/CommentList';
 import {
-  getLikeByUser,
   addLike,
   deleteLike,
   addScrap,
@@ -28,54 +28,22 @@ export default function Post({
   comments,
   sentimentScore,
   images,
-  deleted,
   scrapped,
   liked,
+  deleted,
 }) {
   const [isLiked, setIsLiked] = useState(liked);
   const [scrap, setScrap] = useState(scrapped);
-  // const [scrapId, setScrapId] = useState(null);
-  // const [likeId, setLikeId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [commentsData, setCommentsData] = useState([]);
-  const navigate = useNavigate();
-  const { userInfo } = useLogin();
-
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
-  const [editedHashtag, setEditedHashtag] = useState(hashtag);
   const [selectedFile, setSelectedFile] = useState(null);
-  useEffect(() => {
-    if (userInfo?.userId) {
-      getLikeByUser(userInfo.userId, id).then((result) => {
-        if (result !== undefined) {
-          setLikeId(result);
-          setIsLiked(true);
-        } else {
-          setIsLiked(false);
-        }
-      });
-    }
-  }, [id, userInfo?.userId, likeCount]);
+  const [editedHashtag, setEditedHashtag] = useState(hashtag);
 
-  useEffect(() => {
-    const scrapList = JSON.parse(localStorage.getItem('scrap')) || [];
-    console.log('스크랩 리스트:', scrapList); // 디버깅용 로그 추가
-
-    const existingScrap = scrapList.find(
-      (scrapItem) => scrapItem.postId === id
-    );
-
-    if (existingScrap) {
-      setScrap(true);
-      setScrapId(existingScrap.scrapId);
-    } else {
-      setScrap(false);
-      setScrapId(null);
-    }
-  }, [id]); // `id`가 변경될 때마다 실행
-
+  const navigate = useNavigate();
+  const { userInfo } = useLogin();
 
   const handleLike = (e) => {
     e.stopPropagation();
@@ -122,13 +90,10 @@ export default function Post({
         editedHashtag,
         selectedFile
       );
-      alert('게시글이 수정되었습니다.');
       setIsEditMode(false);
       setIsModalOpen(false);
       window.location.reload();
-    } catch (error) {
-      alert('수정 실패. 다시 시도해주세요.');
-    }
+    } catch (error) {}
   };
 
   const handleDeletePost = async () => {
@@ -136,11 +101,9 @@ export default function Post({
       try {
         const response = await deletePost(id, userInfo.userId);
         if (response.isSuccess) {
-          alert('게시글이 삭제되었습니다.');
-          window.location.reload();
           setIsModalOpen(false);
+          window.location.reload();
         } else {
-          alert('삭제 실패. 다시 시도해주세요.');
         }
       } catch (error) {
         alert('오류 발생: ' + (error.response?.data?.message || '삭제 실패.'));
@@ -151,13 +114,13 @@ export default function Post({
   const navigateToProfile = (e) => {
     e.stopPropagation();
     if (userInfo && nickname === userInfo.nickname) {
-      navigate("/myprofile");
+      navigate('/myprofile');
     } else {
       navigate(`/profile/${nickname}`);
     }
   };
   const sentimentColor =
-    sentimentScore > 50 ? "border-green-500" : "border-red-500";
+    sentimentScore > 50 ? 'border-green-500' : 'border-red-500';
   return (
     <div>
       <div
@@ -181,7 +144,12 @@ export default function Post({
             </div>
             <div className="flex flex-col">
               <div>{nickname}</div>
-              <div>{new Date(created_at).toLocaleString()}</div>
+              <div>
+                {new Date(created_at).toLocaleString({
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                })}
+              </div>
             </div>
           </div>
           {hashtag && (
@@ -205,9 +173,8 @@ export default function Post({
         </div>
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-3">
-            <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
+            <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
             <div>{likeCount}</div>
-
             <button>💬</button>
             <div>{comments}</div>
           </div>
@@ -238,6 +205,7 @@ export default function Post({
               <div className="text-gray-500 text-sm">{created_at}</div>
             </div>
           </div>
+
           {isEditMode ? (
             <div className="flex flex-col gap-2 mt-3">
               <textarea
@@ -277,28 +245,25 @@ export default function Post({
                 onClick={() => navigate(`/stock/${hashtag}`)}
               >
                 {hashtag}
-              </div>
+              </div>{' '}
             </>
           )}
-          <div className="flex flex-row justify-between items-center">
-            {/* ❤️ 좋아요, 💬 댓글 */}
-            <div className="flex flex-row gap-3 mt-4 items-center">
-              <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
-          <div className="mt-3">{content}</div>
+
+          {/* <div className="mt-3">{content}</div>
           <div
             className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm mt-2 cursor-pointer"
             onClick={() => navigate(`/stock/${hashtag}`)}
           >
             {hashtag}
-          </div>
+          </div> */}
+
           <div className="flex flex-row justify-between">
             <div className="flex flex-row gap-3 mt-4">
-              <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
+              <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
               <div>{likeCount}</div>
               <button>💬</button>
               <div>{comments}</div>
             </div>
-            {/* ✏️ 수정 / 🗑 삭제 / 북마크 */}
             <div className="flex flex-row items-center gap-3">
               {userInfo?.nickname === nickname && (
                 <div className="flex flex-row items-center gap-2">
@@ -307,12 +272,9 @@ export default function Post({
                 </div>
               )}
               <button onClick={(e) => handleScrap(e)}>
-                {scrap && userInfo ? <BsBookmarkFill /> : <BsBookmark />}
+                {scrap ? <BsBookmarkFill /> : <BsBookmark />}
               </button>
             </div>
-            <button onClick={(e) => handleScrap(e)}>
-              {scrap ? <BsBookmarkFill /> : <BsBookmark />}
-            </button>
           </div>
         </div>
         {userInfo && (
@@ -325,7 +287,7 @@ export default function Post({
           </div>
         )}
         <div
-          className={`${userInfo ? "max-h-1/3" : "max-h-1/2"} overflow-auto`}
+          className={`${userInfo ? 'max-h-1/3' : 'max-h-1/2'} overflow-auto`}
         >
           <CommentList
             postId={id}
