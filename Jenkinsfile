@@ -56,8 +56,12 @@ spec:
         
         stage('Install Dependencies') {
             steps {
-                container('node') {
-                    sh 'npm install'
+                container('node') {                  
+                    sh '''
+                    npm cache clean --force
+                    rm -rf node_modules package-lock.json
+                    npm install
+                    '''
                 }
             }
         }
