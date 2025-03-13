@@ -1,26 +1,38 @@
 pipeline {
     agent {
         kubernetes {
-            label 'nodejs'         // 파이프라인이 사용할 K8s Pod 라벨 (임의 이름)
-            defaultContainer 'node'// 기본 컨테이너 이름
+            label 'nodejs'    // 임의 라벨
+            defaultContainer 'node'
             yaml """
 apiVersion: v1
 kind: Pod
 metadata:
+  labels:
+    jenkins-build: front-build
   annotations:
     sidecar.istio.io/inject: "false"    # Istio 사이드카 자동 주입 비활성화
 spec:
+  # 아래는 백엔드 파이프라인처럼 nodeSelector/toleration을 지정하는 예시
+  nodeSelector:
+    kubernetes.io/hostname: k8s-cicd
+  tolerations:
+  - key: "no-kafka"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+
   containers:
-    - name: node
-      image: node:16
-      tty: true
-      command:
-        - cat
-    - name: jnlp
-      image: jenkins/inbound-agent:latest
-      args:
-        - \${computer.jnlpmac}
-        - \${computer.name}
+  - name: node
+    image: node:16
+    command:
+      - /busybox/cat
+    tty: true
+
+  - name: jnlp
+    image: jenkins/inbound-agent:latest
+    args:
+      - \${computer.jnlpmac}
+      - \${computer.name}
 """
         }
     }
@@ -31,7 +43,7 @@ spec:
             steps {
                 container('node') {
                     sh """
-                        # Node 공식 이미지에는 apt가 있으므로 아래처럼 AWS CLI 설치
+                        # node:16 이미지는 npm, node는 있지만 awscli는 없으므로 별도로 설치
                         apt-get update && apt-get install -y awscli
                         aws --version
                     """
@@ -42,7 +54,7 @@ spec:
         stage('Checkout') {
             steps {
                 container('node') {
-                    // 예시로 git clone 사용. 필요 시 'checkout scm'으로 대체 가능
+                    // 개발 브랜치 등 원하는 브랜치를 클론. (백엔드처럼 'checkout scmGit' 써도 됨)
                     sh '''
                         git --version
                         git clone -b develop https://github.com/shinhan-instock/frontend.git .
@@ -83,6 +95,15 @@ spec:
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "🎉 프론트엔드 빌드 & 배포 성공!"
+        }
+        failure {
+            echo "🚨 빌드 실패! 로그를 확인하세요..."
         }
     }
 }
