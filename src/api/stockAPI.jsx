@@ -10,8 +10,6 @@ export async function getStockSearch(stockName) {
 }
 
 export function getStockInfo(stockName, userId, onMessage, onError) {
-  if (!userId) return;
-
   const url = userId
     ? `${BASE_URL}/stocks/${stockName}/stream?userId=${userId}`
     : `${BASE_URL}/stocks/${stockName}/stream`;

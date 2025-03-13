@@ -1,8 +1,8 @@
-import axios from "axios";
-const BASE_URL = "http://localhost:8080";
+import axios from 'axios';
+const BASE_URL = 'http://localhost:8080';
 
 export async function getAllPosts(following, popular, scrap, userId) {
-  let res = "";
+  let res = '';
   if (userId !== null) {
     res = await axios.get(
       `${BASE_URL}/posts/?following=${following}&popular=${popular}&scrap=${scrap}`,
@@ -25,7 +25,7 @@ export async function getPost(postId) {
 }
 
 export async function getStockPosts(stockName, userId) {
-  let res = "";
+  let res = '';
   if (userId !== null) {
     res = await axios.get(
       `${BASE_URL}/posts/stocks/${stockName}`,
@@ -51,7 +51,7 @@ export async function getMyPosts(userId) {
 }
 
 export async function getPostsByUser(nickname, userId) {
-  let res = "";
+  let res = '';
   if (userId !== null) {
     res = await axios.post(
       `${BASE_URL}/posts/user`,
@@ -148,11 +148,10 @@ export async function editPost(postId, userId, content, hashtag, images) {
   const data = res.data.result;
   return data;
 }
-export async function updatePost(postId, userId, content, hashtag, file) {
+export async function updatePost(postId, userId, content, file) {
   try {
     const formData = new FormData();
     formData.append('content', content);
-    formData.append('hashtag', hashtag);
     if (file) {
       formData.append('file', file); // 파일이 있을 때만 추가
     }

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import ImageMaker from '../../utils/ImageMaker';
-import userImg from '/img/userImg.png';
+import ImageMaker from "../../utils/ImageMaker";
+import userImg from "/img/userImg.png";
 
 export default function Comment({ comment }) {
   return (
@@ -24,8 +24,8 @@ export default function Comment({ comment }) {
           </div>
           <div className="flex justify-center items-center text-[8px] text-stroke-gray mx-3">
             {new Date(comment.createdAt).toLocaleString({
-              dateStyle: 'medium',
-              timeStyle: 'short',
+              dateStyle: "medium",
+              timeStyle: "short",
             })}
           </div>
         </div>
