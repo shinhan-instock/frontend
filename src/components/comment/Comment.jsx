@@ -13,14 +13,14 @@ export default function Comment({ comment }) {
               className="rounded-full w-[50px] h-[50px]"
             />
           ) : (
-            <ImageMaker nickname={comment.userId} />
+            <ImageMaker nickname={comment.userNickname} />
           )}
         </div>
       </div>
       <div className="flex flex-col mx-4 w-full">
         <div className="flex flex-row">
           <div className="flex justify-center items-center text-m font-bold">
-            {comment.userId}
+            {comment.userNickname}
           </div>
           <div className="flex justify-center items-center text-[8px] text-stroke-gray mx-3">
             {new Date(comment.createdAt).toLocaleString({

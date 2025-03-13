@@ -79,6 +79,7 @@ export default function TopStock() {
     });
   }, []);
 
+  console.log("stockDAta jiwon", stockData);
   return (
     <div className="w-full mx-auto px-5">
       <div className="flex flex-col p-4 rounded-lg bg-instock-gray">
@@ -90,7 +91,7 @@ export default function TopStock() {
             <div
               key={stock.id}
               className="flex justify-between space-y-3 w-full cursor-pointer hover:bg-gray-200 p-2 rounded-md"
-              onClick={() => window.location.href = `/stock/${encodeURIComponent(stock.stockName)}`}
+              onClick={() => window.location.href = `/stock/${encodeURIComponent(stock.name)}`}
               >
               <div className="flex flex-row space-x-3 w-full">
                 <img

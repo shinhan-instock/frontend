@@ -193,7 +193,12 @@ export default function Post({
             </div>
             <div className="flex flex-col">
               <div className="font-bold">{nickname}</div>
-              <div className="text-gray-500 text-sm">{created_at}</div>
+              <div className="text-gray-500 text-sm">
+                {new Date(created_at).toLocaleString({
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                })}
+              </div>
             </div>
           </div>
           <div className="mt-3">{content}</div>
