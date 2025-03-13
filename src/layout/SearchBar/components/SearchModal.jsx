@@ -22,13 +22,15 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
 
   const handleSearch = (e) => {
     if (e.key === "Backspace") {
-      if (searchInput.charAt(0) === "₩") {
+      const firstChar = searchInput.normalize("NFC").charAt(0);
+      if (firstChar === "₩" || firstChar === "\\") {
         setSearchType(1);
       } else {
         setSearchType(2);
       }
     } else {
-      if (searchInput.charAt(0) === "₩") {
+      const firstChar = searchInput.normalize("NFC").charAt(0);
+      if (firstChar === "₩" || firstChar === "\\") {
         setSearchType(1);
       } else if (searchInput.length === 0) {
         setSearchType(0);
@@ -80,7 +82,7 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
             onChange={(e) => {
               setSearchInput(e.target.value);
             }}
-            onKeyDown={(e) => {
+            onKeyUp={(e) => {
               handleSearch(e);
             }}
             onFocus={handleFocus}
