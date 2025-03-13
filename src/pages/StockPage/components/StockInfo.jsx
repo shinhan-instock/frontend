@@ -5,7 +5,7 @@ import { useWatchList } from "../../../context/WatchListContext";
 import { getStockInfo } from "../../../api/StockAPI";
 import WonFormatter from "../../../utils/WonFormatter";
 
-export default function StockInfo({ stockName, setStockDesc }) {
+export default function StockInfo({ stockName, setStockDesc, setSentimentNum }) {
   const { userInfo } = useLogin();
   const { watchList, addStockToWatchList, removeStockFromWatchList } =
     useWatchList(); // ✅ 전역 관심목록 사용
@@ -20,6 +20,7 @@ export default function StockInfo({ stockName, setStockDesc }) {
         setStockData(data);
         setIsInWatchList(data.watchListAdded);
         setStockDesc(data.description);
+        setSentimentNum(data.sentimentScore);
       },
       (error) => {
         console.error("❌ SSE 오류 발생:", error);
