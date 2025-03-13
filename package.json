@@ -15,6 +15,7 @@
     "@react-three/fiber": "^9.1.0",
     "@tailwindcss/vite": "^4.0.7",
     "axios": "^1.7.9",
+    "event-source-polyfill": "^1.0.31",
     "framer-motion": "^12.4.7",
     "gsap": "^3.12.7",
     "react": "^19.0.0",
