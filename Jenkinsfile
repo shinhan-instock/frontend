@@ -45,7 +45,7 @@ spec:
                     // 예시로 git clone 사용. 필요 시 'checkout scm'으로 대체 가능
                     sh '''
                         git --version
-                        git clone -b main https://github.com/shinhan-instock/frontend.git .
+                        git clone -b develop https://github.com/shinhan-instock/frontend.git .
                     '''
                 }
             }
