@@ -21,7 +21,7 @@ spec:
       effect: "NoSchedule"
   containers:
     - name: node
-      image: node:16
+      image: node:18
       command:
         - tail
         - -f
