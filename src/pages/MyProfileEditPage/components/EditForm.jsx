@@ -68,13 +68,13 @@ export default function EditForm() {
             }}
           />
         </div>
-        <div>{JSON.parse(sessionStorage.getItem('instock_user')).userId}</div>
+        <div>{JSON.parse(sessionStorage.getItem('instock_user')).nickname}</div>
         <div>
           {JSON.parse(sessionStorage.getItem('instock_user')).introduction}
         </div>
       </div>
       <div className="flex  flex-col w-3/4">
-        <label>Name</label>
+        <label>성명</label>
         <input
           placeholder="이름을 입력하세요"
           className="border-1  border-stroke-gray p-2 rounded-md"
@@ -85,7 +85,7 @@ export default function EditForm() {
         ></input>
       </div>
       <div className="flex  flex-col w-3/4">
-        <label>Nickname</label>
+        <label>닉네임</label>
         <input
           placeholder="nickname을 입력하세요"
           className="border-1  border-stroke-gray p-2 rounded-md"
@@ -96,7 +96,7 @@ export default function EditForm() {
         ></input>
       </div>
       <div className="flex  flex-col w-3/4">
-        <label>Brief Introduction</label>
+        <label>한줄소개</label>
         <input
           placeholder="자기소개를 입력하세요"
           className="border-1  border-stroke-gray p-2 rounded-md"
