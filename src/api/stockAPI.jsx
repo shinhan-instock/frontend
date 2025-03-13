@@ -36,7 +36,6 @@ export function getStockInfo(stockName, userId, onMessage, onError) {
   };
 
   return () => {
-    console.log("SSE 연결 종료");
     eventSource.close();
   };
 }
@@ -88,11 +87,26 @@ export async function getChartData(stockName) {
   return data;
 }
 
-// 언급이 많이된 주식(글 검색창)으로 언급많이된 종목 TOP10뽑음
-export async function getTop10Stocks() {
-  const res = await axios.get(`${BASE_URL}/stocks/rankings/top10`);
-  const data = res.data;
-  return data;
+export function getTop10Stocks(onMessage, onError) {
+  const eventSource = new EventSource(`${BASE_URL}/stocks/rankings/top10/stream`);
+
+  eventSource.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (onMessage) {
+      onMessage(data);
+    }
+  };
+
+  eventSource.onerror = (error) => {
+    if (onError) {
+      onError(error);
+    }
+    eventSource.close();
+  };
+
+  return () => {
+    eventSource.close();
+  };
 }
 
 export async function searchStock(keyword) {

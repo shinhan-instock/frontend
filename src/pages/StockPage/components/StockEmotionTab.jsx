@@ -3,7 +3,7 @@ import EmotionChart from "./EmotionChart";
 
 export default function StockEmotionTab({stockName}) {
   return (
-    <div className="flex flex-col gap-4 items-center">
+    <div className="flex flex-col gap-4 items-center w-full h-full">
       <div>
         이 그래프는 24시간 동안의 관련주의 게시글을 감정분석하여 나타난
         지표입니다.
