@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { FaWonSign } from 'react-icons/fa6';
-import { MdPercent } from 'react-icons/md';
-import { useLogin } from '../../hooks/useLogin';
-import { account } from '../../api/UserAPI';
+import { useEffect, useState } from "react";
+import { FaWonSign } from "react-icons/fa6";
+import { MdPercent } from "react-icons/md";
+import { useLogin } from "../../hooks/useLogin";
+import { account } from "../../api/UserAPI";
 
 export default function MyStock() {
   const { userInfo } = useLogin();
@@ -15,24 +15,22 @@ export default function MyStock() {
     const cleanup = account(
       userInfo,
       (data) => {
-
         if (!data) {
-
           setStockData([]);
           setHasNoStock(true);
           return;
         }
 
         // 1. STOCK4003 (보유 주식 없음) 체크
-        if (data.code === 'STOCK4003') {
-          setStockData([]); 
+        if (data.code === "STOCK4003") {
+          setStockData([]);
           setHasNoStock(true);
           setIsLinked(true);
           return;
         }
 
         // 2. STOCK4004 (계좌 미개설) 체크
-        if (data.code === 'STOCK4004') {
+        if (data.code === "STOCK4004") {
           setIsLinked(false);
           return;
         }
@@ -51,20 +49,20 @@ export default function MyStock() {
         if (error.response) {
           const errorCode = error.response.data?.code;
 
-          if (errorCode === 'STOCK4004') {
+          if (errorCode === "STOCK4004") {
             setIsLinked(false);
-          } else if (errorCode === 'STOCK4003') {
+          } else if (errorCode === "STOCK4003") {
             setHasNoStock(true);
             setIsLinked(true);
             setStockData([]);
           }
         } else {
-          console.log('다른 오류 발생:', error);
+          console.log("다른 오류 발생:", error);
         }
       }
     );
 
-    return cleanup; 
+    return cleanup;
   }, [userInfo]);
 
   return (
@@ -80,8 +78,8 @@ export default function MyStock() {
                 className="text-2xl text-gray-500"
                 onClick={() =>
                   window.open(
-                    'https://www.shinhansec.com/siw/customer-center/open-accounts/712901/contents.do',
-                    '_blank'
+                    "https://www.shinhansec.com/siw/customer-center/open-accounts/712901/contents.do",
+                    "_blank"
                   )
                 }
               >
@@ -143,20 +141,20 @@ export default function MyStock() {
                             <p
                               className={`text-sm ${
                                 stock.profit >= 0
-                                  ? 'text-red-500'
-                                  : 'text-blue-500'
+                                  ? "text-red-500"
+                                  : "text-blue-500"
                               }`}
                             >
                               {stock.profit >= 0
                                 ? `+${stock.profit.toLocaleString()}`
-                                : stock.profit.toLocaleString()}{' '}
+                                : stock.profit.toLocaleString()}{" "}
                               원
                             </p>
                             <p
                               className={`flex items-center text-sm ${
                                 stock.profit >= 0
-                                  ? 'text-red-500'
-                                  : 'text-blue-500'
+                                  ? "text-red-500"
+                                  : "text-blue-500"
                               }`}
                             >
                               (

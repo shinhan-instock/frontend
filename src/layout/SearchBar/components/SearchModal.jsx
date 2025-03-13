@@ -52,7 +52,6 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
       }
     }
   };
-
   const handleFocus = () => {
     setSearchInput("");
   };

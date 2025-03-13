@@ -1,11 +1,10 @@
-import { HiOutlineX } from 'react-icons/hi';
-import { FaWonSign } from 'react-icons/fa6';
-import { MdPercent } from 'react-icons/md';
-import { useState, useEffect } from 'react';
-import { getTop10Stocks } from '../../api/StockAPI.jsx';
+import { useState, useEffect } from "react";
+import { getTop10Stocks } from "../../api/StockAPI.jsx";
 
+import { useNavigate } from "react-router-dom";
 
 export default function TopStock() {
+  const navigate = useNavigate();
   const [stockData, setStockData] = useState([]);
 
   useEffect(() => {
@@ -19,7 +18,9 @@ export default function TopStock() {
           let top = "-";
 
           // 이전 순위와 비교하여 상승/하락 여부 결정
-          const prevIndex = prevRankings.findIndex((item) => item.id === stock.stockCode);
+          const prevIndex = prevRankings.findIndex(
+            (item) => item.id === stock.stockCode
+          );
           if (prevIndex !== -1) {
             if (data_idx < prevIndex) {
               top = "▲";
@@ -54,14 +55,16 @@ export default function TopStock() {
       <div className="flex flex-col p-4 rounded-lg bg-instock-gray">
         <div className="flex mb-4 justify-center font-title">실시간 검색어</div>
 
-        <div className="flex flex-col h-64 overflow-auto
-          ">
+        <div
+          className="flex flex-col h-64 overflow-auto
+          "
+        >
           {stockData.map((stock) => (
             <div
               key={stock.id}
               className="flex justify-between space-y-3 w-full cursor-pointer hover:bg-gray-200 p-2 rounded-md"
-              onClick={() => window.location.href = `/stock/${encodeURIComponent(stock.name)}`}
-              >
+              onClick={() => navigate(`/stock/${stock.name}`)}
+            >
               <div className="flex flex-row space-x-3 w-full">
                 <img
                   src={stock.img}
