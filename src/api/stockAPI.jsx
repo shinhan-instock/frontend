@@ -36,7 +36,6 @@ export function getStockInfo(stockName, userId, onMessage, onError) {
   };
 
   return () => {
-    console.log("SSE 연결 종료");
     eventSource.close();
   };
 }
