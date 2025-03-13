@@ -105,12 +105,12 @@ export default function PostCreate() {
         },
       });
 
-      if (res.data.isSuccess) {
-        alert('게시글이 성공적으로 업로드되었습니다!');
+      if (res.data.isSuccess) { 
         setIsModalOpen(false);
         setPostText('');
         setImagePreviews([]);
         setImages([]);
+        window.location.reload();
       }
     } catch (error) {
       console.error('❌ 게시글 업로드 실패:', error);
@@ -192,6 +192,7 @@ export default function PostCreate() {
               ))}
             </div>
           )}
+
           {/* 이미지 미리보기 및 삭제 버튼 */}
           {imagePreviews.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-3">
