@@ -1,14 +1,20 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Modal from "./Modal";
-import CommentCreate from "../comment/CommentCreate";
-import CommentList from "../comment/CommentList";
-import { addLike, deleteLike, addScrap, deleteScrap } from "../../api/PostAPI";
-import { useLogin } from "../../hooks/useLogin";
-import ImageMaker from "../../utils/ImageMaker";
-import { BsBookmark } from "react-icons/bs";
-import { BsBookmarkFill } from "react-icons/bs";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Modal from './Modal';
+import CommentCreate from '../comment/CommentCreate';
+import CommentList from '../comment/CommentList';
+import {
+  addLike,
+  deleteLike,
+  addScrap,
+  deleteScrap,
+  updatePost,
+  deletePost,
+} from '../../api/PostAPI';
+import { useLogin } from '../../hooks/useLogin';
+import ImageMaker from '../../utils/ImageMaker';
+import { BsBookmark } from 'react-icons/bs';
+import { BsBookmarkFill } from 'react-icons/bs';
 
 export default function Post({
   id,
@@ -23,14 +29,18 @@ export default function Post({
   images,
   scrapped,
   liked,
+  deleted,
 }) {
   const [isLiked, setIsLiked] = useState(liked);
   const [scrap, setScrap] = useState(scrapped);
-  // const [scrapId, setScrapId] = useState(null);
-  // const [likeId, setLikeId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const [commentsData, setCommentsData] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedContent, setEditedContent] = useState(content);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [editedHashtag, setEditedHashtag] = useState(hashtag);
+
   const navigate = useNavigate();
   const { userInfo } = useLogin();
 
@@ -62,16 +72,54 @@ export default function Post({
     }
   };
 
+  const handleEdit = () => {
+    setIsEditMode(true);
+  };
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleUpdatePost = async () => {
+    try {
+      await updatePost(
+        id,
+        userInfo.userId,
+        editedContent,
+        editedHashtag,
+        selectedFile
+      );
+      setIsEditMode(false);
+      setIsModalOpen(false);
+      window.location.reload();
+    } catch (error) {}
+  };
+
+  const handleDeletePost = async () => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      try {
+        const response = await deletePost(id, userInfo.userId);
+        if (response.isSuccess) {
+          setIsModalOpen(false);
+          window.location.reload();
+        } else {
+        }
+      } catch (error) {
+        alert('오류 발생: ' + (error.response?.data?.message || '삭제 실패.'));
+      }
+    }
+  };
+
   const navigateToProfile = (e) => {
     e.stopPropagation();
     if (userInfo && nickname === userInfo.nickname) {
-      navigate("/myprofile");
+      navigate('/myprofile');
     } else {
       navigate(`/profile/${nickname}`);
     }
   };
   const sentimentColor =
-    sentimentScore > 50 ? "border-green-500" : "border-red-500";
+    sentimentScore > 50 ? 'border-green-500' : 'border-red-500';
   return (
     <div>
       <div
@@ -95,7 +143,12 @@ export default function Post({
             </div>
             <div className="flex flex-col">
               <div>{nickname}</div>
-              <div>{new Date(created_at).toLocaleString()}</div>
+              <div>
+                {new Date(created_at).toLocaleString({
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                })}
+              </div>
             </div>
           </div>
           {hashtag && (
@@ -119,9 +172,8 @@ export default function Post({
         </div>
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-3">
-            <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
+            <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
             <div>{likeCount}</div>
-
             <button>💬</button>
             <div>{comments}</div>
           </div>
@@ -130,6 +182,7 @@ export default function Post({
           </button>
         </div>
       </div>
+
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-4">
           <div className="flex flex-row gap-2">
@@ -151,23 +204,76 @@ export default function Post({
               <div className="text-gray-500 text-sm">{created_at}</div>
             </div>
           </div>
-          <div className="mt-3">{content}</div>
+
+          {isEditMode ? (
+            <div className="flex flex-col gap-2 mt-3">
+              <textarea
+                className="w-full border p-2 rounded-md"
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+              />
+              <input
+                className="w-full border p-2 rounded-md"
+                value={editedHashtag}
+                onChange={(e) => setEditedHashtag(e.target.value)}
+              />
+              <input
+                type="file"
+                onChange={(e) => setSelectedFile(e.target.files[0])}
+              />
+              <div className="flex flex-row gap-2">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                  onClick={handleUpdatePost}
+                >
+                  ✅ 완료
+                </button>
+                <button
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md"
+                  onClick={() => setIsEditMode(false)}
+                >
+                  ❌ 취소
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="mt-3">{content}</div>
+              <div
+                className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm mt-2 cursor-pointer"
+                onClick={() => navigate(`/stock/${hashtag}`)}
+              >
+                {hashtag}
+              </div>{' '}
+            </>
+          )}
+
+          {/* <div className="mt-3">{content}</div>
           <div
             className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm mt-2 cursor-pointer"
             onClick={() => navigate(`/stock/${hashtag}`)}
           >
             {hashtag}
-          </div>
+          </div> */}
+
           <div className="flex flex-row justify-between">
             <div className="flex flex-row gap-3 mt-4">
-              <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
+              <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
               <div>{likeCount}</div>
               <button>💬</button>
               <div>{comments}</div>
             </div>
-            <button onClick={(e) => handleScrap(e)}>
-              {scrap ? <BsBookmarkFill /> : <BsBookmark />}
-            </button>
+            <div className="flex flex-row items-center gap-3">
+              {userInfo?.nickname === nickname && (
+                <div className="flex flex-row items-center gap-2">
+                  <button onClick={handleEdit}>✏️</button>
+                  <button onClick={handleDeletePost}>🗑</button>
+                </div>
+              )}
+              <button onClick={(e) => handleScrap(e)}>
+                {scrap ? <BsBookmarkFill /> : <BsBookmark />}
+              </button>
+            </div>
           </div>
         </div>
         {userInfo && (
@@ -180,7 +286,7 @@ export default function Post({
           </div>
         )}
         <div
-          className={`${userInfo ? "max-h-1/3" : "max-h-1/2"} overflow-auto`}
+          className={`${userInfo ? 'max-h-1/3' : 'max-h-1/2'} overflow-auto`}
         >
           <CommentList
             postId={id}

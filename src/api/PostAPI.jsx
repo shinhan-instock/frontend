@@ -121,11 +121,20 @@ export async function getLikeByUser(userId, postId) {
 }
 
 export async function deletePost(postId, userId) {
-  const res = await axios.delete(`${BASE_URL}/posts/${postId}`, {
-    headers: { Authorization: `Bearer ${userId}` },
-  });
-  const data = res.data.result;
-  return data;
+  try {
+    const res = await axios.delete(`${BASE_URL}/posts/${postId}`, {
+      headers: { Authorization: `Bearer ${userId}` },
+    });
+
+    if (res.data.isSuccess) {
+      return res.data;
+    } else {
+      throw new Error('게시글 삭제 실패');
+    }
+  } catch (error) {
+    console.error('게시글 삭제 실패:', error);
+    throw error;
+  }
 }
 
 export async function editPost(postId, userId, content, hashtag, images) {
@@ -138,4 +147,26 @@ export async function editPost(postId, userId, content, hashtag, images) {
   );
   const data = res.data.result;
   return data;
+}
+export async function updatePost(postId, userId, content, hashtag, file) {
+  try {
+    const formData = new FormData();
+    formData.append('content', content);
+    formData.append('hashtag', hashtag);
+    if (file) {
+      formData.append('file', file); // 파일이 있을 때만 추가
+    }
+
+    const res = await axios.put(`${BASE_URL}/posts/${postId}`, formData, {
+      headers: {
+        Authorization: `Bearer ${userId}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return res.data.result;
+  } catch (error) {
+    console.error('게시글 수정 실패:', error);
+    throw error;
+  }
 }
