@@ -10,10 +10,10 @@ metadata:
   labels:
     jenkins-build: front-build
   annotations:
-    sidecar.istio.io/inject: "false"    # Istio 사이드카 자동 주입 비활성화
+    sidecar.istio.io/inject: "false"
 spec:
   nodeSelector:
-    kubernetes.io/hostname: k8s-cicd    # k8s-cicd 노드에서 실행
+    kubernetes.io/hostname: k8s-cicd
   tolerations:
     - key: "no-kafka"
       operator: "Equal"
@@ -22,8 +22,11 @@ spec:
   containers:
     - name: node
       image: node:16
+      # 기존의 /busybox/cat 대신, tail -f /dev/null 로 대체하여 컨테이너가 계속 실행되도록 함
       command:
-        - /busybox/cat
+        - tail
+        - -f
+        - /dev/null
       tty: true
     - name: jnlp
       image: jenkins/inbound-agent:latest
@@ -40,7 +43,6 @@ spec:
             steps {
                 container('node') {
                     sh """
-                        # node:16 이미지는 npm과 node는 있으나, AWS CLI는 설치되어 있지 않으므로 설치
                         apt-get update && apt-get install -y awscli
                         aws --version
                     """
@@ -51,7 +53,6 @@ spec:
         stage('Checkout') {
             steps {
                 container('node') {
-                    // develop 브랜치에서 리포 클론 (필요 시 'checkout scm' 사용 가능)
                     sh '''
                         git --version
                         git clone -b develop https://github.com/shinhan-instock/frontend.git .
