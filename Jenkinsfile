@@ -29,13 +29,11 @@ spec:
       tty: true
     - name: jnlp
       image: jenkins/inbound-agent:latest
-      # jnlp 컨테이너는 기본값 사용
 """
         }
     }
-
+    
     stages {
-
         stage('Setup Tools') {
             steps {
                 container('node') {
@@ -46,20 +44,16 @@ spec:
                 }
             }
         }
-
+        
         stage('Checkout') {
             steps {
                 container('node') {
-                    sh '''
-                        git --version
-                        # 워크스페이스 정리: 현재 폴더 내 파일들을 삭제하여 빈 디렉토리로 만듭니다.
-                        rm -rf * || true
-                        git clone -b develop https://github.com/shinhan-instock/frontend.git .
-                    '''
+                    // SCM 설정이 이미 되어 있으면 checkout scm으로 자동 체크아웃
+                    checkout scm
                 }
             }
         }
-
+        
         stage('Install Dependencies') {
             steps {
                 container('node') {
@@ -67,7 +61,7 @@ spec:
                 }
             }
         }
-
+        
         stage('Build') {
             steps {
                 container('node') {
@@ -75,7 +69,7 @@ spec:
                 }
             }
         }
-
+        
         stage('Deploy to S3') {
             steps {
                 container('node') {
@@ -83,7 +77,7 @@ spec:
                 }
             }
         }
-
+        
         stage('Invalidate CloudFront') {
             steps {
                 container('node') {
@@ -94,7 +88,7 @@ spec:
             }
         }
     }
-
+    
     post {
         success {
             echo "🎉 프론트엔드 빌드 및 배포 성공!"
