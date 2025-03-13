@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-catch */
 import axios from "axios";
 import { CuteAlert } from "../components/common/CuteAlert";
@@ -120,28 +121,66 @@ export async function unfollowUser(userInfo, nickname) {
 //   }
 // }
 
-export async function account(userInfo) {
-  try {
-    if (!userInfo) {
-      throw new Error("로그인이 필요합니다.");
-    }
-
-    const res = await axios.get(`${BASE_URL}/accounts/stream`, {
-      headers: {
-        Authorization: `Bearer ${userInfo.userId}`,
-      },
-    });
-    console.log("✅ API 응답 성공:", res.data);
-
-    return res.data;
-  } catch (error) {
-    console.error(
-      "❌ API 요청 실패:",
-      error.response ? error.response.data : error.message
-    );
-
-    throw error;
+export function account(userInfo, onMessage, onError) {
+  if (!userInfo || !userInfo.userId) {
+    return () => {};
   }
+
+  // 기존 SSE 연결이 있으면 닫기
+  if (eventSource) {
+    eventSource.close();
+  }
+
+  const url = `${BASE_URL}/accounts/stream`;
+
+  async function fetchSSE() {
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${userInfo.userId}`, // 헤더에
+          Accept: "text/event-stream",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`서버 응답 오류: ${response.status}`);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const text = decoder.decode(value);
+
+        if (!text.trim()) continue;
+
+        try {
+          // "data:" 제거 후 JSON 파싱
+          const cleanText = text.replace(/^data:\s*/, "");
+          const jsonData = JSON.parse(cleanText);
+
+          if (onMessage) onMessage(jsonData);
+        } catch (error) {}
+      }
+    } catch (error) {
+      if (onError) onError(error);
+    } finally {
+      /* empty */
+    }
+  }
+
+  // SSE 연결 시작
+  fetchSSE().catch((error) => {});
+  return () => {
+    if (eventSource) {
+      eventSource.close();
+      eventSource = null;
+    }
+  };
 }
 
 export function getWatchList(userId, onMessage, onError) {

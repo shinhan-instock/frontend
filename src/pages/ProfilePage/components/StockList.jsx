@@ -1,18 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { StockItem, InfluencerStockItem } from "./StockItem";
-import { getUserAccount, account } from "../../../api/UserAPI";
+import { getUserAccount } from "../../../api/UserAPI";
 import { useLogin } from "../../../hooks/useLogin";
 
 export default function StockList({ userData }) {
   const [stock, setStock] = useState([]);
   const [isLinked, setIsLinked] = useState(true);
   const { userInfo } = useLogin();
-  // 1 : 남이 인플루언서, 2: 남이 일반 공개 계좌 , 3: 남이 계좌 공개 안함, 4: 내가 계좌 개설 안함
+  const [error, setError] = useState(false); // ✅ 수정됨
+  // 1 : 남이 인플루언서, 2: 남이 일반 공개 계좌, 3: 남이 계좌 공개 안함, 4: 내가 계좌 개설 안함
   const [option, setOption] = useState(0);
-  // console.log("option", option, "linked", isLinked);
-  // console.log("userData", userData);
-  // console.log("userInfo", userInfo);
 
   useEffect(() => {
     if (!userInfo?.userId || !userData?.userId) return;
@@ -21,14 +19,20 @@ export default function StockList({ userData }) {
       userInfo.userId,
       userData.userId,
       (data) => {
-        if (typeof data === "string") {
+        if (data.code === "USER4011") {
+          setOption(3);
+        } else if (!data || data.success === false) {
+          console.log("ddddd", data);
           setStock([]);
+          setError(true);
         } else {
           setStock(data);
+          setError(false);
         }
       },
       (error) => {
         console.error("SSE 오류 발생:", error);
+        setError(true);
       }
     );
 
@@ -36,12 +40,16 @@ export default function StockList({ userData }) {
       userInfo.userId,
       userInfo.userId,
       (data) => {
-        if (data === "보유주식 list에 해당 주식이 없습니다.") {
+        console.log(data);
+        if (
+          data.length > 0 ||
+          data.message === "보유주식 list에 해당 주식이 없습니다."
+        ) {
           setIsLinked(true);
-        } else if (typeof data === "string") {
-          setIsLinked(false);
+          setError(false);
         } else {
-          setIsLinked(true);
+          setIsLinked(false);
+          setError(true);
         }
       },
       (error) => {
@@ -58,24 +66,23 @@ export default function StockList({ userData }) {
   useEffect(() => {
     let newOption = 0;
 
-    if (userData.influencer) {
-      newOption = isLinked ? 1 : 4;
+    if (!isLinked) {
+      newOption = 4;
+    } else if (userData.influencer) {
+      newOption = 1;
     } else if (userData.openAccount) {
-      newOption = isLinked ? 2 : 4;
+      newOption = 2;
     } else {
       newOption = 3;
     }
 
-    if (!isLinked) {
-      newOption = 4;
-    }
-    console.log(newOption);
+    console.log("현재 옵션:", newOption);
     setOption(newOption);
   }, [isLinked, userData, userInfo]);
 
   return (
     <div>
-      {stock.length > 0 && (
+      {stock.length > 0 && !error && (
         <>
           {option === 1 &&
             stock.map((item) => (
@@ -83,7 +90,9 @@ export default function StockList({ userData }) {
             ))}
 
           {option === 2 &&
-            stock.map((item) => <StockItem key={item} stock={item} />)}
+            stock.map((item) => (
+              <StockItem key={item.stockCode} stock={item} />
+            ))}
         </>
       )}
 
@@ -91,9 +100,12 @@ export default function StockList({ userData }) {
 
       {option === 4 && (
         <div>
-          아직 계좌를 연동하지 않았어요. Instocker 의 계좌를 보고 싶다면 계좌
+          아직 계좌를 연동하지 않았어요. Instocker의 계좌를 보고 싶다면 계좌
           연동을 해주세요!
         </div>
+      )}
+      {option !== 4 && error && (
+        <div>아직 {userData.nickname}님이 보유한 주식이 없습니다.</div>
       )}
     </div>
   );
