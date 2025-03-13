@@ -4,82 +4,51 @@ import { MdPercent } from 'react-icons/md';
 import { useState, useEffect } from 'react';
 import { getTop10Stocks } from '../../api/StockAPI.jsx';
 
-const stockData = [
-  {
-    id: 1,
-    name: 'IBK',
-    img: '/img/stockImg.png',
-    top: '▲',
-  },
-  {
-    id: 2,
-    name: 'Samsung',
-    img: '/img/stockImg.png',
-    top: '-',
-  },
-  {
-    id: 3,
-    name: 'LG',
-    img: '/img/stockImg.png',
-    top: '-',
-  },
-  {
-    id: 4,
-    name: 'Hyundai',
-    img: '/img/stockImg.png',
-    top: '▼',
-  },
-];
+
 export default function TopStock() {
   const [stockData, setStockData] = useState([]);
 
   useEffect(() => {
-    getTop10Stocks().then((data) => {
-      const _stockData = [];
+    const eventSource = getTop10Stocks(
+      (data) => {
+        const prevRankings = sessionStorage.getItem("top_10_rank")
+          ? JSON.parse(sessionStorage.getItem("top_10_rank"))
+          : [];
 
-      if (sessionStorage.getItem("top_10_rank")) {
-        const prevRankings = JSON.parse(sessionStorage.getItem("top_10_rank"));
-        
-        data.forEach((stock, data_idx) => {
-          let top = '';
+        const updatedStockData = data.map((stock, data_idx) => {
+          let top = "-";
 
-          prevRankings.forEach((item, prev_idx) => {
-            if (stock.stockCode === item.id) {
-              if (data_idx < prev_idx) {
-                top = '▲';
-              } else if (data_idx > prev_idx) {
-                top = '▼';
-              } else {
-                top = '-';
-              }
+          // 이전 순위와 비교하여 상승/하락 여부 결정
+          const prevIndex = prevRankings.findIndex((item) => item.id === stock.stockCode);
+          if (prevIndex !== -1) {
+            if (data_idx < prevIndex) {
+              top = "▲";
+            } else if (data_idx > prevIndex) {
+              top = "▼";
             }
-          });
+          }
 
-          _stockData.push({
+          return {
             id: stock.stockCode,
             name: stock.stockName,
             img: `https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`,
-            top: (top === '' ? '▲' : top)
-          });
+            top,
+          };
         });
-        setStockData(_stockData);
-        sessionStorage.setItem("top_10_rank", JSON.stringify(_stockData));
-      } else {
-        data.forEach((stock) => {
-          _stockData.push({
-            id: stock.stockCode,
-            name: stock.stockName,
-            img: `https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`,
-            top: '-'
-          });
-        });
-        setStockData(_stockData);
-        sessionStorage.setItem("top_10_rank", JSON.stringify(_stockData));
+
+        setStockData(updatedStockData);
+        sessionStorage.setItem("top_10_rank", JSON.stringify(updatedStockData));
+      },
+      (error) => {
+        console.error("SSE 연결 오류:", error);
       }
-    });
+    );
+
+    return () => {
+      eventSource();
+    };
   }, []);
 
-  console.log("stockDAta jiwon", stockData);
   return (
     <div className="w-full mx-auto px-5">
       <div className="flex flex-col p-4 rounded-lg bg-instock-gray">
