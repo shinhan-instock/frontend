@@ -6,7 +6,6 @@ const WatchListContext = createContext();
 
 export function WatchListProvider({ children }) {
   const { userInfo } = useLogin();
-  console.log("userInfo", userInfo);
   const [watchList, setWatchList] = useState([]);
 
   useEffect(() => {

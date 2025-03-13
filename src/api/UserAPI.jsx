@@ -276,26 +276,67 @@ export async function updateUser(
   }
 }
 
-export async function getUserAccount(id, userId) {
-  try {
-    const res = await axios.post(
-      `${BASE_URL}/users/account`,
-      { userId: userId },
-      {
-        headers: {
-          Authorization: `Bearer ${id}`,
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    return error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+
+export function getUserAccount(id, userId, onMessage, onError) {
+  if (!userId) return () => {};
+
+  // EventSource 객체가 이미 있다면 연결 종료
+  if (eventSource) {
+    eventSource.close();
+    console.log("SSE 연결 종료");
   }
+
+  // 새 EventSource 객체 생성
+  eventSource = new EventSource(
+    `http://localhost:8080/users/account?userId=${userId}`
+  );
+
+  // 서버로부터 받은 메시지를 처리
+  eventSource.onmessage = (event) => {
+    try {
+      const jsonData = JSON.parse(event.data);
+      // 서버에서 받은 데이터 처리
+      if (onMessage) {
+        onMessage(jsonData);
+      }
+    } catch (error) {
+      console.error("JSON 파싱 오류:", error);
+    }
+  };
+
+  // 오류 처리
+  eventSource.onerror = (error) => {
+    console.error("SSE 연결 오류:", error);
+    if (onError) {
+      onError(error);
+    }
+    eventSource.close();
+  };
+
+  // 클린업: EventSource 연결 종료 함수 반환
+  return () => {
+    console.log("SSE 연결 종료");
+    eventSource.close();
+  };
 }
 
 export async function changeOpenAccount(id) {
   const res = await axios.post(
     `${BASE_URL}/users/openAccount`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${id}`,
+      },
+    }
+  );
+  console.log(res.data);
+  return res.data.result;
+}
+
+export async function getMyInfo(id) {
+  const res = await axios.post(
+    "http://localhost:8080/users",
     {},
     {
       headers: {
