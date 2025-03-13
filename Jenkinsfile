@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            label 'nodejs'    // 임의 라벨
+            label 'nodejs'
             defaultContainer 'node'
             yaml """
 apiVersion: v1
@@ -12,27 +12,24 @@ metadata:
   annotations:
     sidecar.istio.io/inject: "false"    # Istio 사이드카 자동 주입 비활성화
 spec:
-  # 아래는 백엔드 파이프라인처럼 nodeSelector/toleration을 지정하는 예시
   nodeSelector:
-    kubernetes.io/hostname: k8s-cicd
+    kubernetes.io/hostname: k8s-cicd    # k8s-cicd 노드에서 실행
   tolerations:
-  - key: "no-kafka"
-    operator: "Equal"
-    value: "true"
-    effect: "NoSchedule"
-
+    - key: "no-kafka"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
   containers:
-  - name: node
-    image: node:16
-    command:
-      - /busybox/cat
-    tty: true
-
-  - name: jnlp
-    image: jenkins/inbound-agent:latest
-    args:
-      - \${computer.jnlpmac}
-      - \${computer.name}
+    - name: node
+      image: node:16
+      command:
+        - /busybox/cat
+      tty: true
+    - name: jnlp
+      image: jenkins/inbound-agent:latest
+      args:
+        - \${computer.jnlpmac}
+        - \${computer.name}
 """
         }
     }
@@ -43,7 +40,7 @@ spec:
             steps {
                 container('node') {
                     sh """
-                        # node:16 이미지는 npm, node는 있지만 awscli는 없으므로 별도로 설치
+                        # node:16 이미지는 npm과 node는 있으나, AWS CLI는 설치되어 있지 않으므로 설치
                         apt-get update && apt-get install -y awscli
                         aws --version
                     """
@@ -54,7 +51,7 @@ spec:
         stage('Checkout') {
             steps {
                 container('node') {
-                    // 개발 브랜치 등 원하는 브랜치를 클론. (백엔드처럼 'checkout scmGit' 써도 됨)
+                    // develop 브랜치에서 리포 클론 (필요 시 'checkout scm' 사용 가능)
                     sh '''
                         git --version
                         git clone -b develop https://github.com/shinhan-instock/frontend.git .
@@ -100,7 +97,7 @@ spec:
 
     post {
         success {
-            echo "🎉 프론트엔드 빌드 & 배포 성공!"
+            echo "🎉 프론트엔드 빌드 및 배포 성공!"
         }
         failure {
             echo "🚨 빌드 실패! 로그를 확인하세요..."
