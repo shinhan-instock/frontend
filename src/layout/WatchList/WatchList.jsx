@@ -22,7 +22,7 @@ export default function WatchList() {
               watchList.map((stock) => (
                 <div
                   key={stock.stockCode}
-                  className="flex justify-between space-y-3 w-full my-3"
+                  className="flex justify-between space-y-3 w-full py-3 px-1 hover:bg-gray-200 rounded-sm"
                   onClick={() => navigate(`stock/${stock.stockName}`)}
                 >
                   <div className="flex flex-row space-x-3 w-full">

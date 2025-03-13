@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { createContext, useState } from "react";
 
-export const loginContext = createContext();
+export const LoginContext = createContext();
 
 function instockUser() {
   const instock_user = sessionStorage.getItem("instock_user");
@@ -13,9 +13,9 @@ export function LoginProvider({ children }) {
 
   return (
     <>
-      <loginContext.Provider value={{ userInfo, setUserInfo }}>
+      <LoginContext.Provider value={{ userInfo, setUserInfo }}>
         {children}
-      </loginContext.Provider>
+      </LoginContext.Provider>
     </>
   );
 }

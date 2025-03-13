@@ -1,12 +1,23 @@
 /* eslint-disable react/prop-types */
 import ImageMaker from "../../utils/ImageMaker";
-import userImg from "/img/userImg.png";
+import { useNavigate } from "react-router-dom";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function Comment({ comment }) {
+  const navigate = useNavigate();
+  const { userInfo } = useLogin();
+  const url =
+    userInfo.nickname == comment.userNickname
+      ? "/myprofile"
+      : `/profile/${comment.userNickname}`;
+
   return (
     <div className="p-4 py-3 flex flex-row w-full gap-3">
       <div className="flex items-center justify-center rounded-full">
-        <div className="flex items-center justify-center w-[50px] h-[50px]">
+        <div
+          className="flex items-center justify-center w-[50px] h-[50px] "
+          onClick={() => navigate(url)}
+        >
           {comment.userImage ? (
             <img
               src={comment.userImage}

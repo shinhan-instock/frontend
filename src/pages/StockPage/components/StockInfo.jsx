@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLogin } from "../../../hooks/useLogin";
 import { useWatchList } from "../../../context/WatchListContext";
 import { getStockInfo } from "../../../api/StockAPI";
@@ -7,10 +6,12 @@ import WonFormatter from "../../../utils/WonFormatter";
 
 export default function StockInfo({ stockName, setStockDesc }) {
   const { userInfo } = useLogin();
+  const [isInWatchList, setIsInWatchList] = useState(true);
   const { watchList, addStockToWatchList, removeStockFromWatchList } =
-    useWatchList(); // ✅ 전역 관심목록 사용
+    useWatchList();
+
   const [stockData, setStockData] = useState({});
-  const [isInWatchList, setIsInWatchList] = useState();
+  const prevWatchListAdded = useRef(null);
 
   useEffect(() => {
     const closeSSE = getStockInfo(
@@ -18,8 +19,11 @@ export default function StockInfo({ stockName, setStockDesc }) {
       userInfo?.userId,
       (data) => {
         setStockData(data);
-        setIsInWatchList(data.watchListAdded);
         setStockDesc(data.description);
+        if (prevWatchListAdded.current !== data.watchListAdded) {
+          prevWatchListAdded.current = data.watchListAdded;
+          setIsInWatchList(data.watchListAdded);
+        }
       },
       (error) => {
         console.error("❌ SSE 오류 발생:", error);
@@ -31,9 +35,11 @@ export default function StockInfo({ stockName, setStockDesc }) {
     };
   }, [setStockDesc, stockName, userInfo?.userId]);
 
-  // 관심목록 포함 여부 확인
   useEffect(() => {
-    setIsInWatchList(watchList.some((stock) => stock.stockName === stockName));
+    const isInList = watchList.some((stock) => stock.stockName === stockName);
+    if (isInWatchList !== isInList) {
+      setIsInWatchList(isInList);
+    }
   }, [watchList, stockName]);
 
   const handleWatchList = async () => {
@@ -47,7 +53,7 @@ export default function StockInfo({ stockName, setStockDesc }) {
         stockData.price,
         stockData.priceChange
       );
-      setIsInWatchList(true); // 버튼을 눌렀을 때 watchlist에 추가되었으므로 상태 업데이트
+      setIsInWatchList(true);
     }
   };
 

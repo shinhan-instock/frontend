@@ -17,28 +17,45 @@ export default function StockList({ userData }) {
   useEffect(() => {
     if (!userInfo?.userId || !userData?.userId) return;
 
-    getUserAccount(userInfo.userId, userData.userId).then((result) => {
-      if (typeof result === "string") {
-        setStock([]);
-      } else {
-        setStock(result);
+    const closeSSE1 = getUserAccount(
+      userInfo.userId,
+      userData.userId,
+      (data) => {
+        if (typeof data === "string") {
+          setStock([]);
+        } else {
+          setStock(data);
+        }
+      },
+      (error) => {
+        console.error("SSE 오류 발생:", error);
       }
-    });
+    );
 
-    getUserAccount(userInfo.userId, userInfo.userId).then((result) => {
-      if (result === "보유주식 list에 해당 주식이 없습니다.") {
-        setIsLinked(true);
-      } else if (typeof result === "string") {
-        setIsLinked(false);
-      } else {
-        setIsLinked(true);
+    const closeSSE2 = getUserAccount(
+      userInfo.userId,
+      userInfo.userId,
+      (data) => {
+        if (data === "보유주식 list에 해당 주식이 없습니다.") {
+          setIsLinked(true);
+        } else if (typeof data === "string") {
+          setIsLinked(false);
+        } else {
+          setIsLinked(true);
+        }
+      },
+      (error) => {
+        console.error("SSE 오류 발생:", error);
       }
-    });
+    );
+
+    return () => {
+      closeSSE1();
+      closeSSE2();
+    };
   }, [userInfo?.userId, userData?.userId]);
 
   useEffect(() => {
-    if (!userData) return;
-
     let newOption = 0;
 
     if (userData.influencer) {
@@ -52,9 +69,9 @@ export default function StockList({ userData }) {
     if (!isLinked) {
       newOption = 4;
     }
-
+    console.log(newOption);
     setOption(newOption);
-  }, [isLinked, userData]);
+  }, [isLinked, userData, userInfo]);
 
   return (
     <div>
@@ -66,9 +83,7 @@ export default function StockList({ userData }) {
             ))}
 
           {option === 2 &&
-            stock.map((item) => (
-              <StockItem key={item.stockCode} stock={item} />
-            ))}
+            stock.map((item) => <StockItem key={item} stock={item} />)}
         </>
       )}
 

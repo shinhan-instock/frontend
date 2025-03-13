@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { FaWonSign } from 'react-icons/fa6';
-import { MdPercent } from 'react-icons/md';
-import { useLogin } from '../../hooks/useLogin';
-import { account } from '../../api/UserAPI';
+import { useEffect, useState } from "react";
+import { FaWonSign } from "react-icons/fa6";
+import { MdPercent } from "react-icons/md";
+import { useLogin } from "../../hooks/useLogin";
+import { account } from "../../api/UserAPI";
 
 export default function MyStock() {
   const { userInfo } = useLogin();
@@ -28,7 +28,7 @@ export default function MyStock() {
             setIsLinked(true); // 계좌는 연동된 상태
           }
         } else {
-          console.log('⚠️ 다른 오류 발생');
+          console.log("⚠️ 다른 오류 발생");
         }
       }
     }
@@ -49,8 +49,8 @@ export default function MyStock() {
                 className="text-2xl text-gray-500"
                 onClick={() =>
                   window.open(
-                    'https://www.shinhansec.com/siw/customer-center/open-accounts/712901/contents.do',
-                    '_blank'
+                    "https://www.shinhansec.com/siw/customer-center/open-accounts/712901/contents.do",
+                    "_blank"
                   )
                 }
               >
@@ -108,20 +108,20 @@ export default function MyStock() {
                           <p
                             className={`text-sm ${
                               stock.profit >= 0
-                                ? 'text-red-500'
-                                : 'text-blue-500'
+                                ? "text-red-500"
+                                : "text-blue-500"
                             }`}
                           >
                             {stock.profit >= 0
                               ? `+${stock.profit.toLocaleString()}`
-                              : stock.profit.toLocaleString()}{' '}
+                              : stock.profit.toLocaleString()}{" "}
                             원
                           </p>
                           <p
                             className={`flex items-center text-sm ${
                               stock.profit >= 0
-                                ? 'text-red-500'
-                                : 'text-blue-500'
+                                ? "text-red-500"
+                                : "text-blue-500"
                             }`}
                           >
                             (
