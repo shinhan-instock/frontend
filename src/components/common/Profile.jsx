@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useLogin } from '../../hooks/useLogin';
 import ImageMaker from '../../utils/ImageMaker';
-import { getFollowList, followUser, unfollowUser } from '../../api/UserAPI';
+import {
+  getFollowList,
+  followUser,
+  unfollowUser,
+  checkInfluencerStatus,
+} from '../../api/UserAPI';
 import Modal from './Modal';
 import miniLogo from '/img/miniLogo.png';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Profile({ isMyProfile, userNickname, userData }) {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -13,6 +19,17 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [followList, setFollowList] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchInfluencerStatus() {
+      const isUserInfluencer = await checkInfluencerStatus(userNickname);
+      setIsInfluencer(isUserInfluencer);
+    }
+
+    if (userNickname) {
+      fetchInfluencerStatus();
+    }
+  }, [userNickname]);
 
   useEffect(() => {
     const checkFollowStatus = async () => {
@@ -39,22 +56,6 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
       } catch (error) {}
     };
 
-    if (!isMyProfile) {
-      checkFollowStatus();
-    }
-  }, [userInfo, userNickname]);
-
-  useEffect(() => {
-    const checkFollowStatus = async () => {
-      try {
-        if (!userInfo.nickname) return;
-        const followList = await getFollowList(userInfo.nickname);
-        const isAlreadyFollowing = followList.some(
-          (user) => user.nickname === userNickname
-        );
-        setIsFollowing(isAlreadyFollowing);
-      } catch (error) {}
-    };
     if (!isMyProfile) {
       checkFollowStatus();
     }
@@ -143,13 +144,13 @@ export default function Profile({ isMyProfile, userNickname, userData }) {
               {followList.map((user) => (
                 <li
                   key={user.id}
-                  className="flex items-center space-x-3"
+                  className="flex items-center space-x-3 p-2 rounded-lg cursor-pointer transition-colors hover:bg-gray-200"
                   onClick={() => navigate(`/profile/${user.nickname}`)}
                 >
                   {user.imageUrl ? (
                     <img
                       src={user.imageUrl}
-                      className="w-[50px] h-[50px] rounded-full"
+                      className="w-[40px] h-[40px] rounded-full"
                     />
                   ) : (
                     <ImageMaker nickname={user.nickname} />

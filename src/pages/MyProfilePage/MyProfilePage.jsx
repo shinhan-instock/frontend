@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import Profile from "../../components/common/Profile";
-import NavigationBar from "../../components/common/NavigationBar";
-import PostList from "../../components/common/PostList";
-import MyProfilePostsData from "./components/MyProfilePostsData";
-import { useLogin } from "../../hooks/useLogin";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import Profile from '../../components/common/Profile';
+import NavigationBar from '../../components/common/NavigationBar';
+import PostList from '../../components/common/PostList';
+import MyProfilePostsData from './components/MyProfilePostsData';
+import { useLogin } from '../../hooks/useLogin';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyProfilePage() {
   const { userInfo } = useLogin();
@@ -13,7 +13,7 @@ export default function MyProfilePage() {
   const navigate = useNavigate();
   useEffect(() => {
     if (!userInfo?.userId) {
-      navigate("/");
+      navigate('/');
     }
   }, [navigate, userInfo]);
 
@@ -26,6 +26,7 @@ export default function MyProfilePage() {
               isMyProfile={true}
               userId={userInfo?.userId}
               userData={userInfo}
+              userNickname={userInfo?.nickname}
             />
           </div>
           <div className="w-4/5">

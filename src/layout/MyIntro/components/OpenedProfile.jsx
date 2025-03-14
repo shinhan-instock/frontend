@@ -1,7 +1,11 @@
 /* eslint-disable react/prop-types */
-import { HiChevronUp } from "react-icons/hi";
-import ImageMaker from "../../../utils/ImageMaker";
-import { useNavigate } from "react-router-dom";
+import { HiChevronUp } from 'react-icons/hi';
+import ImageMaker from '../../../utils/ImageMaker';
+import { useNavigate } from 'react-router-dom';
+import { checkInfluencerStatus } from '../../../api/UserAPI';
+import miniLogo from '/img/miniLogo.png';
+import { useState, useEffect } from 'react';
+
 export default function OpenedProfile({
   userInfo,
   setIsMyInfoOpen,
@@ -9,6 +13,17 @@ export default function OpenedProfile({
   setIsLogoutOpen,
 }) {
   const navigate = useNavigate();
+  const [isInfluencer, setIsInfluencer] = useState(false);
+  useEffect(() => {
+    async function fetchInfluencerStatus() {
+      if (userInfo?.nickname) {
+        const isUserInfluencer = await checkInfluencerStatus(userInfo.nickname);
+        setIsInfluencer(isUserInfluencer);
+      }
+    }
+    fetchInfluencerStatus();
+  }, [userInfo]);
+
   return (
     <div className="flex flex-col p-4 border border-stroke-gray rounded-lg relative z-100">
       <div className="flex flex-row justify-between">
@@ -23,12 +38,21 @@ export default function OpenedProfile({
             userInfo &&
             userInfo.nickname && <ImageMaker nickname={userInfo.nickname} />
           )}
-          <div className="flex-col px-3">
-            <h2 className="text-lg font-semibold">
-              {userInfo ? userInfo.nickname : "로그인이 필요해요"}
-            </h2>
+          <div className="flex flex-col px-3">
+            <div className="flex flex-row items-center">
+              <h2 className="text-lg font-semibold">
+                {userInfo ? userInfo.nickname : '로그인이 필요해요'}
+              </h2>
+              {isInfluencer && (
+                <img
+                  src={miniLogo}
+                  className="w-5 h-5 ml-1"
+                  alt="Influencer Badge"
+                />
+              )}
+            </div>
             <p className="text-gray-600 text-sm">
-              {userInfo ? userInfo.introduction : ""}
+              {userInfo ? userInfo.introduction : ''}
             </p>
           </div>
         </div>
@@ -44,7 +68,7 @@ export default function OpenedProfile({
         <p
           className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
           onClick={() => {
-            navigate("/myprofile");
+            navigate('/myprofile');
             setIsMyInfoOpen(!isMyInfoOpen);
           }}
         >
@@ -53,7 +77,7 @@ export default function OpenedProfile({
         <p
           className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
           onClick={() => {
-            navigate("/myprofile/edit");
+            navigate('/myprofile/edit');
             setIsMyInfoOpen(!isMyInfoOpen);
           }}
         >
@@ -62,7 +86,7 @@ export default function OpenedProfile({
         <p
           className="text-lg font-semibold cursor-pointer hover:text-stroke-gray"
           onClick={() => {
-            navigate("/piggybank");
+            navigate('/piggybank');
             setIsMyInfoOpen(!isMyInfoOpen);
           }}
         >
