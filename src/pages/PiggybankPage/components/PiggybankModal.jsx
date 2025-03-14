@@ -6,7 +6,7 @@ import WonFormatter from '../../../utils/WonFormatter';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { account } from '../../../api/UserAPI';
 
-const BASE_URL = 'http://localhost:8081';
+const BASE_URL = 'https://api.inst00ck.shop';
 
 export default function PiggybankModal() {
   const navigate = useNavigate();
