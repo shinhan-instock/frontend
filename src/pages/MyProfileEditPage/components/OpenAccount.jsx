@@ -10,7 +10,6 @@ export default function OpenAccount() {
   useEffect(() => {
     if (userInfo?.userId) {
       getMyInfo(userInfo.userId).then((result) => {
-        console.log("user", result);
         setMyInfo(result);
         setIsOpenAccount(result.openAccount);
       });
