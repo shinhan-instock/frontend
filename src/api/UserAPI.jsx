@@ -4,7 +4,7 @@ import axios from "axios";
 import { CuteAlert } from "../components/common/CuteAlert";
 import { EventSourcePolyfill } from "event-source-polyfill";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "api.inst00ck.shop";
 
 export async function checkInfluencerStatus(userNickname) {
   try {
@@ -16,11 +16,10 @@ export async function checkInfluencerStatus(userNickname) {
       return influencerList.some((user) => user.nickname === userNickname);
     }
   } catch (error) {
-    console.error('인플루언서 여부 확인 실패:', error);
+    console.error("인플루언서 여부 확인 실패:", error);
   }
-  return false; 
+  return false;
 }
-
 
 export async function login(userId, password) {
   const res = await axios.post(`${BASE_URL}/users/login`, {
