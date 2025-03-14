@@ -8,7 +8,7 @@ export function UserSearchResult({ img, nickname, intro, setIsSearchOpen }) {
   const navigate = useNavigate();
   return (
     <div
-      className="flex flex-row gap-5 items-center py-2 border-b-1 border-instock-gray"
+      className="flex flex-row gap-5 items-center py-2 px-4 border-b-1 border-instock-gray hover:bg-gray-100 transition duration-200"
       onClick={() => {
         navigate(`/profile/${nickname}`);
         setIsSearchOpen(false);
@@ -32,7 +32,7 @@ export function StockSearchResult({ stockName, setIsSearchOpen }) {
   const navigate = useNavigate();
   return (
     <div
-      className="flex flex-row justify-between items-center py-2 border-b-1 border-instock-gray cursor-pointer"
+      className="flex flex-row justify-between items-center px-4 py-2 border-b-1 border-instock-gray cursor-pointer hover:bg-gray-100 transition duration-200"
       onClick={() => {
         navigate(`/stock/${stockName}`);
         setIsSearchOpen(false);
@@ -53,7 +53,7 @@ export function TopResult({
   const navigate = useNavigate();
   return (
     <div
-      className="flex flex-row justify-between items-center py-2 border-b-1 border-instock-gray cursor-pointer"
+      className="flex flex-row justify-between items-center py-2 border-b-1 border-instock-gray cursor-pointer hover:bg-gray-100 transition duration-200 px-4"
       onClick={() => {
         navigate(`/stock/${stockName}`);
         setIsSearchOpen(false);

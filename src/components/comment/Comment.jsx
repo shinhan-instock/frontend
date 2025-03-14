@@ -27,7 +27,7 @@ export default function Comment({ comment }) {
   }, [userInfo]);
 
   return (
-    <div className="p-4 py-2 flex flex-row w-full gap-3">
+    <div className="p-4 py-2 flex flex-row w-full gap-3 ">
       <div className="flex items-center justify-center rounded-full">
         <div
           className="flex items-center justify-center w-[50px] h-[50px] "

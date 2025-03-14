@@ -208,7 +208,7 @@ export default function Post({
         {images && <img src={images} className="w-11/12 rounded-xl" />}
 
         <div
-          className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm hover:cursor-pointer"
+          className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm hover:cursor-pointer hover:bg-gray-200 transition duration-200"
           onClick={() => {
             navigate(`/stock/${hashtag}`);
           }}
