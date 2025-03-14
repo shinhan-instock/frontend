@@ -4,7 +4,7 @@ import axios from "axios";
 import { CuteAlert } from "../components/common/CuteAlert";
 import { EventSourcePolyfill } from "event-source-polyfill";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "https://api.inst00ck.shop";
 
 export async function checkInfluencerStatus(userNickname) {
   try {
@@ -16,11 +16,10 @@ export async function checkInfluencerStatus(userNickname) {
       return influencerList.some((user) => user.nickname === userNickname);
     }
   } catch (error) {
-    console.error('인플루언서 여부 확인 실패:', error);
+    console.error("인플루언서 여부 확인 실패:", error);
   }
-  return false; 
+  return false;
 }
-
 
 export async function login(userId, password) {
   const res = await axios.post(`${BASE_URL}/users/login`, {
@@ -162,7 +161,7 @@ export function getWatchList(userId, onMessage, onError) {
   }
 
   eventSource = new EventSource(
-    `http://localhost:8080/watchList?userId=${userId}&page=0&size=5`
+    `${BASE_URL}/watchList?userId=${userId}&page=0&size=5`
   );
 
   eventSource.onmessage = (event) => {
@@ -192,7 +191,7 @@ export function getWatchList(userId, onMessage, onError) {
 }
 
 export async function addWatchList(userId, stockCode, stockName, onUpdate) {
-  const res = await axios.post("http://localhost:8080/watchList", {
+  const res = await axios.post(`${BASE_URL}/watchList`, {
     userId: userId,
     stockCode: stockCode,
     stockName: stockName,
@@ -206,7 +205,7 @@ export async function addWatchList(userId, stockCode, stockName, onUpdate) {
 }
 
 export async function deleteWatchList(userId, stockName, onUpdate) {
-  const res = await axios.delete("http://localhost:8080/watchList", {
+  const res = await axios.delete(`${BASE_URL}/watchList`, {
     data: {
       userId: userId,
       stockName: stockName,
@@ -292,7 +291,7 @@ export function getUserAccount(userId, targetUserId, onMessage, onError) {
 
   // SSE 설정
   const eventSource = new EventSourcePolyfill(
-    `http://localhost:8080/users/account/${targetUserId}/stream`,
+    `${BASE_URL}/users/account/${targetUserId}/stream`,
     {
       method: "GET", // POST 요청 지원
       headers: {
@@ -345,7 +344,7 @@ export async function changeOpenAccount(id) {
 
 export async function getMyInfo(id) {
   const res = await axios.post(
-    "http://localhost:8080/users",
+    `${BASE_URL}/users`,
     {},
     {
       headers: {

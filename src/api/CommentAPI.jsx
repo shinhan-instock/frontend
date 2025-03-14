@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "https://api.inst00ck.shop";
 
 export async function getComments(postId, lastCommentId, limit) {
   let url = "";

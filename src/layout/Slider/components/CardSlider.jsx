@@ -11,9 +11,7 @@ export default function CardSlider() {
   useEffect(() => {
     async function fetchInfluencers() {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/users/influencer"
-        );
+        const response = await axios.get(`${BASE_URL}/users/influencer`);
         if (response.data.isSuccess) {
           setInfluencers(response.data.result);
         }

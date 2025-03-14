@@ -10,7 +10,6 @@ import {
 import Modal from './Modal';
 import miniLogo from '/img/miniLogo.png';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 export default function Profile({ isMyProfile, userNickname, userData }) {
   const [isFollowing, setIsFollowing] = useState(false);
