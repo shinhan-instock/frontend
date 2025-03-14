@@ -77,7 +77,7 @@ spec:
         stage('Deploy to S3') {
             steps {
                 container('node') {
-                    sh 'aws s3 sync build/ s3://inst00ck-front --delete'
+                    sh 'aws s3 sync dist/ s3://inst00ck-front --delete'
                 }
             }
         }
