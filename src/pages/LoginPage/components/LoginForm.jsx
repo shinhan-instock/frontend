@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login } from "../../../api/UserAPI";
-import Modal from "../../../components/common/Modal";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../../../api/UserAPI';
+import Modal from '../../../components/common/Modal';
 
 export default function LoginForm() {
-  const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
+  const [id, setId] = useState('');
+  const [pw, setPw] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [errMsg, setErrMsg] = useState();
 
@@ -15,8 +15,8 @@ export default function LoginForm() {
     e.preventDefault();
     login(id, pw)
       .then((result) => {
-        sessionStorage.setItem("instock_user", JSON.stringify(result));
-        navigate("/");
+        sessionStorage.setItem('instock_user', JSON.stringify(result));
+        navigate('/');
         location.reload();
       })
 
@@ -40,6 +40,7 @@ export default function LoginForm() {
 
         <div>Password</div>
         <input
+          type="password"
           onChange={(e) => {
             setPw(e.target.value);
           }}
