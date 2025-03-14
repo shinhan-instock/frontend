@@ -18,6 +18,7 @@ export default function MyStock() {
         if (!data) {
           setStockData([]);
           setHasNoStock(true);
+
           return;
         }
 
@@ -145,9 +146,9 @@ export default function MyStock() {
                                   : "text-blue-500"
                               }`}
                             >
-                              {stock.profit >= 0
-                                ? `+${stock.profit.toLocaleString()}`
-                                : stock.profit.toLocaleString()}{" "}
+                              {stock.avgPrice >= 0
+                                ? `+${stock.avgPrice}`
+                                : stock.avgPrice}{" "}
                               원
                             </p>
                             <p
@@ -157,12 +158,7 @@ export default function MyStock() {
                                   : "text-blue-500"
                               }`}
                             >
-                              (
-                              {(
-                                (stock.profit /
-                                  (stock.avgPrice * stock.stockCount)) *
-                                100
-                              ).toFixed(2)}
+                              ({stock.profit.toFixed(2)}
                               <MdPercent />)
                             </p>
                           </div>

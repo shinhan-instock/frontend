@@ -22,10 +22,3 @@ export async function addComment(postId, userId, content) {
   const data = res.data;
   return data;
 }
-
-export async function deleteComment(commentId, userId) {
-  const res = await axios.delete(
-    `${BASE_URL}/comment/${commentId}?userId=${userId}`
-  );
-  return res.data;
-}

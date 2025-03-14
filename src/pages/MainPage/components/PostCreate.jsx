@@ -119,7 +119,10 @@ export default function PostCreate() {
         setPostText("");
         setImagePreviews([]);
         setImages([]);
-        window.location.reload();
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }
     } catch (error) {
       console.error("❌ 게시글 업로드 실패:", error);
