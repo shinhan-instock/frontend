@@ -24,7 +24,6 @@ export default function PostCreate() {
   
     if (key === "₩" || key === "\\") {
       getHashtagList(userInfo.userId).then((result) => {
-        console.log("hash", result);
         setMyStocks(result);
       });
     }
@@ -97,7 +96,11 @@ export default function PostCreate() {
     const formData = new FormData();
     formData.append("userId", userInfo.userId);
     formData.append("content", postText);
-    formData.append("hashtag", hashtag); // 필요하면 해시태그 추가
+    if (hashtag && (!postText.includes("₩" + hashtag) && !postText.includes("\\" + hashtag))) {
+      formData.append("hashtag", ""); // 필요하면 해시태그 추가
+    } else {
+      formData.append("hashtag", hashtag); // 필요하면 해시태그 추가
+    }
 
     if (images.length > 0) {
       formData.append("file", images[0]);
@@ -189,9 +192,9 @@ export default function PostCreate() {
           {/* 보유 주식 리스트 (₩ 입력 시) */}
           {myStocks.length > 0 && (
             <div className="w-full flex flex-row gap-3 overflow-auto mt-2">
-              {myStocks.map((stock) => (
+              {myStocks.map((stock, idx) => (
                 <div
-                  key={stock.id}
+                  key={idx}
                   className="border border-stroke-gray px-4 py-2 rounded-md cursor-pointer hover:bg-gray-200"
                   onClick={() => selectHashtag(stock.name || stock)}
                 >
