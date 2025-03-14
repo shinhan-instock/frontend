@@ -4,7 +4,7 @@ import axios from "axios";
 import { CuteAlert } from "../components/common/CuteAlert";
 import { EventSourcePolyfill } from "event-source-polyfill";
 
-const BASE_URL = "http://api.inst00ck.shop";
+const BASE_URL = "https://api.inst00ck.shop";
 
 export async function checkInfluencerStatus(userNickname) {
   try {
