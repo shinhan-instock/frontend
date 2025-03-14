@@ -85,12 +85,15 @@ spec:
         stage('Invalidate CloudFront') {
             steps {
                 container('node') {
-                    withAWS(credentials: 'test', region: 'ap-northeast-2') {
-                        sh 'aws cloudfront create-invalidation --distribution-id test --paths "/*"'
+                    withAWS(credentials: '93d53f6a-d44c-4637-984b-ef73d9f2a653', region: 'ap-northeast-2') {
+                        withCredentials([string(credentialsId: 'cloudfront', variable: 'CLOUDFRONT_ID')]) {
+                            sh 'aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"'
+                        }
                     }
                 }
             }
         }
+
     }
     
     post {
