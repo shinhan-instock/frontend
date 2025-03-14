@@ -3,6 +3,7 @@ import { useWatchList } from "../../context/WatchListContext";
 import { useNavigate } from "react-router-dom";
 import WonFormatter from "../../utils/WonFormatter";
 import { useLogin } from "../../hooks/useLogin";
+import { addDefaultImg } from "../../utils/DefaultImage";
 
 export default function WatchList() {
   const { userInfo } = useLogin();
@@ -29,6 +30,7 @@ export default function WatchList() {
                     <img
                       src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`}
                       alt={stock.stockName}
+                      onError={addDefaultImg}
                       className="w-10 h-10 rounded-full"
                     />
                     <div className="flex flex-row justify-between w-full">

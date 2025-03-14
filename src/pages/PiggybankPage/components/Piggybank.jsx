@@ -8,6 +8,7 @@ import { getMileage } from "../../../api/PigAPI";
 import { useLogin } from "../../../hooks/useLogin";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { account } from "../../../api/UserAPI";
+import { addDefaultImg } from "../../../utils/DefaultImage";
 
 const BASE_URL = "https://api.inst00ck.shop";
 
@@ -161,6 +162,7 @@ export default function Piggybank() {
                 <img
                   key={index}
                   src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${icon.code}.png`}
+                  onError={addDefaultImg}
                   alt={`stock-${index}`}
                   className={`absolute floating-${index} ${icon.size} z-20 rounded-full`}
                   style={{

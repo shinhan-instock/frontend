@@ -2,6 +2,7 @@
 import ImageMaker from "../../../utils/ImageMaker";
 import WonFormatter from "../../../utils/WonFormatter";
 import { useNavigate } from "react-router-dom";
+import { addDefaultImg } from "../../../utils/DefaultImage";
 
 export function UserSearchResult({ img, nickname, intro, setIsSearchOpen }) {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ export function TopResult({
         <img
           src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stockCode}.png`}
           className="w-12 h-12 rounded-full shadow-md object-cover "
+          onError={addDefaultImg}
         />
 
         <div className="flex flex-col">

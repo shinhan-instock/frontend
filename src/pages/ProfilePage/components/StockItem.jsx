@@ -2,6 +2,7 @@
 import React from "react";
 import WonFormatter from "../../../utils/WonFormatter";
 import { useNavigate } from "react-router-dom";
+import { addDefaultImg } from "../../../utils/DefaultImage";
 
 export function InfluencerStockItem({ stock }) {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export function InfluencerStockItem({ stock }) {
         <img
           src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`}
           className=" w-10 h-10 rounded-full"
+          onError={addDefaultImg}
         />
         <div className="flex flex-col">
           <div>{stock.stockName}</div>
@@ -46,6 +48,7 @@ export function StockItem({ stock }) {
       <img
         src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`}
         className=" w-10 h-10 rounded-full"
+        onError={addDefaultImg}
       />
       <div className="flex flex-col">
         <div>{stock.stockName}</div>

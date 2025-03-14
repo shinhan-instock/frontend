@@ -2,6 +2,7 @@ import { IoCloseCircle } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import WonFormatter from "../../../utils/WonFormatter";
 import cryPig from "/img/crypig.png";
+import { addDefaultImg } from "../../../utils/DefaultImage";
 
 export default function PiggybankModal({ stocks, isLinked }) {
   const navigate = useNavigate();
@@ -67,6 +68,7 @@ function TopResult({ stockName, stockCode, price, changeRate, isLinked }) {
         <img
           src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stockCode}.png`}
           className="w-12 h-12 rounded-full shadow-md object-cover"
+          onError={addDefaultImg}
         />
 
         <div className="flex flex-col">

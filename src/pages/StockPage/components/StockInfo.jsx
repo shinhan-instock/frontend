@@ -3,7 +3,7 @@ import { useLogin } from "../../../hooks/useLogin";
 import { useWatchList } from "../../../context/WatchListContext";
 import { getStockInfo } from "../../../api/StockAPI";
 import WonFormatter from "../../../utils/WonFormatter";
-import miniLogo from "/img/miniLogo.png";
+import { addDefaultImg } from "../../../utils/DefaultImage";
 
 export default function StockInfo({
   stockName,
@@ -70,7 +70,7 @@ export default function StockInfo({
           <img
             src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stockData.stockCode}.png`}
             className="w-[50px] h-[50px] rounded-full"
-            onError={miniLogo}
+            onError={addDefaultImg}
           />
 
           <div className="flex flex-col items-start gap-2">

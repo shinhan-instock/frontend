@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getTop10Stocks } from "../../api/StockAPI.jsx";
 
 import { useNavigate } from "react-router-dom";
+import { addDefaultImg } from "../../utils/DefaultImage";
 
 export default function TopStock() {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ export default function TopStock() {
               <div className="flex flex-row space-x-3 w-full">
                 <img
                   src={stock.img}
+                  onError={addDefaultImg}
                   alt={stock.name}
                   className="w-10 h-10 rounded-full"
                 />
