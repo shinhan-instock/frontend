@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { getComments } from '../../api/CommentAPI';
-import Comment from './Comment';
+import React, { useState, useEffect, useRef } from "react";
+import { getComments } from "../../api/CommentAPI";
+import Comment from "./Comment";
 
 export default function CommentList({ postId, comments, setComments }) {
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ export default function CommentList({ postId, comments, setComments }) {
         setHasMore(false);
       }
     } catch (error) {
-      console.error('Error fetching comments:', error);
+      console.error("Error fetching comments:", error);
     } finally {
       setLoading(false);
     }
@@ -67,12 +67,10 @@ export default function CommentList({ postId, comments, setComments }) {
   }, [postId]);
 
   return (
-    <div className="comment-section">
-      <div className="comment-list">
-        {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
-      </div>
+    <div>
+      {comments.map((comment) => (
+        <Comment key={comment.id} comment={comment} />
+      ))}
 
       {loading && <div>Loading...</div>}
     </div>

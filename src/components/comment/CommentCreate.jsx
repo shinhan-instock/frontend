@@ -38,8 +38,8 @@ export default function CommentCreate({ postId, comments, setComments }) {
   };
 
   return (
-    <div className="p-4 flex flex-row  w-full">
-      <div className="flex py-3 flex-row items-start justify-center">
+    <div className="px-4 flex flex-row w-full">
+      <div className="flex flex-row items-start justify-center">
         {userInfo &&
           (userInfo.imageUrl ? (
             <div className="flex items-center justify-center w-[50px] h-[50px]">
@@ -53,7 +53,7 @@ export default function CommentCreate({ postId, comments, setComments }) {
             <ImageMaker nickname={userInfo.nickname} />
           ))}
       </div>
-      <div className="flex flex-col px-4  w-full">
+      <div className="flex flex-col px-4 w-full">
         <div className="flex flex-row">
           <div className="flex justify-center items-center text-m">
             {userInfo.nickname}
@@ -74,7 +74,7 @@ export default function CommentCreate({ postId, comments, setComments }) {
         />
         <button
           onClick={handlePost}
-          className="mt-1 inline-flex self-end justify-center items-center bg-black text-white px-4 py-2 rounded-full font-medium text-sm"
+          className="mt-1 inline-flex self-end justify-center items-center bg-black text-white px-5 py-1 rounded-full font-medium text-xs"
         >
           POST
         </button>

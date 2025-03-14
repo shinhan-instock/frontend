@@ -153,8 +153,7 @@ export default function Post({
       navigate(`/profile/${nickname}`);
     }
   };
-  const sentimentColor =
-    sentimentScore > 50 ? "border-green-500" : "border-red-500";
+  const sentimentColor = sentimentScore > 50 ? "bg-green-400" : "bg-red-400";
   return (
     <div>
       <div
@@ -199,7 +198,7 @@ export default function Post({
           </div>
           {hashtag && (
             <div
-              className={`border-1 ${sentimentColor} w-10 h-10 flex flex-row items-center justify-center rounded-lg`}
+              className={`${sentimentColor} text-white w-10 h-10 flex flex-row items-center justify-center rounded-lg`}
             >
               {sentimentScore}
             </div>
@@ -230,7 +229,7 @@ export default function Post({
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="p-4">
+        <div className={`p-4 h-fit`}>
           <div className="flex flex-row gap-2">
             <div
               onClick={(e) => navigateToProfile(e)}
@@ -324,8 +323,8 @@ export default function Post({
             </div>
           ) : (
             <>
-              <div className="justify-center mt-6">{content}</div>
-              {images && <img src={images} className="w-1/3 rounded-xl" />}
+              <div className="justify-center mt-6 ">{content}</div>
+              {images && <img src={images} className="w-1/5 rounded-xl" />}
               <div
                 className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm mt-2 cursor-pointer"
                 onClick={() => navigate(`/stock/${hashtag}`)}
@@ -359,18 +358,17 @@ export default function Post({
             </>
           )}
         </div>
-        {!isEditMode && userInfo && (
-          <div>
+        <div className="">
+          {!isEditMode && userInfo && (
             <CommentCreate
               postId={id}
               comments={commentsData}
               setComments={setCommentsData}
             />
-          </div>
-        )}
-        <div
-          className={`${userInfo ? "max-h-1/3" : "max-h-1/2"} overflow-auto`}
-        >
+          )}
+        </div>
+
+        <div className={`${userInfo ? "h-1/4" : "h-1/2"} overflow-auto pb-4`}>
           {!isEditMode && (
             <CommentList
               postId={id}

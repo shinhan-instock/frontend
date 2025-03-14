@@ -1,18 +1,18 @@
 /* eslint-disable react/prop-types */
-import ImageMaker from '../../utils/ImageMaker';
-import { useNavigate } from 'react-router-dom';
-import { useLogin } from '../../hooks/useLogin';
+import ImageMaker from "../../utils/ImageMaker";
+import { useNavigate } from "react-router-dom";
+import { useLogin } from "../../hooks/useLogin";
 
-import { checkInfluencerStatus } from '../../api/UserAPI';
-import miniLogo from '/img/miniLogo.png';
-import { useState, useEffect } from 'react';
+import { checkInfluencerStatus } from "../../api/UserAPI";
+import miniLogo from "/img/miniLogo.png";
+import { useState, useEffect } from "react";
 
 export default function Comment({ comment }) {
   const navigate = useNavigate();
   const { userInfo } = useLogin();
   const url =
-    userInfo.nickname == comment.userNickname
-      ? '/myprofile'
+    userInfo?.nickname == comment.userNickname
+      ? "/myprofile"
       : `/profile/${comment.userNickname}`;
 
   const [isInfluencer, setIsInfluencer] = useState(false);
@@ -27,7 +27,7 @@ export default function Comment({ comment }) {
   }, [userInfo]);
 
   return (
-    <div className="p-4 py-3 flex flex-row w-full gap-3">
+    <div className="p-4 py-2 flex flex-row w-full gap-3">
       <div className="flex items-center justify-center rounded-full">
         <div
           className="flex items-center justify-center w-[50px] h-[50px] "
@@ -57,8 +57,8 @@ export default function Comment({ comment }) {
           </div>
           <div className="flex justify-center items-center text-[8px] text-stroke-gray mx-3">
             {new Date(comment.createdAt).toLocaleString({
-              dateStyle: 'medium',
-              timeStyle: 'short',
+              dateStyle: "medium",
+              timeStyle: "short",
             })}
           </div>
         </div>
