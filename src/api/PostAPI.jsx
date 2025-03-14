@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "api.inst00ck.shop";
+const BASE_URL = "http://api.inst00ck.shop";
 
 export async function getAllPosts(following, popular, scrap, userId) {
   let res = "";
