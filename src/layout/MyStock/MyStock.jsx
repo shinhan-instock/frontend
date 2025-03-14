@@ -3,6 +3,8 @@ import { FaWonSign } from "react-icons/fa6";
 import { MdPercent } from "react-icons/md";
 import { useLogin } from "../../hooks/useLogin";
 import { account } from "../../api/UserAPI";
+import { LiaPiggyBankSolid } from "react-icons/lia";
+import miniLogo from "/img/miniLogo.png";
 
 export default function MyStock() {
   const { userInfo } = useLogin();
@@ -118,9 +120,11 @@ export default function MyStock() {
                   <div className="flex flex-row space-x-3 w-full">
                     <img
                       src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${stock.stockCode}.png`}
-                      alt={stock.stockName}
+                      alt={stock.stockCode}
+                      onError={miniLogo}
                       className="w-10 h-10 rounded-full"
                     />
+
                     <div className="flex justify-between w-full">
                       <div className="w-full">
                         <div className="flex justify-between w-full">
