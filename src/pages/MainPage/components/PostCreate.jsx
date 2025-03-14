@@ -1,18 +1,21 @@
-import { useState, useRef } from "react";
-import axios from "axios";
-import { useLogin } from "../../../hooks/useLogin";
-import ImageMaker from "../../../utils/ImageMaker.jsx";
-import Modal from "../../../components/common/Modal.jsx";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
-import { IoCloseCircle } from "react-icons/io5";
-import { getHashtagList } from "../../../api/StockAPI.jsx";
-import { debounce } from "lodash";
+import { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+import { useLogin } from '../../../hooks/useLogin';
+import ImageMaker from '../../../utils/ImageMaker.jsx';
+import Modal from '../../../components/common/Modal.jsx';
+import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
+import { IoCloseCircle } from 'react-icons/io5';
+import { getHashtagList } from '../../../api/StockAPI.jsx';
+import { debounce } from 'lodash';
+import { useNavigate } from 'react-router-dom';
+import { checkInfluencerStatus } from '../../../api/UserAPI';
+import miniLogo from '/img/miniLogo.png';
 
 export default function PostCreate() {
-  const [postText, setPostText] = useState("");
+  const [postText, setPostText] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [hashtag, setHashtag] = useState("");
+  const [hashtag, setHashtag] = useState('');
   const [myStocks, setMyStocks] = useState([]); // 보유 주식 리스트 (보여줄 때)
   const [images, setImages] = useState([]); // 실제 파일 저장
   const fileInputRef = useRef(null);
@@ -21,19 +24,19 @@ export default function PostCreate() {
 
   const handleKeyDown = (e) => {
     const key = e.key.normalize("NFC");
-  
+
     if (key === "₩" || key === "\\") {
       getHashtagList(userInfo.userId).then((result) => {
         setMyStocks(result);
       });
     }
   };
-  
+
   const handleInput = (e) => {
     const inputValue = e.target.value.normalize("NFC");
-  
+
     setPostText(inputValue);
-    if (!inputValue.includes("₩") && !inputValue.includes("\\")) {
+    if (!inputValue.includes('₩') && !inputValue.includes('\\')) {
       setMyStocks([]);
     }
   };
@@ -61,13 +64,23 @@ export default function PostCreate() {
     }, 10);
   };
 
-  // ✅ 이미지 선택 (최대 1개 제한)
+  const navigate = useNavigate();
+  const [isInfluencer, setIsInfluencer] = useState(false);
+  useEffect(() => {
+    async function fetchInfluencerStatus() {
+      if (userInfo?.nickname) {
+        const isUserInfluencer = await checkInfluencerStatus(userInfo.nickname);
+        setIsInfluencer(isUserInfluencer);
+      }
+    }
+    fetchInfluencerStatus();
+  }, [userInfo]);
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
 
-    // 📌 1개 이상이면 경고 메시지 띄우기
     if (files.length > 1 || images.length >= 1) {
-      alert("이미지는 1개만 업로드할 수 있습니다.");
+      alert('이미지는 1개만 업로드할 수 있습니다.');
       return;
     }
 
@@ -80,43 +93,45 @@ export default function PostCreate() {
     setImagePreviews(newPreviews);
   };
 
-  // ❌ 이미지 삭제
   const removeImage = (id) => {
     setImagePreviews([]);
     setImages([]);
   };
 
-  // 🔥 게시글 업로드 함수
   const handlePostUpload = async () => {
     if (!postText.trim()) {
-      alert("게시글 내용을 입력하세요!");
+      alert('게시글 내용을 입력하세요!');
       return;
     }
 
     const formData = new FormData();
     formData.append("userId", userInfo.userId);
     formData.append("content", postText);
-    if (hashtag && (!postText.includes("₩" + hashtag) && !postText.includes("\\" + hashtag))) {
+    if (
+      hashtag &&
+      !postText.includes("₩" + hashtag) &&
+      !postText.includes("\\" + hashtag)
+    ) {
       formData.append("hashtag", ""); // 필요하면 해시태그 추가
     } else {
-      formData.append("hashtag", hashtag); // 필요하면 해시태그 추가
+      formData.append('hashtag', hashtag); // 필요하면 해시태그 추가
     }
 
     if (images.length > 0) {
-      formData.append("file", images[0]);
+      formData.append('file', images[0]);
     }
 
     try {
-      const res = await axios.post("http://localhost:8080/posts", formData, {
+      const res = await axios.post(`${BASE_URL}/posts`, formData, {
         headers: {
           Authorization: `Bearer ${userInfo.userId}`, // 필요 시 토큰 추가
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
 
       if (res.data.isSuccess) {
         setIsModalOpen(false);
-        setPostText("");
+        setPostText('');
         setImagePreviews([]);
         setImages([]);
 
@@ -125,8 +140,8 @@ export default function PostCreate() {
         }, 500);
       }
     } catch (error) {
-      console.error("❌ 게시글 업로드 실패:", error);
-      alert("게시글 업로드 중 오류가 발생했습니다.");
+      console.error('❌ 게시글 업로드 실패:', error);
+      alert('게시글 업로드 중 오류가 발생했습니다.');
     }
   };
 
@@ -145,7 +160,7 @@ export default function PostCreate() {
             />
           </div>
         ) : (
-          <ImageMaker nickname={userInfo?.nickname || "유저"} />
+          <ImageMaker nickname={userInfo?.nickname || '유저'} />
         )}
       </div>
 
@@ -176,9 +191,18 @@ export default function PostCreate() {
                 className="w-16 h-16 rounded-full"
               />
             ) : (
-              <ImageMaker nickname={userInfo?.nickname || "User"} />
+              <ImageMaker nickname={userInfo?.nickname || 'User'} />
             )}
-            <span className="text-lg font-semibold">{userInfo?.nickname}</span>
+            <span className="text-lg font-semibold">
+              {userInfo?.nickname}
+              {isInfluencer && (
+                <img
+                  src={miniLogo}
+                  className="w-5 h-5 ml-1"
+                  alt="Influencer Badge"
+                />
+              )}
+            </span>
           </div>
 
           {/* 게시글 입력 폼 */}

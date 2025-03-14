@@ -12,6 +12,7 @@ export default function OpenedProfile({
   isMyInfoOpen,
   setIsLogoutOpen,
 }) {
+
   const navigate = useNavigate();
   const [isInfluencer, setIsInfluencer] = useState(false);
   useEffect(() => {
@@ -43,6 +44,7 @@ export default function OpenedProfile({
               <h2 className="text-lg font-semibold">
                 {userInfo ? userInfo.nickname : '로그인이 필요해요'}
               </h2>
+
               {isInfluencer && (
                 <img
                   src={miniLogo}
@@ -50,6 +52,7 @@ export default function OpenedProfile({
                   alt="Influencer Badge"
                 />
               )}
+              
             </div>
             <p className="text-gray-600 text-sm">
               {userInfo ? userInfo.introduction : ''}

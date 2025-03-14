@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLogin } from '../../hooks/useLogin';
 import ImageMaker from '../../utils/ImageMaker';
 import { addComment } from '../../api/CommentAPI';
 
+import { useNavigate } from 'react-router-dom';
+import { checkInfluencerStatus } from '../../api/UserAPI';
+import miniLogo from '/img/miniLogo.png';
+
 export default function CommentCreate({ postId, comments, setComments }) {
   const [content, setContent] = useState('');
   const { userInfo } = useLogin();
+
+  const navigate = useNavigate();
+  const [isInfluencer, setIsInfluencer] = useState(false);
+  useEffect(() => {
+    async function fetchInfluencerStatus() {
+      if (userInfo?.nickname) {
+        const isUserInfluencer = await checkInfluencerStatus(userInfo.nickname);
+        setIsInfluencer(isUserInfluencer);
+      }
+    }
+    fetchInfluencerStatus();
+  }, [userInfo]);
+
   const handlePost = async () => {
     if (!content.trim()) return; // 빈 댓글 방지
 
@@ -41,8 +58,15 @@ export default function CommentCreate({ postId, comments, setComments }) {
       </div>
       <div className="flex flex-col px-4  w-full">
         <div className="flex flex-row">
-          <div className="flex justify-center items-center text-m font-bold">
+          <div className="flex justify-center items-center text-m">
             {userInfo.nickname}
+            {isInfluencer && (
+              <img
+                src={miniLogo}
+                className="w-5 h-5 ml-1"
+                alt="Influencer Badge"
+              />
+            )}
           </div>
         </div>
         <textarea

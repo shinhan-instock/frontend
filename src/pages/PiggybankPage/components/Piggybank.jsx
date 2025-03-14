@@ -8,8 +8,9 @@ import { getMileage } from "../../../api/PigAPI";
 import { useLogin } from "../../../hooks/useLogin";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { account } from "../../../api/UserAPI";
+import stockImg from "/img/stockImg.png";
 
-const BASE_URL = "http://localhost:8081";
+const BASE_URL = "https://localhost:8081";
 
 export default function Piggybank() {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ export default function Piggybank() {
       account(
         userInfo,
         (data) => {
+          console.log("acc", data);
           if (data?.code === "STOCK4004") {
             console.warn("📢 계좌 없음 (STOCK4004 감지)");
             setIsLinked(false);
@@ -67,7 +69,7 @@ export default function Piggybank() {
         try {
           const newStocks = JSON.parse(event.data);
           setStocks(newStocks);
-
+          console.log("sto", newStocks);
           const stockCodeList = newStocks.map((stock) => stock.stockCode);
           setStockCodes(stockCodeList);
         } catch (error) {
@@ -159,7 +161,11 @@ export default function Piggybank() {
             {stockIcons.map((icon, index) => (
               <img
                 key={index}
-                src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${icon.code}.png`}
+                src={
+                  icon.code
+                    ? `https://static.toss.im/png-icons/securities/icn-sec-fill-${icon.code}.png`
+                    : stockImg
+                }
                 alt={`stock-${index}`}
                 className={`absolute floating-${index} ${icon.size} z-20 rounded-full`}
                 style={{
