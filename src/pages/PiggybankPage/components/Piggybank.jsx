@@ -9,7 +9,7 @@ import { useLogin } from "../../../hooks/useLogin";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { account } from "../../../api/UserAPI";
 
-const BASE_URL = "http://localhost:8081";
+const BASE_URL = "https://api.inst00ck.shop";
 
 export default function Piggybank() {
   const navigate = useNavigate();
