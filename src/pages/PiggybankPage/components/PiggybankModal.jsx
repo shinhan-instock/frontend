@@ -1,6 +1,7 @@
 import { IoCloseCircle } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import WonFormatter from "../../../utils/WonFormatter";
+import cryPig from "/img/crypig.png";
 
 export default function PiggybankModal({ stocks, isLinked }) {
   const navigate = useNavigate();
@@ -21,7 +22,12 @@ export default function PiggybankModal({ stocks, isLinked }) {
 
       <div className="w-full max-w-lg bg-white rounded-lg p-5 text-black shadow-lg h-11/12 overflow-auto">
         {stocks.length === 0 ? (
-          <p className="text-center">📡 데이터를 불러오는 중...</p>
+          <div className="flex flex-col items-center gap-10 pt-20">
+            {" "}
+            <p className="text-center text-xl"> 구매 가능한 종목이 없어요. </p>
+            <img src={cryPig} className="w-1/2" />
+            <p className="text-center  text-xl"> 마일리지를 더 모아보세요! </p>
+          </div>
         ) : (
           <ul className="space-y-3">
             {stocks.map((stock, index) => (

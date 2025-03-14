@@ -138,7 +138,7 @@ export default function MyStock() {
                               </span>
                             </p>
                           </div>
-                          <div className="flex flex-col items-start">
+                          <div className="flex flex-col items-end">
                             <p
                               className={`text-sm ${
                                 stock.profit >= 0
@@ -147,8 +147,8 @@ export default function MyStock() {
                               }`}
                             >
                               {stock.avgPrice >= 0
-                                ? `+${stock.avgPrice}`
-                                : stock.avgPrice}{" "}
+                                ? `+${stock.gapPrice}`
+                                : stock.gapPrice}{" "}
                               원
                             </p>
                             <p

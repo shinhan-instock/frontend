@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import ImageMaker from "../../../utils/ImageMaker";
 import axios from "axios";
 import { useLogin } from "../../../hooks/useLogin";
+
+const BASE_URL = "https://api.inst00ck.shop";
 export default function CardSlider() {
   const { userInfo } = useLogin();
   const navigate = useNavigate();

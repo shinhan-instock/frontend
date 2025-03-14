@@ -156,20 +156,21 @@ export default function Piggybank() {
           </div>
           <div className="relative flex justify-center">
             <img src={piggybank} alt="piggybank" className="w-[250px] z-10" />
-            {stockIcons.map((icon, index) => (
-              <img
-                key={index}
-                src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${icon.code}.png`}
-                alt={`stock-${index}`}
-                className={`absolute floating-${index} ${icon.size} z-20 rounded-full`}
-                style={{
-                  top: icon.top,
-                  left: icon.left,
-                  right: icon.right,
-                  bottom: icon.bottom,
-                }}
-              />
-            ))}
+            {stocks.length !== 0 &&
+              stockIcons.map((icon, index) => (
+                <img
+                  key={index}
+                  src={`https://static.toss.im/png-icons/securities/icn-sec-fill-${icon.code}.png`}
+                  alt={`stock-${index}`}
+                  className={`absolute floating-${index} ${icon.size} z-20 rounded-full`}
+                  style={{
+                    top: icon.top,
+                    left: icon.left,
+                    right: icon.right,
+                    bottom: icon.bottom,
+                  }}
+                />
+              ))}
           </div>
 
           <button
