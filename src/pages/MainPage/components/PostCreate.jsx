@@ -21,17 +21,17 @@ export default function PostCreate() {
 
   const handleKeyDown = (e) => {
     const key = e.key.normalize("NFC");
-  
+
     if (key === "₩" || key === "\\") {
       getHashtagList(userInfo.userId).then((result) => {
         setMyStocks(result);
       });
     }
   };
-  
+
   const handleInput = (e) => {
     const inputValue = e.target.value.normalize("NFC");
-  
+
     setPostText(inputValue);
     if (!inputValue.includes("₩") && !inputValue.includes("\\")) {
       setMyStocks([]);
@@ -96,7 +96,11 @@ export default function PostCreate() {
     const formData = new FormData();
     formData.append("userId", userInfo.userId);
     formData.append("content", postText);
-    if (hashtag && (!postText.includes("₩" + hashtag) && !postText.includes("\\" + hashtag))) {
+    if (
+      hashtag &&
+      !postText.includes("₩" + hashtag) &&
+      !postText.includes("\\" + hashtag)
+    ) {
       formData.append("hashtag", ""); // 필요하면 해시태그 추가
     } else {
       formData.append("hashtag", hashtag); // 필요하면 해시태그 추가
@@ -107,7 +111,7 @@ export default function PostCreate() {
     }
 
     try {
-      const res = await axios.post("http://localhost:8080/posts", formData, {
+      const res = await axios.post(`${BASE_URL}/posts`, formData, {
         headers: {
           Authorization: `Bearer ${userInfo.userId}`, // 필요 시 토큰 추가
           "Content-Type": "multipart/form-data",

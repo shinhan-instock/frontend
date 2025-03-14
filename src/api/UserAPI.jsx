@@ -161,7 +161,7 @@ export function getWatchList(userId, onMessage, onError) {
   }
 
   eventSource = new EventSource(
-    `http://localhost:8080/watchList?userId=${userId}&page=0&size=5`
+    `${BASE_URL}/watchList?userId=${userId}&page=0&size=5`
   );
 
   eventSource.onmessage = (event) => {
@@ -191,7 +191,7 @@ export function getWatchList(userId, onMessage, onError) {
 }
 
 export async function addWatchList(userId, stockCode, stockName, onUpdate) {
-  const res = await axios.post("http://localhost:8080/watchList", {
+  const res = await axios.post(`${BASE_URL}/watchList`, {
     userId: userId,
     stockCode: stockCode,
     stockName: stockName,
@@ -205,7 +205,7 @@ export async function addWatchList(userId, stockCode, stockName, onUpdate) {
 }
 
 export async function deleteWatchList(userId, stockName, onUpdate) {
-  const res = await axios.delete("http://localhost:8080/watchList", {
+  const res = await axios.delete(`${BASE_URL}/watchList`, {
     data: {
       userId: userId,
       stockName: stockName,
@@ -291,7 +291,7 @@ export function getUserAccount(userId, targetUserId, onMessage, onError) {
 
   // SSE 설정
   const eventSource = new EventSourcePolyfill(
-    `http://localhost:8080/users/account/${targetUserId}/stream`,
+    `${BASE_URL}/users/account/${targetUserId}/stream`,
     {
       method: "GET", // POST 요청 지원
       headers: {
@@ -344,7 +344,7 @@ export async function changeOpenAccount(id) {
 
 export async function getMyInfo(id) {
   const res = await axios.post(
-    "http://localhost:8080/users",
+    `${BASE_URL}/users`,
     {},
     {
       headers: {
