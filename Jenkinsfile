@@ -86,7 +86,7 @@ spec:
             steps {
                 container('node') {
                     withAWS(credentials: '93d53f6a-d44c-4637-984b-ef73d9f2a653', region: 'ap-northeast-2') {
-                        sh 'aws cloudfront create-invalidation --distribution-id d3tg0snud1pi3v.cloudfront.net --paths "/*"'
+                        sh 'aws cloudfront create-invalidation --distribution-id EHQ5I97F8FPY2 --paths "/*"'
                     }
                 }
             }
