@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useLogin } from '../../hooks/useLogin';
-import ImageMaker from '../../utils/ImageMaker';
-import { addComment } from '../../api/CommentAPI';
+import React, { useState, useEffect } from "react";
+import { useLogin } from "../../hooks/useLogin";
+import ImageMaker from "../../utils/ImageMaker";
+import { addComment } from "../../api/CommentAPI";
 
-import { useNavigate } from 'react-router-dom';
-import { checkInfluencerStatus } from '../../api/UserAPI';
-import miniLogo from '/img/miniLogo.png';
+import { useNavigate } from "react-router-dom";
+import { checkInfluencerStatus } from "../../api/UserAPI";
+import miniLogo from "/img/miniLogo.png";
 
 export default function CommentCreate({ postId, comments, setComments }) {
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const { userInfo } = useLogin();
 
   const navigate = useNavigate();
@@ -24,19 +24,16 @@ export default function CommentCreate({ postId, comments, setComments }) {
   }, [userInfo]);
 
   const handlePost = async () => {
-    if (!content.trim()) return; // 빈 댓글 방지
+    if (!content.trim()) return;
 
     try {
       const newComment = await addComment(postId, userInfo.userId, content);
 
-      setComments((prevComments) => [
-        newComment, // 새로운 댓글을 최상단에 추가
-        ...prevComments,
-      ]);
+      setComments((prevComments) => [newComment, ...prevComments]);
 
-      setContent(''); // 입력창 초기화
+      setContent("");
     } catch (error) {
-      console.error('댓글 등록 실패:', error);
+      console.error("댓글 등록 실패:", error);
     }
   };
 

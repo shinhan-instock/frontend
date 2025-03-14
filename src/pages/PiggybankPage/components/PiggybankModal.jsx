@@ -48,7 +48,6 @@ export default function PiggybankModal({ stocks, isLinked }) {
   );
 }
 
-// TopResult 컴포넌트 추가 (주식 정보 UI)
 function TopResult({ stockName, stockCode, price, changeRate, isLinked }) {
   const navigate = useNavigate();
   const handleStockClick = () => {

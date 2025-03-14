@@ -7,7 +7,7 @@ import { addDefaultImg } from "../../utils/DefaultImage";
 
 export default function WatchList() {
   const { userInfo } = useLogin();
-  const { watchList, removeStockFromWatchList } = useWatchList(); // ✅ 전역 관심목록 사용
+  const { watchList, removeStockFromWatchList } = useWatchList();
   const navigate = useNavigate();
   return (
     <div className="w-full mx-auto px-5 h-3/7">

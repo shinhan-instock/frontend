@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Modal from './Modal';
-import { CuteConfirm } from './CuteConfirm';
-import CommentCreate from '../comment/CommentCreate';
-import CommentList from '../comment/CommentList';
-import { IoCloseCircle } from 'react-icons/io5';
-import { MdOutlineAddPhotoAlternate } from 'react-icons/md';
-import { FiEdit } from 'react-icons/fi';
-import { LuTrash2 } from 'react-icons/lu';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Modal from "./Modal";
+import { CuteConfirm } from "./CuteConfirm";
+import CommentCreate from "../comment/CommentCreate";
+import CommentList from "../comment/CommentList";
+import { IoCloseCircle } from "react-icons/io5";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
+import { LuTrash2 } from "react-icons/lu";
 
-import { checkInfluencerStatus } from '../../api/UserAPI';
-import miniLogo from '/img/miniLogo.png';
+import { checkInfluencerStatus } from "../../api/UserAPI";
+import miniLogo from "/img/miniLogo.png";
 
 import {
   addLike,
@@ -19,11 +19,11 @@ import {
   deleteScrap,
   updatePost,
   deletePost,
-} from '../../api/PostAPI';
-import { useLogin } from '../../hooks/useLogin';
-import ImageMaker from '../../utils/ImageMaker';
-import { BsBookmark } from 'react-icons/bs';
-import { BsBookmarkFill } from 'react-icons/bs';
+} from "../../api/PostAPI";
+import { useLogin } from "../../hooks/useLogin";
+import ImageMaker from "../../utils/ImageMaker";
+import { BsBookmark } from "react-icons/bs";
+import { BsBookmarkFill } from "react-icons/bs";
 
 export default function Post({
   id,
@@ -105,10 +105,8 @@ export default function Post({
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-
-    // 📌 1개 이상이면 경고 메시지 띄우기
     if (files.length > 1) {
-      alert('이미지는 1개만 업로드할 수 있습니다.');
+      alert("이미지는 1개만 업로드할 수 있습니다.");
       return;
     }
 
@@ -117,8 +115,8 @@ export default function Post({
       file: files[0],
     };
 
-    setSelectedFile(files[0]); // 업로드할 파일 저장
-    setImagePreviews([newPreview]); // 기존 이미지 제거 후 새 이미지 설정
+    setSelectedFile(files[0]);
+    setImagePreviews([newPreview]);
   };
 
   const removeImage = () => {
@@ -136,7 +134,7 @@ export default function Post({
   };
 
   const handleDeletePost = async () => {
-    CuteConfirm('이 게시글을 삭제하면 복구할 수 없어요!', async () => {
+    CuteConfirm("이 게시글을 삭제하면 복구할 수 없어요!", async () => {
       try {
         const response = await deletePost(id, userInfo.userId);
         if (response.isSuccess) {
@@ -150,13 +148,13 @@ export default function Post({
   const navigateToProfile = (e) => {
     e.stopPropagation();
     if (userInfo && nickname === userInfo.nickname) {
-      navigate('/myprofile');
+      navigate("/myprofile");
     } else {
       navigate(`/profile/${nickname}`);
     }
   };
   const sentimentColor =
-    sentimentScore > 50 ? 'border-green-500' : 'border-red-500';
+    sentimentScore > 50 ? "border-green-500" : "border-red-500";
   return (
     <div>
       <div
@@ -193,8 +191,8 @@ export default function Post({
               </div>
               <div>
                 {new Date(created_at).toLocaleString({
-                  dateStyle: 'medium',
-                  timeStyle: 'short',
+                  dateStyle: "medium",
+                  timeStyle: "short",
                 })}
               </div>
             </div>
@@ -220,7 +218,7 @@ export default function Post({
         </div>
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-3">
-            <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
+            <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
             <div>{likeCount}</div>
             <button>💬</button>
             <div>{comments}</div>
@@ -265,8 +263,8 @@ export default function Post({
               </div>
               <div className="text-gray-500 text-sm">
                 {new Date(created_at).toLocaleString({
-                  dateStyle: 'medium',
-                  timeStyle: 'short',
+                  dateStyle: "medium",
+                  timeStyle: "short",
                 })}
               </div>
             </div>
@@ -327,20 +325,22 @@ export default function Post({
           ) : (
             <>
               <div className="justify-center mt-6">{content}</div>
+              {images && <img src={images} className="w-1/3 rounded-xl" />}
               <div
                 className="bg-instock-gray w-fit text-zinc-600 px-4 text-sm mt-2 cursor-pointer"
                 onClick={() => navigate(`/stock/${hashtag}`)}
               >
                 {hashtag}
-              </div>{' '}
+              </div>{" "}
               <div className="flex flex-row justify-between">
                 <div className="flex flex-row gap-3 mt-4">
-                  <button onClick={handleLike}>{isLiked ? '❤️' : '🤍'}</button>
+                  <button onClick={handleLike}>{isLiked ? "❤️" : "🤍"}</button>
                   <div>{likeCount}</div>
                   <button>💬</button>
                   <div>{comments}</div>
                 </div>
-                <div className="flex flex-row items-center gap-3">
+
+                <div className="flex flex-row items-center gap-3  ">
                   {userInfo?.nickname === nickname && (
                     <div className="flex flex-row items-center gap-2">
                       <button onClick={handleEdit}>
@@ -369,7 +369,7 @@ export default function Post({
           </div>
         )}
         <div
-          className={`${userInfo ? 'max-h-1/3' : 'max-h-1/2'} overflow-auto`}
+          className={`${userInfo ? "max-h-1/3" : "max-h-1/2"} overflow-auto`}
         >
           {!isEditMode && (
             <CommentList

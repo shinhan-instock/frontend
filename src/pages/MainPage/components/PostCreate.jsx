@@ -17,8 +17,8 @@ export default function PostCreate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [hashtag, setHashtag] = useState("");
-  const [myStocks, setMyStocks] = useState([]); // 보유 주식 리스트 (보여줄 때)
-  const [images, setImages] = useState([]); // 실제 파일 저장
+  const [myStocks, setMyStocks] = useState([]);
+  const [images, setImages] = useState([]);
   const fileInputRef = useRef(null);
   const textAreaRef = useRef(null);
   const { userInfo } = useLogin();
@@ -42,7 +42,6 @@ export default function PostCreate() {
     }
   };
 
-  // 🔥 주식 종목 선택 시 현재 커서 위치에 삽입하고 리스트 숨김
   const selectHashtag = (selectedStock) => {
     if (!textAreaRef.current) return;
 
@@ -53,14 +52,10 @@ export default function PostCreate() {
 
     const newText = `${beforeText}${selectedStock} ${afterText}`;
     setPostText(newText);
-
-    // 주식 리스트 숨기기
     setMyStocks([]);
-
-    // 커서 위치를 선택된 종목 뒤로 이동
     setTimeout(() => {
       textAreaRef.current.selectionStart = textAreaRef.current.selectionEnd =
-        beforeText.length + selectedStock.length + 2; // ₩ + 주식명 + 공백
+        beforeText.length + selectedStock.length + 2;
       textAreaRef.current.focus();
     }, 10);
   };
@@ -113,9 +108,9 @@ export default function PostCreate() {
       !postText.includes("₩" + hashtag) &&
       !postText.includes("\\" + hashtag)
     ) {
-      formData.append("hashtag", ""); // 필요하면 해시태그 추가
+      formData.append("hashtag", "");
     } else {
-      formData.append("hashtag", hashtag); // 필요하면 해시태그 추가
+      formData.append("hashtag", hashtag);
     }
 
     if (images.length > 0) {
@@ -125,7 +120,7 @@ export default function PostCreate() {
     try {
       const res = await axios.post(`${BASE_URL}/posts`, formData, {
         headers: {
-          Authorization: `Bearer ${userInfo.userId}`, // 필요 시 토큰 추가
+          Authorization: `Bearer ${userInfo.userId}`,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -150,7 +145,6 @@ export default function PostCreate() {
 
   return (
     <div className="flex flex-row p-5 w-5/6">
-      {/* 로그인 유저 프로필 이미지 */}
       <div className="flex py-3 flex-row items-start justify-center">
         {userInfo?.imageUrl ? (
           <div className="flex items-center justify-center w-[50px] h-[50px]">
@@ -165,7 +159,6 @@ export default function PostCreate() {
         )}
       </div>
 
-      {/* 게시글 작성 버튼 */}
       <div
         className="p-4 mx-4 border rounded-2xl w-full text-stroke-gray cursor-pointer"
         onClick={() => setIsModalOpen(true)}
@@ -180,10 +173,8 @@ export default function PostCreate() {
         />
       </div>
 
-      {/* 모달 */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-5 w-full bg-white rounded-xl">
-          {/* 로그인 유저 프로필 이미지 */}
           <div className="flex items-center gap-3">
             {userInfo?.imageUrl ? (
               <img
@@ -194,7 +185,7 @@ export default function PostCreate() {
             ) : (
               <ImageMaker nickname={userInfo?.nickname || "User"} />
             )}
-            <span className="text-lg font-semibold">
+            <div className="text-lg font-semibold flex flex-row items-center">
               {userInfo?.nickname}
               {isInfluencer && (
                 <img
@@ -203,10 +194,9 @@ export default function PostCreate() {
                   alt="Influencer Badge"
                 />
               )}
-            </span>
+            </div>
           </div>
 
-          {/* 게시글 입력 폼 */}
           <textarea
             ref={textAreaRef}
             value={postText}
@@ -217,7 +207,6 @@ export default function PostCreate() {
             rows="6"
           ></textarea>
 
-          {/* 보유 주식 리스트 (₩ 입력 시) */}
           {myStocks.length > 0 && (
             <div className="w-full flex flex-row gap-3 overflow-auto mt-2">
               {myStocks.map((stock, idx) => (
@@ -232,7 +221,6 @@ export default function PostCreate() {
             </div>
           )}
 
-          {/* 이미지 미리보기 및 삭제 버튼 */}
           {imagePreviews.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-3">
               {imagePreviews.map(({ id, file }) => (
@@ -249,9 +237,7 @@ export default function PostCreate() {
             </div>
           )}
 
-          {/* 첨부 및 업로드 버튼 */}
           <div className="flex justify-between items-center mt-3">
-            {/* 파일 업로드 버튼 */}
             <button
               className="text-blue-500 hover:text-blue-700"
               onClick={() => fileInputRef.current.click()}
@@ -266,7 +252,6 @@ export default function PostCreate() {
               accept="image/*"
             />
 
-            {/* 게시글 업로드 버튼 */}
             <button
               className="bg-black text-white px-4 py-1 rounded-full"
               onClick={debouncedHandlePostUpload}

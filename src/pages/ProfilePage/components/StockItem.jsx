@@ -36,13 +36,12 @@ export function InfluencerStockItem({ stock }) {
   );
 }
 
-// 계좌 공개한 일반 사람
 export function StockItem({ stock }) {
   const navigate = useNavigate();
   console.log("stock", stock);
   return (
     <div
-      className="flex flex-row  items-center gap-5 px-10 border-b-1 border-instock-gray py-3 hover:bg-instock-gray "
+      className="flex flex-row  items-center gap-5 px-10 border-b-1 border-instock-gray py-3  hover:bg-gray-100 transition duration-200"
       onClick={() => navigate(`/stock/${stock.stockName}`)}
     >
       <img

@@ -8,7 +8,7 @@ export default function StockList({ userData }) {
   const [stock, setStock] = useState([]);
   const [isLinked, setIsLinked] = useState(true);
   const { userInfo } = useLogin();
-  const [error, setError] = useState(false); // ✅ 수정됨
+  const [error, setError] = useState(false);
   // 1 : 남이 인플루언서, 2: 남이 일반 공개 계좌, 3: 남이 계좌 공개 안함, 4: 내가 계좌 개설 안함
   const [option, setOption] = useState(0);
 

@@ -44,7 +44,6 @@ export function StockSearchResult({ stockName, setIsSearchOpen }) {
 }
 
 export function TopResult({
-  // img,
   stockName,
   stockCode,
   price,

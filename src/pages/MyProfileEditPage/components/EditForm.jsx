@@ -1,20 +1,20 @@
-import profileImg from '/img/userImg.png';
-import { LiaEditSolid } from 'react-icons/lia';
-import { useRef, useEffect, useState } from 'react';
-import { getUserInfo, updateUser } from '../../../api/UserAPI';
+import profileImg from "/img/userImg.png";
+import { LiaEditSolid } from "react-icons/lia";
+import { useRef, useEffect, useState } from "react";
+import { getUserInfo, updateUser } from "../../../api/UserAPI";
 
 export default function EditForm() {
-  const [image, setImage] = useState(''); //사진 update할때 쓰는 변수
-  const [nickname, setNickname] = useState('');
-  const [introduction, setIntroduction] = useState('');
-  const [name, setName] = useState('');
-  const [previewUrl, setPreviewUrl] = useState(profileImg); //frontend에서 사진 보여줄때 쓰는 변수
+  const [image, setImage] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [introduction, setIntroduction] = useState("");
+  const [name, setName] = useState("");
+  const [previewUrl, setPreviewUrl] = useState(profileImg);
 
   const fileInputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = sessionStorage.getItem('instock_user');
+    const userData = sessionStorage.getItem("instock_user");
 
     if (userData) {
       const parsedData = JSON.parse(userData);
@@ -30,7 +30,7 @@ export default function EditForm() {
   };
 
   useEffect(() => {
-    const userData = sessionStorage.getItem('instock_user');
+    const userData = sessionStorage.getItem("instock_user");
 
     if (userData) {
       const parsedData = JSON.parse(userData);
@@ -68,9 +68,9 @@ export default function EditForm() {
             }}
           />
         </div>
-        <div>{JSON.parse(sessionStorage.getItem('instock_user')).nickname}</div>
+        <div>{JSON.parse(sessionStorage.getItem("instock_user")).nickname}</div>
         <div>
-          {JSON.parse(sessionStorage.getItem('instock_user')).introduction}
+          {JSON.parse(sessionStorage.getItem("instock_user")).introduction}
         </div>
       </div>
       <div className="flex  flex-col w-3/4">

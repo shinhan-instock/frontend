@@ -78,7 +78,7 @@ export default function Piggybank() {
 
       eventSourceRef.current.onerror = () => {
         eventSourceRef.current.close();
-        setTimeout(connectSSE, 3000); // 3초 후 재연결
+        setTimeout(connectSSE, 3000);
       };
     };
 

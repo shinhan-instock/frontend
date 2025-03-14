@@ -8,7 +8,7 @@ const BASE_URL = "https://api.inst00ck.shop";
 
 export async function checkInfluencerStatus(userNickname) {
   try {
-    if (!userNickname) return false; // 닉네임이 없으면 false 반환
+    if (!userNickname) return false;
 
     const response = await axios.get(`${BASE_URL}/users/influencer`);
     if (response.data.isSuccess) {
@@ -95,7 +95,6 @@ export function account(userInfo, onMessage, onError) {
     return () => {};
   }
 
-  // 기존 SSE 연결이 있으면 닫기
   if (eventSource) {
     eventSource.close();
   }
@@ -107,7 +106,7 @@ export function account(userInfo, onMessage, onError) {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${userInfo.userId}`, // 헤더에
+          Authorization: `Bearer ${userInfo.userId}`,
           Accept: "text/event-stream",
         },
       });
@@ -128,7 +127,6 @@ export function account(userInfo, onMessage, onError) {
         if (!text.trim()) continue;
 
         try {
-          // "data:" 제거 후 JSON 파싱
           const cleanText = text.replace(/^data:\s*/, "");
           const jsonData = JSON.parse(cleanText);
 
@@ -138,11 +136,9 @@ export function account(userInfo, onMessage, onError) {
     } catch (error) {
       if (onError) onError(error);
     } finally {
-      /* empty */
     }
   }
 
-  // SSE 연결 시작
   fetchSSE().catch((error) => {});
   return () => {
     if (eventSource) {
@@ -167,7 +163,7 @@ export function getWatchList(userId, onMessage, onError) {
   eventSource.onmessage = (event) => {
     try {
       const jsonData = JSON.parse(event.data);
-      // console.log("서버에서 받은 JSON 데이터:", jsonData.result);
+
       if (onMessage) {
         onMessage(jsonData);
       }
@@ -256,11 +252,9 @@ export async function updateUser(
       },
     });
 
-    // 기존 데이터 가져오기
     const existingUserData =
       JSON.parse(sessionStorage.getItem("instock_user")) || {};
 
-    // 기존 userId 유지하면서 나머지 값 업데이트
     const updatedUserData = {
       ...existingUserData,
       nickname: nickname,
@@ -268,10 +262,10 @@ export async function updateUser(
       introduction: introduction,
     };
     sessionStorage.setItem("instock_user", JSON.stringify(updatedUserData));
-    CuteAlert("🎉 수정이 완료되었습니다!", "success");
+    CuteAlert("수정이 완료되었습니다!", "success");
   } catch (error) {
     console.error(
-      "❌ 사용자 정보 업데이트 실패:",
+      "사용자 정보 업데이트 실패:",
       error.response?.data || error.message
     );
 
@@ -289,13 +283,12 @@ export async function updateUser(
 export function getUserAccount(userId, targetUserId, onMessage, onError) {
   if (!userId || !targetUserId) return () => {};
 
-  // SSE 설정
   const eventSource = new EventSourcePolyfill(
     `${BASE_URL}/users/account/${targetUserId}/stream`,
     {
-      method: "GET", // POST 요청 지원
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${userId}`, // 필요 시 실제 토큰 사용
+        Authorization: `Bearer ${userId}`,
       },
       body: JSON.stringify({ userId: targetUserId }),
       withCredentials: true,
@@ -321,7 +314,6 @@ export function getUserAccount(userId, targetUserId, onMessage, onError) {
     eventSource.close();
   };
 
-  // 클린업 함수 반환 (SSE 연결 해제)
   return () => {
     console.log("SSE 연결 종료");
     eventSource.close();

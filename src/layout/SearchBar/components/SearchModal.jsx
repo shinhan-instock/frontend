@@ -9,7 +9,7 @@ import TopStock from "./TopStock";
 import { useEffect, useRef, useState } from "react";
 import { getTopStocks } from "../../../api/StockAPI";
 import { searchStock } from "../../../api/StockAPI";
-import { searchUser } from "../../../api/UserAPI"; // 사용자 검색 API를 불러옴 (예시)
+import { searchUser } from "../../../api/UserAPI";
 
 export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
   const [searchInput, setSearchInput] = useState("");

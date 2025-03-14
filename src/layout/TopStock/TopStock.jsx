@@ -18,7 +18,6 @@ export default function TopStock() {
         const updatedStockData = data.map((stock, data_idx) => {
           let top = "-";
 
-          // 이전 순위와 비교하여 상승/하락 여부 결정
           const prevIndex = prevRankings.findIndex(
             (item) => item.id === stock.stockCode
           );
@@ -63,7 +62,7 @@ export default function TopStock() {
           {stockData.map((stock) => (
             <div
               key={stock.id}
-              className="flex justify-between space-y-3 w-full cursor-pointer hover:bg-gray-200 p-2 rounded-md"
+              className="flex justify-between space-y-3 w-full cursor-pointer hover:bg-gray-200 transition duration-200 p-2 rounded-md"
               onClick={() => navigate(`/stock/${stock.name}`)}
             >
               <div className="flex flex-row space-x-3 w-full">
