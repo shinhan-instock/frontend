@@ -1,16 +1,17 @@
-import { WatchListProvider } from "../context/WatchListContext"; // ✅ WatchListProvider 추가
-import { Outlet } from "react-router-dom";
-import SearchBar from "./SearchBar/SearchBar";
-import Header from "./Header";
-import MyIntro from "./MyIntro/MyIntro";
-import WatchList from "./WatchList/WatchList";
-import MyStock from "./MyStock/MyStock";
-import TopStock from "./TopStock/TopStock";
-import Slider from "./Slider/Slider";
-import Modal from "../components/common/Modal";
-import SearchModal from "./SearchBar/components/SearchModal";
-import LogoutModal from "./MyIntro/components/LogoutModal";
-import { useState } from "react";
+import { WatchListProvider } from '../context/WatchListContext'; // ✅ WatchListProvider 추가
+import { Outlet } from 'react-router-dom';
+import SearchBar from './SearchBar/SearchBar';
+import Header from './Header';
+import MyIntro from './MyIntro/MyIntro';
+import WatchList from './WatchList/WatchList';
+import MyStock from './MyStock/MyStock';
+import TopStock from './TopStock/TopStock';
+import Footer from './Footer/Footer';
+import Slider from './Slider/Slider';
+import Modal from '../components/common/Modal';
+import SearchModal from './SearchBar/components/SearchModal';
+import LogoutModal from './MyIntro/components/LogoutModal';
+import { useState } from 'react';
 
 export default function Layout() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -58,6 +59,7 @@ export default function Layout() {
           <Modal />
           <MyStock />
           <TopStock />
+          <Footer />
         </div>
       </WatchListProvider>
     </div>
