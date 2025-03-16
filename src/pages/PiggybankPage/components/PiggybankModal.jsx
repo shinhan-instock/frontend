@@ -52,6 +52,10 @@ function TopResult({ stockName, stockCode, price, changeRate, isLinked }) {
   const navigate = useNavigate();
   const handleStockClick = () => {
     if (isLinked) {
+      window.open(
+        "https://www.shinhansec.com/siw/customer-center/open-accounts/712901/contents.do",
+        "_blank"
+      );
       navigate(`/stock/${stockName}`);
     } else {
       alert("⚠️ 계좌 연동이 필요합니다! 먼저 계좌를 연동해주세요.");
