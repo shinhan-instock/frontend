@@ -6,50 +6,31 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 import { useState, useEffect } from "react";
 import { getChartData } from "../../../api/StockAPI";
-import { ResponsiveContainer } from "recharts";
-
-export function Card({ children, className = "" }) {
-  return (
-    <div
-      className={`rounded-lg shadow-md bg-white dark:bg-gray-800 p-4 ${className}`}
-    >
-      {children}
-    </div>
-  );
-}
-
-export function CardHeader({ children, className = "" }) {
-  return <div className={`border-b pb-2 ${className}`}>{children}</div>;
-}
-
-export function CardContent({ children, className = "" }) {
-  return <div className={className}>{children}</div>;
-}
-
-export function CardTitle({ children, className = "" }) {
-  return <h2 className={`text-lg font-bold ${className}`}>{children}</h2>;
-}
-
-export function CardDescription({ children, className = "" }) {
-  return <p className={`text-sm text-gray-500 ${className}`}>{children}</p>;
-}
 
 export default function EmotionChart({ stockName }) {
   const [data, setData] = useState([]);
+
   useEffect(() => {
-    getChartData(stockName).then((data) => setData(data));
-  }, []);
+    // stockName이 변경될 때 기존 데이터 초기화
+    setData([]);
+
+    // 새로운 stockName에 대한 데이터 가져오기
+    getChartData(stockName).then((newData) => setData(newData));
+  }, [stockName]); // stockName이 변경될 때마다 실행
 
   return (
-    <Card className="md:col-span-1 w-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg">과거 주식과 감정분석 비교</CardTitle>
-        <CardDescription>시간에 따른 주가와 감정 점수 변화</CardDescription>
-      </CardHeader>
-      <CardContent className="pt-4 h-[250px]">
+    <div className="md:col-span-1 w-full rounded-lg shadow-md bg-white dark:bg-gray-800 p-4">
+      <div className="border-b pb-2">
+        <h2 className="text-lg font-bold">과거 주식과 감정분석 비교</h2>
+        <p className="text-sm text-gray-500">
+          시간에 따른 주가와 감정 점수 변화
+        </p>
+      </div>
+      <div className="pt-4 h-[250px]">
         <div className="w-full h-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data} height={500}>
@@ -78,7 +59,7 @@ export default function EmotionChart({ stockName }) {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

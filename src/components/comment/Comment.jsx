@@ -8,6 +8,7 @@ import miniLogo from "/img/miniLogo.png";
 import { useState, useEffect } from "react";
 
 export default function Comment({ comment }) {
+  console.log(comment);
   const navigate = useNavigate();
   const { userInfo } = useLogin();
   const url =
@@ -56,7 +57,9 @@ export default function Comment({ comment }) {
             )}
           </div>
           <div className="flex justify-center items-center text-[8px] text-stroke-gray mx-3">
-            {new Date(comment.createdAt).toLocaleString({
+            {new Date(
+              new Date(comment.createdAt).getTime() + 9 * 60 * 60 * 1000
+            ).toLocaleString("ko-KR", {
               dateStyle: "medium",
               timeStyle: "short",
             })}

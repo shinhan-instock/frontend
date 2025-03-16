@@ -299,6 +299,7 @@ export function getUserAccount(userId, targetUserId, onMessage, onError) {
     try {
       const jsonData = JSON.parse(event.data);
       if (onMessage) {
+        console.log("user account", jsonData);
         onMessage(jsonData);
       }
     } catch (error) {
