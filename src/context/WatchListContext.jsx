@@ -14,13 +14,11 @@ export function WatchListProvider({ children }) {
     const closeSSE = getWatchList(
       userInfo.userId,
       (data) => {
-        console.log("swa", data);
         setWatchList(
           data.result.map((stock) => ({
             stockCode: stock.stockCode,
             stockName: stock.stockName,
             currentPrice: stock.currentPrice,
-
             changeRate: stock.changeRate, // ✅ 등락율도 상태에 반영
           }))
         );

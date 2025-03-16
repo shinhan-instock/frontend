@@ -38,7 +38,7 @@ export default function PiggybankModal({ stocks, isLinked }) {
                 stockCode={stock.stockCode}
                 price={stock.price}
                 changeRate={stock.priceChange}
-                isLink={isLinked}
+                isLinked={isLinked}
               />
             ))}
           </ul>

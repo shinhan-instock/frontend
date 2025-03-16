@@ -15,9 +15,11 @@ export default function StockInfo({
     useWatchList();
 
   // ✅ 초기값을 watchList에서 가져오도록 수정
-  const [isInWatchList, setIsInWatchList] = useState(() => {
-    return watchList.some((stock) => stock.stockName === stockName);
-  });
+  const [isInWatchList, setIsInWatchList] = useState(false);
+
+  useEffect(() => {
+    setIsInWatchList(watchList.some((stock) => stock.stockName === stockName));
+  }, [watchList, stockName]);
 
   const [stockData, setStockData] = useState({});
   const prevWatchListAdded = useRef(null);
@@ -43,11 +45,7 @@ export default function StockInfo({
     return () => {
       closeSSE();
     };
-  }, [setStockDesc, stockName, userInfo?.userId]);
-
-  useEffect(() => {
-    setIsInWatchList(watchList.some((stock) => stock.stockName === stockName));
-  }, [watchList, stockName]);
+  }, [setStockDesc, stockName, userInfo?.userId, watchList]);
 
   const handleWatchList = async () => {
     if (isInWatchList) {
