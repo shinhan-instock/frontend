@@ -82,6 +82,9 @@ export default function StockList({ userData }) {
 
   return (
     <div>
+      {!userInfo && (
+        <div>다른 유저의 계좌를 구경하려면 로그인이 필요해요 😊</div>
+      )}
       {stock.length > 0 && !error && (
         <>
           {option === 1 &&
@@ -96,16 +99,16 @@ export default function StockList({ userData }) {
         </>
       )}
 
-      {option === 3 && <div>계좌를 공개하지 않은 유저입니다.</div>}
+      {option === 3 && <div>계좌를 공개하지 않은 유저입니다 😅 </div>}
 
       {option === 4 && (
         <div>
-          아직 계좌를 연동하지 않았어요. Instocker의 계좌를 보고 싶다면 계좌
-          연동을 해주세요!
+          아직 계좌를 연동하지 않았어요. 다른 유저의 계좌를 보고 싶다면 계좌
+          연동을 해주세요! 😊
         </div>
       )}
       {option !== 4 && error && (
-        <div>아직 {userData.nickname}님이 보유한 주식이 없습니다.</div>
+        <div>아직 {userData.nickname}님이 보유한 주식이 없어요 😅</div>
       )}
     </div>
   );

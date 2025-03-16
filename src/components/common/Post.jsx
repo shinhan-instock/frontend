@@ -51,7 +51,6 @@ export default function Post({
     images ? [{ id: images, file: null }] : []
   );
   const [selectedFile, setSelectedFile] = useState(null);
-  const [timeForce, setTimeForce] = useState();
 
   const navigate = useNavigate();
   const { userInfo } = useLogin();
@@ -188,8 +187,10 @@ export default function Post({
                   )}
                 </div>
               </div>
-              <div>
-                {new Date(created_at).toLocaleString({
+              <div className="flex justify-center items-center text-[8px] text-stroke-gray mx-3">
+                {new Date(
+                  new Date(created_at).getTime() + 9 * 60 * 60 * 1000
+                ).toLocaleString("ko-KR", {
                   dateStyle: "medium",
                   timeStyle: "short",
                 })}
@@ -260,8 +261,10 @@ export default function Post({
                   )}
                 </div>
               </div>
-              <div className="text-gray-500 text-sm">
-                {new Date(created_at).toLocaleString({
+              <div className="flex justify-center items-center text-[8px] text-stroke-gray mx-3">
+                {new Date(
+                  new Date(created_at).getTime() + 9 * 60 * 60 * 1000
+                ).toLocaleString("ko-KR", {
                   dateStyle: "medium",
                   timeStyle: "short",
                 })}
@@ -368,7 +371,11 @@ export default function Post({
           )}
         </div>
 
-        <div className={`${userInfo ? "h-1/4" : "h-1/2"} overflow-auto pb-4`}>
+        <div
+          className={`${
+            images ? "h-1/4" : userInfo ? "h-1/2" : "h-2/3"
+          } overflow-auto pb-4`}
+        >
           {!isEditMode && (
             <CommentList
               postId={id}

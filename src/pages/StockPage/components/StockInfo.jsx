@@ -11,9 +11,13 @@ export default function StockInfo({
   setSentimentNum,
 }) {
   const { userInfo } = useLogin();
-  const [isInWatchList, setIsInWatchList] = useState(true);
   const { watchList, addStockToWatchList, removeStockFromWatchList } =
     useWatchList();
+
+  // ✅ 초기값을 watchList에서 가져오도록 수정
+  const [isInWatchList, setIsInWatchList] = useState(() => {
+    return watchList.some((stock) => stock.stockName === stockName);
+  });
 
   const [stockData, setStockData] = useState({});
   const prevWatchListAdded = useRef(null);
@@ -28,7 +32,7 @@ export default function StockInfo({
         setSentimentNum(data.sentimentScore);
         if (prevWatchListAdded.current !== data.watchListAdded) {
           prevWatchListAdded.current = data.watchListAdded;
-          setIsInWatchList(data.watchListAdded);
+          setIsInWatchList(true);
         }
       },
       (error) => {
@@ -42,16 +46,12 @@ export default function StockInfo({
   }, [setStockDesc, stockName, userInfo?.userId]);
 
   useEffect(() => {
-    const isInList = watchList.some((stock) => stock.stockName === stockName);
-    if (isInWatchList !== isInList) {
-      setIsInWatchList(isInList);
-    }
+    setIsInWatchList(watchList.some((stock) => stock.stockName === stockName));
   }, [watchList, stockName]);
 
   const handleWatchList = async () => {
     if (isInWatchList) {
       await removeStockFromWatchList(stockName);
-      setIsInWatchList(false);
     } else {
       await addStockToWatchList(
         stockData.stockCode,
@@ -59,8 +59,8 @@ export default function StockInfo({
         stockData.price,
         stockData.priceChange
       );
-      setIsInWatchList(true);
     }
+    setIsInWatchList(!isInWatchList); // ✅ 즉시 상태 반영
   };
 
   return (

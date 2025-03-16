@@ -8,7 +8,9 @@ export async function getComments(postId, lastCommentId, limit) {
   } else {
     url = `${BASE_URL}/comment/post/${postId}/infinite?limit=${limit}`;
   }
+
   const res = await axios.get(url);
+  console.log("comments", res.data);
   const data = res.data;
   return data;
 }

@@ -6,7 +6,7 @@ export default function CommentList({ postId, comments, setComments }) {
   const [loading, setLoading] = useState(false);
   const [lastCommentId, setLastCommentId] = useState(null);
   const [hasMore, setHasMore] = useState(true);
-  const limit = 3;
+  const limit = 100;
 
   const lastCommentElementRef = useRef(null);
 

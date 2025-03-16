@@ -14,7 +14,16 @@ export function WatchListProvider({ children }) {
     const closeSSE = getWatchList(
       userInfo.userId,
       (data) => {
-        setWatchList(data.result);
+        console.log("swa", data);
+        setWatchList(
+          data.result.map((stock) => ({
+            stockCode: stock.stockCode,
+            stockName: stock.stockName,
+            currentPrice: stock.currentPrice,
+
+            changeRate: stock.changeRate, // ✅ 등락율도 상태에 반영
+          }))
+        );
       },
       (error) => {
         console.error("SSE 오류 발생:", error);
@@ -30,13 +39,14 @@ export function WatchListProvider({ children }) {
     stockCode,
     stockName,
     currentPrice,
-    priceChange
+    changeRate // ✅ 등락율 추가
   ) => {
     try {
       await addWatchList(userInfo.userId, stockCode, stockName);
+
       setWatchList((prevList) => [
         ...prevList,
-        { stockCode, stockName, currentPrice, priceChange },
+        { stockCode, stockName, currentPrice, changeRate },
       ]);
     } catch (error) {
       console.error("❌ 관심목록 추가 실패:", error);

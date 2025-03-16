@@ -23,14 +23,15 @@ export function InfluencerStockItem({ stock }) {
           <div>{stock.stockCode}</div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col text-end">
+        <div className="font-semibold">
+          {WonFormatter.format(stock.avgPrice)} ({stock.stockCount}주)
+        </div>
         {stock.profit > 0 ? (
-          <div className="text-red-500"> +{stock.profit} %</div>
+          <div className="text-red-500"> +{stock.profit.toFixed(2)} %</div>
         ) : (
-          <div>{stock.profit}</div>
+          <div className="text-blue-500"> +{stock.profit.toFixed(2)} %</div>
         )}
-
-        <div>{WonFormatter.format(stock.avgPrice * stock.stockCount)}</div>
       </div>
     </div>
   );
