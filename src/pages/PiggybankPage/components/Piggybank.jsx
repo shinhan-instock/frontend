@@ -25,9 +25,11 @@ export default function Piggybank() {
   const eventSourceRef = useRef(null);
 
   useEffect(() => {
-    getMileage(userInfo.userId).then((result) => {
-      setMileage(result.mileage);
-    });
+    getMileage(userInfo.userId)
+      .then((result) => {
+        setMileage(result.mileage);
+      })
+      .catch((err) => setMileage(0));
   }, []);
 
   useEffect(() => {
@@ -153,7 +155,11 @@ export default function Piggybank() {
       ) : (
         <>
           <div className="text-white text-2xl pb-10">
-            {mileage} 마일리지를 모았어요!
+            {mileage == 0 ? (
+              <>마일리지가 없어요 ㅜㅜ</>
+            ) : (
+              <> {mileage} 마일리지를 모았어요!</>
+            )}
           </div>
           <div className="relative flex justify-center">
             <img src={piggybank} alt="piggybank" className="w-[250px] z-10" />
