@@ -145,7 +145,7 @@ export default function MyStock() {
                           <div className="flex flex-col items-end">
                             {stock.profit >= 0 ? (
                               <p className="text-sm text-red-500">
-                                + {stock.gapPrice}원
+                                +{stock.gapPrice}원
                               </p>
                             ) : (
                               <p className="text-sm text-blue-500">

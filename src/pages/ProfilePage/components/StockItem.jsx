@@ -30,7 +30,7 @@ export function InfluencerStockItem({ stock }) {
         {stock.profit > 0 ? (
           <div className="text-red-500"> +{stock.profit.toFixed(2)} %</div>
         ) : (
-          <div className="text-blue-500"> +{stock.profit.toFixed(2)} %</div>
+          <div className="text-blue-500"> {stock.profit.toFixed(2)} %</div>
         )}
       </div>
     </div>
