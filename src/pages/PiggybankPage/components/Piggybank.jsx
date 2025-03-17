@@ -70,6 +70,7 @@ export default function Piggybank() {
         try {
           const newStocks = JSON.parse(event.data);
           setStocks(newStocks);
+          console.log("10", newStocks);
 
           const stockCodeList = newStocks.map((stock) => stock.stockCode);
           setStockCodes(stockCodeList);
@@ -151,7 +152,7 @@ export default function Piggybank() {
       </button>
 
       {isBroken ? (
-        <PiggybankModal stocks={stocks} isLinked={isLinked} />
+        <PiggybankModal stocks={stocks} isLinked={isLinked} mileage={mileage} />
       ) : (
         <>
           <div className="text-white text-2xl pb-10">

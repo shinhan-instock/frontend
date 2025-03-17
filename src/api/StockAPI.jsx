@@ -43,6 +43,7 @@ export function getStockInfo(stockName, userId, onMessage, onError) {
 export async function getTopStocks() {
   const res = await axios.get(`${BASE_URL}/stocks/rankings/top20`);
   const data = res.data;
+  console.log(data, "top");
 
   return data;
 }
@@ -115,6 +116,23 @@ export function getTop10Stocks(onMessage, onError) {
 export async function searchStock(keyword) {
   const res = await axios.get(`${BASE_URL}/stocks/search?stockName=${keyword}`);
   console.log(keyword, res);
+  const data = res.data;
+  return data;
+}
+
+export async function buyStock(stockName, stockCode, price, userId) {
+  const res = await axios.post(
+    `${BASE_URL}/accounts`,
+    {
+      stockName: stockName,
+      stockCode: stockCode,
+      price: price,
+    },
+    {
+      headers: { Authorization: `Bearer ${userId}` },
+    }
+  );
+
   const data = res.data;
   return data;
 }
