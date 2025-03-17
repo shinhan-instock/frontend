@@ -43,7 +43,7 @@ export default function StockInfo({
     return () => {
       closeSSE();
     };
-  }, [setSentimentNum, setStockDesc, stockName, userInfo?.userId]);
+  }, [setSentimentNum, setStockDesc, stockName, userInfo?.userId, watchList]);
 
   const handleWatchList = async () => {
     if (isInWatchList) {

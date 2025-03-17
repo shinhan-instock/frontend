@@ -40,10 +40,11 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
     }
 
     if (e.key === "Enter") {
-      if (searchInput.charAt(0) === "₩") {
+      const lowerCaseInput = searchInput.toLowerCase();
+      if (lowerCaseInput.charAt(0) === "₩") {
         setSearchType(1);
       } else if (searchType === 2) {
-        searchUser(searchInput).then((data) => {
+        searchUser(lowerCaseInput).then((data) => {
           setUserData(data);
         });
         setSearchType(2);
@@ -52,6 +53,7 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
       }
     }
   };
+
   const handleFocus = () => {
     setSearchInput("");
   };
@@ -62,7 +64,7 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
 
   useEffect(() => {
     if (searchType === 1 && searchInput) {
-      searchStock(searchInput.slice(1)).then((data) => {
+      searchStock(searchInput.slice(1).toLowerCase()).then((data) => {
         setStockData(data);
       });
     } else if (searchType !== 1) {

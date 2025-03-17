@@ -143,28 +143,32 @@ export default function MyStock() {
                             </p>
                           </div>
                           <div className="flex flex-col items-end">
-                            <p
-                              className={`text-sm ${
-                                stock.profit >= 0
-                                  ? "text-red-500"
-                                  : "text-blue-500"
-                              }`}
-                            >
-                              {stock.avgPrice >= 0
-                                ? `+${stock.gapPrice}`
-                                : stock.gapPrice}{" "}
-                              원
-                            </p>
-                            <p
-                              className={`flex items-center text-sm ${
-                                stock.profit >= 0
-                                  ? "text-red-500"
-                                  : "text-blue-500"
-                              }`}
-                            >
-                              ({stock.profit.toFixed(2)}
-                              <MdPercent />)
-                            </p>
+                            {stock.profit >= 0 ? (
+                              <p className="text-sm text-red-500">
+                                + {stock.gapPrice}원
+                              </p>
+                            ) : (
+                              <p className="text-sm text-blue-500">
+                                {stock.gapPrice}원
+                              </p>
+                            )}
+                            {stock.profit >= 0 ? (
+                              <p
+                                className="flex items-center text-sm 
+                                 text-red-500"
+                              >
+                                ({stock.profit.toFixed(2)}
+                                <MdPercent />)
+                              </p>
+                            ) : (
+                              <p
+                                className="flex items-center text-sm 
+                                 text-blue-500"
+                              >
+                                ({stock.profit.toFixed(2)}
+                                <MdPercent />)
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
