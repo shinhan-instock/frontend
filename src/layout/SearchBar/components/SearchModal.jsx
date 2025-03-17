@@ -9,7 +9,7 @@ import TopStock from "./TopStock";
 import { useEffect, useRef, useState } from "react";
 import { getTopStocks } from "../../../api/StockAPI";
 import { searchStock } from "../../../api/StockAPI";
-import { searchUser } from "../../../api/UserAPI";
+import { searchUser } from "../../../api/UserAPI"; // 사용자 검색 API를 불러옴 (예시)
 
 export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
   const [searchInput, setSearchInput] = useState("");
@@ -40,11 +40,10 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
     }
 
     if (e.key === "Enter") {
-      const lowerCaseInput = searchInput.toLowerCase();
-      if (lowerCaseInput.charAt(0) === "₩") {
+      if (searchInput.charAt(0) === "₩") {
         setSearchType(1);
       } else if (searchType === 2) {
-        searchUser(lowerCaseInput).then((data) => {
+        searchUser(searchInput).then((data) => {
           setUserData(data);
         });
         setSearchType(2);
@@ -53,7 +52,6 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
       }
     }
   };
-
   const handleFocus = () => {
     setSearchInput("");
   };
@@ -64,7 +62,7 @@ export default function SearchModal({ isSearchOpen, setIsSearchOpen }) {
 
   useEffect(() => {
     if (searchType === 1 && searchInput) {
-      searchStock(searchInput.slice(1).toLowerCase()).then((data) => {
+      searchStock(searchInput.slice(1).toUpperCase()).then((data) => {
         setStockData(data);
       });
     } else if (searchType !== 1) {
