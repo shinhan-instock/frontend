@@ -67,7 +67,7 @@ export default function Post({
   }, [userInfo]);
 
   useEffect(() => {
-    setTimeout(() => {}, 3000);
+    setTimeout(() => {}, 5000);
   }, [sentimentScore]);
 
   const handleLike = (e) => {
