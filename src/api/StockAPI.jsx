@@ -43,6 +43,7 @@ export function getStockInfo(stockName, userId, onMessage, onError) {
 export async function getTopStocks() {
   const res = await axios.get(`${BASE_URL}/stocks/rankings/top20`);
   const data = res.data;
+
   return data;
 }
 

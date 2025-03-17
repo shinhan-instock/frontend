@@ -14,15 +14,12 @@ export default function StockInfo({
   const { watchList, addStockToWatchList, removeStockFromWatchList } =
     useWatchList();
 
-  // ✅ 초기값을 watchList에서 가져오도록 수정
   const [isInWatchList, setIsInWatchList] = useState(false);
-
+  const [stockData, setStockData] = useState({});
+  const prevWatchListAdded = useRef(null);
   useEffect(() => {
     setIsInWatchList(watchList.some((stock) => stock.stockName === stockName));
   }, [watchList, stockName]);
-
-  const [stockData, setStockData] = useState({});
-  const prevWatchListAdded = useRef(null);
 
   useEffect(() => {
     const closeSSE = getStockInfo(
@@ -32,9 +29,10 @@ export default function StockInfo({
         setStockData(data);
         setStockDesc(data.description);
         setSentimentNum(data.sentimentScore);
+
         if (prevWatchListAdded.current !== data.watchListAdded) {
           prevWatchListAdded.current = data.watchListAdded;
-          setIsInWatchList(true);
+          setIsInWatchList(data.watchListAdded);
         }
       },
       (error) => {
@@ -45,7 +43,7 @@ export default function StockInfo({
     return () => {
       closeSSE();
     };
-  }, [setStockDesc, stockName, userInfo?.userId, watchList]);
+  }, [setSentimentNum, setStockDesc, stockName, userInfo?.userId]);
 
   const handleWatchList = async () => {
     if (isInWatchList) {
@@ -58,7 +56,8 @@ export default function StockInfo({
         stockData.priceChange
       );
     }
-    setIsInWatchList(!isInWatchList); // ✅ 즉시 상태 반영
+
+    setIsInWatchList((prev) => !prev);
   };
 
   return (
